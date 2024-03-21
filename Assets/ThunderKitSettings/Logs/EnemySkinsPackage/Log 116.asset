@@ -1,0 +1,855 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9af1c6015733a42be940cc462aa7ed, type: 3}
+  m_Name: Log 116
+  m_EditorClassIdentifier: 
+  pipeline: {fileID: 11400000, guid: 75aa58e78ef11a144b5abc5e2d39b4c8, type: 2}
+  creationDate:
+    ticks: 638460160939414031
+  entries:
+  - logLevel: 3
+    internalTime:
+      ticks: 638460161117805320
+    message: '[EnemySkinsPackage](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
+      Finished execution'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638460161117015901
+    message: '[EnemySkinsPackage(5 - Zip)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638460161116231551
+    message: '[EnemySkinsPackage(4 - StageThunderstoreManifest)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638460161115137512
+    message: '[EnemySkinsPackage(3 - Copy)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      ``` <AssetBundleStaging> ``` to ``` <ManifestPluginStaging>/AssetBundles ```
+
+      
+
+      Copied
+      ``` ThunderKit/AssetBundleStaging ``` to ``` ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/AssetBundles
+      ```'
+    context:
+    - "Copied Files\r\n\r\n 1. ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/AssetBundles\\AssetBundleStaging\r\n\r\n
+      2. ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/AssetBundles\\AssetBundleStaging.manifest\r\n\r\n
+      3. ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/AssetBundles\\assets\r\n\r\n
+      4. ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/AssetBundles\\assets.manifest\r\n\r\n
+      5. ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/AssetBundles\\testassets\r\n\r\n
+      6. ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/AssetBundles\\testassets.manifest"
+  - logLevel: 3
+    internalTime:
+      ticks: 638460161109362137
+    message: '[EnemySkinsPackage(3 - Copy)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638460161108252994
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Build Completed: ``` ThunderKit/Libraries/EntitySkinRegistry.dll ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638460161100014236
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      staging ``` ThunderKit/Libraries ``` in ``` ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry
+      ```
+
+'
+    context:
+    - "Assembly Files\r\nFrom: ThunderKit/Libraries\\EntitySkinRegistry.dll\r\n 
+      To: ThunderKit/Staging/EnemySkinRegistry/plugins/EnemySkinRegistry/EntitySkinRegistry.dll\r\n\r\n"
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161098865152
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(17,24): warning
+      CS0649: Field ''SkinFrequencyView.removeButton'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs (17:24)
+
+      [Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(17,24):
+      warning CS0649: Field ''SkinFrequencyView.removeButton'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs#17)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161097776006
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(14,23): warning
+      CS0169: The field ''AvailableSkinView.skinAvatar'' is never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs (14:23)
+
+      [Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(14,23):
+      warning CS0169: The field ''AvailableSkinView.skinAvatar'' is never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs#14)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161096661888
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(67,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.saveDialogButton'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (67:20)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(67,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.saveDialogButton'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#67)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161095542783
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(14,24): warning
+      CS0649: Field ''SkinFrequencyView.slider'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs (14:24)
+
+      [Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(14,24):
+      warning CS0649: Field ''SkinFrequencyView.slider'' is never assigned to, and
+      will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs#14)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161094443579
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(73,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.cancelDialogButton'' is
+      never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (73:20)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(73,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.cancelDialogButton'' is
+      never assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#73)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161093354446
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(20,24): warning
+      CS0649: Field ''AvailableSkinView.toggle'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs (20:24)
+
+      [Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(20,24):
+      warning CS0649: Field ''AvailableSkinView.toggle'' is never assigned to, and
+      will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs#20)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161092265309
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\TestConfigMenu.cs(37,44): warning CS0649:
+      Field ''TestConfigMenu.prefab'' is never assigned to, and will always have
+      its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\TestConfigMenu.cs (37:44)
+
+      [Assets\EnemySkinRegistry\Scripts\View\TestConfigMenu.cs(37,44):
+      warning CS0649: Field ''TestConfigMenu.prefab'' is never assigned to, and will
+      always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\TestConfigMenu.cs#37)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161091146103
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(19,28): warning
+      CS0649: Field ''MapConfigurationView.skinFreqContainer'' is never assigned
+      to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (19:28)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(19,28):
+      warning CS0649: Field ''MapConfigurationView.skinFreqContainer'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#19)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161089951981
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(33,24): warning
+      CS0649: Field ''MapConfigurationView.removeMoonButton'' is never assigned to,
+      and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (33:24)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(33,24):
+      warning CS0649: Field ''MapConfigurationView.removeMoonButton'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#33)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161088852872
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(15,22):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.enemyLabel'' is never assigned
+      to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (15:22)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(15,22):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.enemyLabel'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#15)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161087753693
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(18,31):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.skinViewPrefab'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (18:31)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(18,31):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.skinViewPrefab'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#18)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161086644580
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(17,23): warning
+      CS0649: Field ''AvailableSkinView.toggleOverlay'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs (17:23)
+
+      [Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(17,23):
+      warning CS0649: Field ''AvailableSkinView.toggleOverlay'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs#17)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161085515326
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(70,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.discardDialogButton'' is
+      never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (70:20)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(70,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.discardDialogButton'' is
+      never assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#70)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161084316256
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(27,24): warning
+      CS0649: Field ''MapConfigurationView.vanillaSlider'' is never assigned to,
+      and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (27:24)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(27,24):
+      warning CS0649: Field ''MapConfigurationView.vanillaSlider'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#27)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161083172277
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(21,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.skinViewContainer'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (21:27)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(21,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.skinViewContainer'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#21)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161082063023
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(42,31): warning
+      CS0649: Field ''MapConfigurationView.collapseRoot'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (42:31)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(42,31):
+      warning CS0649: Field ''MapConfigurationView.collapseRoot'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#42)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161080014558
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(55,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigToolTip'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (55:27)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(55,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigToolTip'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#55)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161077986133
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(61,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.exitButton'' is never assigned
+      to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (61:20)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(61,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.exitButton'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#61)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161076752155
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(64,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.exitDialog'' is never assigned
+      to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (64:27)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(64,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.exitDialog'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#64)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161075552977
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(16,35): warning
+      CS0649: Field ''MapConfigurationView.skinFreqPrefab'' is never assigned to,
+      and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (16:35)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(16,35):
+      warning CS0649: Field ''MapConfigurationView.skinFreqPrefab'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#16)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161074463836
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(39,24): warning
+      CS0649: Field ''MapConfigurationView.expandButton'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (39:24)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(39,24):
+      warning CS0649: Field ''MapConfigurationView.expandButton'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#39)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161073394648
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(58,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.saveConfigButton'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (58:20)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(58,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.saveConfigButton'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#58)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161072335489
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(43,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.previousEnemyButton'' is
+      never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (43:20)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(43,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.previousEnemyButton'' is
+      never assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#43)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161071196273
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(46,26):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.activeSkinsToolTipHover''
+      is never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (46:26)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(46,26):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.activeSkinsToolTipHover''
+      is never assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#46)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161070122036
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(32,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigContainer'' is
+      never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (32:27)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(32,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigContainer'' is
+      never assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#32)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161069072820
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(30,33): warning
+      CS0649: Field ''MapConfigurationView.vanillaLabel'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (30:33)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(30,33):
+      warning CS0649: Field ''MapConfigurationView.vanillaLabel'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#30)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161068023669
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(48,30): warning
+      CS0649: Field ''MapConfigurationView.addSkinDropdown'' is never assigned to,
+      and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (48:30)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(48,30):
+      warning CS0649: Field ''MapConfigurationView.addSkinDropdown'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#48)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161066954526
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(49,26):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigToolTipHover''
+      is never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (49:26)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(49,26):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigToolTipHover''
+      is never assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#49)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161065895353
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(20,33): warning
+      CS0649: Field ''SkinFrequencyView.label'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs (20:33)
+
+      [Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(20,33):
+      warning CS0649: Field ''SkinFrequencyView.label'' is never assigned to, and
+      will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs#20)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161064881188
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(40,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.nextEnemyButton'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (40:20)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(40,20):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.nextEnemyButton'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#40)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161063872001
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(26,34):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.defaultConfig'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (26:34)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(26,34):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.defaultConfig'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#26)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161062857901
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(24,33): warning
+      CS0649: Field ''MapConfigurationView.moonLabel'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (24:33)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(24,33):
+      warning CS0649: Field ''MapConfigurationView.moonLabel'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#24)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161061803693
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(52,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.activeSkinsToolTip'' is
+      never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (52:27)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(52,27):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.activeSkinsToolTip'' is
+      never assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#52)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161060829648
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(23,33): warning
+      CS0649: Field ''SkinFrequencyView.percentage'' is never assigned to, and will
+      always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs (23:33)
+
+      [Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(23,33):
+      warning CS0649: Field ''SkinFrequencyView.percentage'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs#23)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161059910303
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(36,24): warning
+      CS0649: Field ''MapConfigurationView.collapseButton'' is never assigned to,
+      and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (36:24)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(36,24):
+      warning CS0649: Field ''MapConfigurationView.collapseButton'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#36)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161059050942
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(29,34):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigPrefab'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (29:34)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(29,34):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.mapConfigPrefab'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#29)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161058241582
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(23,33): warning
+      CS0649: Field ''AvailableSkinView.skinLabel'' is never assigned to, and will
+      always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs (23:33)
+
+      [Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(23,33):
+      warning CS0649: Field ''AvailableSkinView.skinLabel'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs#23)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161057482276
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(45,31): warning
+      CS0649: Field ''MapConfigurationView.expandRoot'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (45:31)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(45,31):
+      warning CS0649: Field ''MapConfigurationView.expandRoot'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#45)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161056083234
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(37,26):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.moonDropdown'' is never
+      assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs (37:26)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs(37,26):
+      warning CS0649: Field ''EnemySkinConfigurationMenu.moonDropdown'' is never
+      assigned to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemySkinConfigurationMenu.cs#37)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161055083961
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(411,50): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (411:50)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(411,50):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#411)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161054324607
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(357,50): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (357:50)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(357,50):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#357)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161053735080
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(307,54): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (307:54)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(307,54):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#307)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161053185528
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(272,54): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (272:54)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(272,54):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#272)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161052675913
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(234,54): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (234:54)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(234,54):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#234)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161052180709
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(206,54): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (206:54)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(206,54):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#206)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161051756103
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(135,50): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (135:50)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(135,50):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#135)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161051326554
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(39,46): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs (39:46)
+
+      [Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs(39,46):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\AvailableSkinView.cs#39)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161050911852
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(112,54): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs (112:54)
+
+      [Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs(112,54):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\EnemyConfigurationMenu.cs#112)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161050602171
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(167,45): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (167:45)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(167,45):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#167)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161050332473
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(82,49): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs (82:49)
+
+      [Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs(82,49):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\MapConfigurationView.cs#82)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638460161050052594
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(48,45): warning
+      CS0168: The variable ''e'' is declared but never used'
+    context:
+    - 'Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs (48:45)
+
+      [Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs(48,45):
+      warning CS0168: The variable ''e'' is declared but never used](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkinRegistry\Scripts\View\SkinFrequencyView.cs#48)'
+  - logLevel: 0
+    internalTime:
+      ticks: 638460161041779335
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Building : ThunderKit/Libraries/EntitySkinRegistry.dll'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638460161037567953
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638460160946833095
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Creating 1 AssetBundles'
+    context:
+    - 'assets
+
+      [add](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fadd.png)
+
+      
+
+      [AvailableSkin](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fAvailableSkin.prefab)
+
+      
+
+      [collapse](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fcollapse.png)
+
+      
+
+      [delete](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fdelete.png)
+
+      
+
+      [delete_large](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fdelete_large.png)
+
+      
+
+      [leftArrow](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fleftArrow.png)
+
+      
+
+      [MapConfiguration](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fMapConfiguration.prefab)
+
+      
+
+      [remove](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fremove.png)
+
+      
+
+      [rightArrow](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2frightArrow.png)
+
+      
+
+      [settings](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fsettings.png)
+
+      
+
+      [SkinConfigurationMenu](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fSkinConfigurationMenu.prefab)
+
+      
+
+      [SkinFrequency](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2fSkinFrequency.prefab)
+
+      
+
+      [tooltip_large](assetlink://Assets%2fEnemySkinRegistry%2fAssets%2fUI%2ftooltip_large.png)
+
+      
+
+      [3270-Regular
+      SDF](assetlink://Assets%2fEnemySkins%2fTestAssets%2fFonts%2f3270-Regular+SDF.asset)
+
+      
+
+      [TMP_SDF](assetlink://Assets%2fTextMesh+Pro%2fShaders%2fTMP_SDF.shader)
+
+      
+
+      [3270-Regular](assetlink://Assets%2fEnemySkins%2fTestAssets%2fFonts%2f3270-Regular.ttf)
+
+      
+
+      [TMP
+      - Font Asset Icon](assetlink://Packages%2fcom.unity.textmeshpro%2fEditor+Resources%2fGizmos%2fTMP+-+Font+Asset+Icon.psd)
+
+      
+
+      [TMP
+      - Text Component Icon](assetlink://Packages%2fcom.unity.textmeshpro%2fEditor+Resources%2fGizmos%2fTMP+-+Text+Component+Icon.psd)
+
+      
+
+      [TMP
+      - Dropdown Icon](assetlink://Packages%2fcom.unity.textmeshpro%2fEditor+Resources%2fGizmos%2fTMP+-+Dropdown+Icon.psd)
+
+      
+
+      
+
+'
+  - logLevel: 3
+    internalTime:
+      ticks: 638460160942511619
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638460160942501627
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      staged ``` Assets/EnemySkinRegistry/Metadata/README.md ``` in ``` ThunderKit/Staging/EnemySkinRegistry/README.md
+      ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638460160942491634
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      staged ``` Assets/EnemySkinRegistry/Metadata/icon.png ``` in ``` ThunderKit/Staging/EnemySkinRegistry/icon.png
+      ```'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638460160941712249
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638460160941702248
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Clearing PipelineJob error states'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638460160941532424
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Execute Pipeline'
+    context: []

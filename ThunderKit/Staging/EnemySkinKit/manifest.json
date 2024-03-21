@@ -1,0 +1,10 @@
+{
+    "name": "EnemySkinKit",
+    "author": "Yinigma",
+    "version_number": "0.1.0",
+    "website_url": "",
+    "description": "Toolkit for making enemy skins in the unity editor",
+    "dependencies": [
+        "AntlerShed-EnemySkinRegistry-1.0.0"
+    ]
+}

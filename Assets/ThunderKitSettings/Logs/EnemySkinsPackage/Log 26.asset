@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9af1c6015733a42be940cc462aa7ed, type: 3}
+  m_Name: Log 26
+  m_EditorClassIdentifier: 
+  pipeline: {fileID: 11400000, guid: 540379a749326bf4d85d741d1a3fe8b0, type: 2}
+  creationDate:
+    ticks: 638442139376426822
+  entries:
+  - logLevel: 2
+    internalTime:
+      ticks: 638442139745172864
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Failed to Copy File / Directory from ''ThunderKit/AssetBundleStaging\AssetBundleStaging.manifest''
+      to ''ThunderKit/AssetBundleStaging\EnemySkinKit.manifest''.'
+    context:
+    - "Stacktrace\r\nFailed to Copy File / Directory from 'ThunderKit/AssetBundleStaging\\AssetBundleStaging.manifest'
+      to 'ThunderKit/AssetBundleStaging\\EnemySkinKit.manifest'.\r\n\r\n  at UnityEditor.FileUtil.CopyFileOrDirectory
+      (System.String source, System.String dest) [0x00041] in <2e279d988b9d4542841de511fbfdf8c2>:0
+      \r\n\r\n  at UnityEditor.FileUtil.ReplaceFile (System.String src, System.String
+      dst) [0x00012] in <2e279d988b9d4542841de511fbfdf8c2>:0 \r\n\r\n  at ThunderKit.Pipelines.Jobs.StageAssetBundles.Execute
+      (ThunderKit.Core.Pipelines.Pipeline pipeline) [0x00720] in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Jobs\\StageAssetBundles.cs:157](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Jobs\\StageAssetBundles.cs#157)
+      \r\n\r\n  at ThunderKit.Core.Pipelines.Pipeline.ExecuteJob () [0x0000e] in
+      [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs:281](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs#281)
+      \r\n\r\n  at ThunderKit.Core.Pipelines.Pipeline.Execute () [0x00419] in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs:227](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs#227) "
+  - logLevel: 0
+    internalTime:
+      ticks: 638442139391645602
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Creating 1 AssetBundles'
+    context:
+    - 'TestAssets
+
+      [BitoSkin](assetlink://Assets%2fEnemySkins%2fTestAssets%2fBitoSkin.asset)
+
+      
+
+      [brackenSkinTest](assetlink://Assets%2fEnemySkins%2fTestAssets%2fbrackenSkinTest.fbx)
+
+      
+
+      [Lit](assetlink://Packages%2fcom.unity.render-pipelines.high-definition%2fRuntime%2fMaterial%2fLit%2fLit.shader)
+
+      
+
+      [DefaultHDMaterial](assetlink://Packages%2fcom.unity.render-pipelines.high-definition%2fRuntime%2fRenderPipelineResources%2fMaterial%2fDefaultHDMaterial.mat)
+
+      
+
+      
+
+'
+  - logLevel: 3
+    internalTime:
+      ticks: 638442139386428844
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442139386249028
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      staged ``` Assets/EnemySkins/Metadata/README.md ``` in ``` ThunderKit/Staging/EnemySkinKit/README.md
+      ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442139386109164
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      staged ``` Assets/EnemySkins/Metadata/icon.png ``` in ``` ThunderKit/Staging/EnemySkinKit/icon.png
+      ```'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638442139385129894
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442139385059952
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Clearing PipelineJob error states'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638442139384880012
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Execute Pipeline'
+    context: []

@@ -1,0 +1,59 @@
+ManifestFileVersion: 0
+CRC: 182522320
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e7419bb70186c8ca97906ba74ac5d77f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4571d3825aeb82c1345eb7b881f47a26
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: e7419bb70186c8ca97906ba74ac5d77f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ba1f1bd351d01204a9895fac42342450, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 60fb0aaccc6af4d4ba42378643eb68c7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.ArmatureAttachment
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.AudioAction
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.MaterialAction
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.SkinnedMeshAction
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.StaticMeshAction
+Assets:
+- Assets/EnemySkins/TestAssets/Bracken/EloraMap.asset
+- Assets/EnemySkins/TestAssets/Bracken/bodice.png
+- Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.shader
+- Assets/EnemySkins/TestAssets/Bracken/hatman.fbx
+- Assets/EnemySkins/TestAssets/Bracken/EloraSkin.asset
+- Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipelineResources/Material/DefaultHDMaterial.mat
+- Assets/EnemySkins/TestAssets/Bracken/EloraTex.png
+- Assets/EnemySkins/TestAssets/Bracken/brackLora.fbx
+Dependencies: []

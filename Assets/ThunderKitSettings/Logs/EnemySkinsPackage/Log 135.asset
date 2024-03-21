@@ -1,0 +1,256 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9af1c6015733a42be940cc462aa7ed, type: 3}
+  m_Name: Log 135
+  m_EditorClassIdentifier: 
+  pipeline: {fileID: 11400000, guid: 540379a749326bf4d85d741d1a3fe8b0, type: 2}
+  creationDate:
+    ticks: 638461655335435425
+  entries:
+  - logLevel: 3
+    internalTime:
+      ticks: 638461655354644328
+    message: '[EnemySkinsPackage](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)
+      Finished execution'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655354329575
+    message: '[EnemySkinsPackage(3 - Zip)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      archived ``` ThunderKit/Staging/EnemySkinKit ``` into ``` ThunderKit/Staging/EnemySkinKit.zip
+      ```'
+    context:
+    - "Copied Files\r\n\r\n 1. ThunderKit\\Staging\\EnemySkinKit.zip\r\n\r\n 2. ThunderKit\\Staging\\EnemySkinRegistry.zip\r\n\r\n
+      3. ThunderKit\\Staging\\EnemySkinKit\\Editor.meta\r\n\r\n 4. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs.meta\r\n\r\n
+      5. ThunderKit\\Staging\\EnemySkinKit\\icon.png\r\n\r\n 6. ThunderKit\\Staging\\EnemySkinKit\\icon.png.meta\r\n\r\n
+      7. ThunderKit\\Staging\\EnemySkinKit\\manifest.json\r\n\r\n 8. ThunderKit\\Staging\\EnemySkinKit\\manifest.json.meta\r\n\r\n
+      9. ThunderKit\\Staging\\EnemySkinKit\\package.json\r\n\r\n 10. ThunderKit\\Staging\\EnemySkinKit\\package.json.meta\r\n\r\n
+      11. ThunderKit\\Staging\\EnemySkinKit\\plugins.meta\r\n\r\n 12. ThunderKit\\Staging\\EnemySkinKit\\README.md\r\n\r\n
+      13. ThunderKit\\Staging\\EnemySkinKit\\README.md.meta\r\n\r\n 14. ThunderKit\\Staging\\EnemySkinRegistry\\icon.png\r\n\r\n
+      15. ThunderKit\\Staging\\EnemySkinRegistry\\manifest.json\r\n\r\n 16. ThunderKit\\Staging\\EnemySkinRegistry\\package.json\r\n\r\n
+      17. ThunderKit\\Staging\\EnemySkinRegistry\\README.md\r\n\r\n 18. ThunderKit\\Staging\\EnemySkinKit\\Editor\\ArmatureMapEditor.cs\r\n\r\n
+      19. ThunderKit\\Staging\\EnemySkinKit\\Editor\\ArmatureMapEditor.cs.meta\r\n\r\n
+      20. ThunderKit\\Staging\\EnemySkinKit\\Editor\\AudioActionDrawer.cs\r\n\r\n
+      21. ThunderKit\\Staging\\EnemySkinKit\\Editor\\AudioActionDrawer.cs.meta\r\n\r\n
+      22. ThunderKit\\Staging\\EnemySkinKit\\Editor\\AudioListActionDrawer.cs\r\n\r\n
+      23. ThunderKit\\Staging\\EnemySkinKit\\Editor\\AudioListActionDrawer.cs.meta\r\n\r\n
+      24. ThunderKit\\Staging\\EnemySkinKit\\Editor\\EnemySkinKitEditorException.cs\r\n\r\n
+      25. ThunderKit\\Staging\\EnemySkinKit\\Editor\\EnemySkinKitEditorException.cs.meta\r\n\r\n
+      26. ThunderKit\\Staging\\EnemySkinKit\\Editor\\MaterialActionDrawer.cs\r\n\r\n
+      27. ThunderKit\\Staging\\EnemySkinKit\\Editor\\MaterialActionDrawer.cs.meta\r\n\r\n
+      28. ThunderKit\\Staging\\EnemySkinKit\\Editor\\SkinModBuilderEditor.cs\r\n\r\n
+      29. ThunderKit\\Staging\\EnemySkinKit\\Editor\\SkinModBuilderEditor.cs.meta\r\n\r\n
+      30. ThunderKit\\Staging\\EnemySkinKit\\Editor\\SkinnedMeshActionDrawer.cs\r\n\r\n
+      31. ThunderKit\\Staging\\EnemySkinKit\\Editor\\SkinnedMeshActionDrawer.cs.meta\r\n\r\n
+      32. ThunderKit\\Staging\\EnemySkinKit\\Editor\\StaticMeshActionDrawer.cs\r\n\r\n
+      33. ThunderKit\\Staging\\EnemySkinKit\\Editor\\StaticMeshActionDrawer.cs.meta\r\n\r\n
+      34. ThunderKit\\Staging\\EnemySkinKit\\Editor\\TempMod.cs\r\n\r\n 35. ThunderKit\\Staging\\EnemySkinKit\\Editor\\TempMod.cs.meta\r\n\r\n
+      36. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\BaboonHawk.meta\r\n\r\n 37.
+      ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Bracken.meta\r\n\r\n 38. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Coilhead.meta\r\n\r\n
+      39. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\EarthLeviathan.meta\r\n\r\n
+      40. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\EyelessDog.meta\r\n\r\n 41.
+      ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\GhostGirl.meta\r\n\r\n 42. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Giant.meta\r\n\r\n
+      43. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\HoarderBug.meta\r\n\r\n 44.
+      ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Hygrodere.meta\r\n\r\n 45. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Jester.meta\r\n\r\n
+      46. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Nutcracker.meta\r\n\r\n 47.
+      ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\SnareFlea.meta\r\n\r\n 48. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Spider.meta\r\n\r\n
+      49. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\SporeLizard.meta\r\n\r\n
+      50. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Thumper.meta\r\n\r\n 51.
+      ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit.meta\r\n\r\n 52. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\BaboonHawk\\metarig.prefab\r\n\r\n
+      53. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\BaboonHawk\\metarig.prefab.meta\r\n\r\n
+      54. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Bracken\\AnimContainer.prefab\r\n\r\n
+      55. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Bracken\\AnimContainer.prefab.meta\r\n\r\n
+      56. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Bracken\\metarig.prefab\r\n\r\n
+      57. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Bracken\\metarig.prefab.meta\r\n\r\n
+      58. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Coilhead\\metarig.prefab\r\n\r\n
+      59. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Coilhead\\metarig.prefab.meta\r\n\r\n
+      60. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\EarthLeviathan\\Bone.prefab\r\n\r\n
+      61. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\EarthLeviathan\\Bone.prefab.meta\r\n\r\n
+      62. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\EyelessDog\\Armature.prefab\r\n\r\n
+      63. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\EyelessDog\\Armature.prefab.meta\r\n\r\n
+      64. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\GhostGirl\\metarig.prefab\r\n\r\n
+      65. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\GhostGirl\\metarig.prefab.meta\r\n\r\n
+      66. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Giant\\metarig.prefab\r\n\r\n
+      67. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Giant\\metarig.prefab.meta\r\n\r\n
+      68. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\HoarderBug\\Armature.prefab\r\n\r\n
+      69. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\HoarderBug\\Armature.prefab.meta\r\n\r\n
+      70. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Hygrodere\\Armature.prefab\r\n\r\n
+      71. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Hygrodere\\Armature.prefab.meta\r\n\r\n
+      72. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Jester\\metarig.prefab\r\n\r\n
+      73. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Jester\\metarig.prefab.meta\r\n\r\n
+      74. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Nutcracker\\metarig.prefab\r\n\r\n
+      75. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Nutcracker\\metarig.prefab.meta\r\n\r\n
+      76. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\SnareFlea\\Armature.prefab\r\n\r\n
+      77. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\SnareFlea\\Armature.prefab.meta\r\n\r\n
+      78. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Spider\\Armature.prefab\r\n\r\n
+      79. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Spider\\Armature.prefab.meta\r\n\r\n
+      80. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\SporeLizard\\Armature.prefab\r\n\r\n
+      81. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\SporeLizard\\Armature.prefab.meta\r\n\r\n
+      82. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Thumper\\metarig.prefab\r\n\r\n
+      83. ThunderKit\\Staging\\EnemySkinKit\\EnemyRigs\\Thumper\\metarig.prefab.meta\r\n\r\n
+      84. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\AssetBundles.meta\r\n\r\n
+      85. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\EnemySkinRegistry.dll\r\n\r\n
+      86. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\EnemySkinRegistry.dll.meta\r\n\r\n
+      87. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\EntitySkinKit.dll\r\n\r\n
+      88. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\EntitySkinKit.dll.meta\r\n\r\n
+      89. ThunderKit\\Staging\\EnemySkinRegistry\\plugins\\EnemySkinRegistry\\EnemySkinRegistry.dll\r\n\r\n
+      90. ThunderKit\\Staging\\BepInExPack\\plugins\\BepInExPack\\AssetBundles\\assets\r\n\r\n
+      91. ThunderKit\\Staging\\BepInExPack\\plugins\\BepInExPack\\AssetBundles\\assets.manifest\r\n\r\n
+      92. ThunderKit\\Staging\\EnemySkinRegistry\\plugins\\EnemySkinRegistry\\AssetBundles\\assets\r\n\r\n
+      93. ThunderKit\\Staging\\EnemySkinRegistry\\plugins\\EnemySkinRegistry\\AssetBundles\\assets.manifest\r\n\r\n
+      94. ThunderKit\\Staging\\LethalConfig\\plugins\\LethalConfig\\AssetBundles\\assets\r\n\r\n
+      95. ThunderKit\\Staging\\LethalConfig\\plugins\\LethalConfig\\AssetBundles\\assets.manifest"
+  - logLevel: 3
+    internalTime:
+      ticks: 638461655348629176
+    message: '[EnemySkinsPackage(3 - Zip)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655347889937
+    message: '[EnemySkinsPackage(2 - StageThunderstoreManifest)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      Creating Thunderstore manifest.json'
+    context:
+    - "Manifest.json\r\n```js\r\n{\n    \"name\": \"EnemySkinKit\",\n    \"author\":
+      \"Yinigma\",\n    \"version_number\": \"0.0.1\",\n    \"website_url\": \"\",\n   
+      \"description\": \"Toolkit for making enemy skins in the unity editor\",\n   
+      \"dependencies\": []\n}\r\n```"
+  - logLevel: 3
+    internalTime:
+      ticks: 638461655347515270
+    message: '[EnemySkinsPackage(2 - StageThunderstoreManifest)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 1
+    internalTime:
+      ticks: 638461655347060669
+    message: '[EnemySkinsPackage(1 - StageAssemblies)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      AssemblyDefinitions with unassigned definition at index 0'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638461655344093195
+    message: '[EnemySkinsPackage(1 - StageAssemblies)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655343898321
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      staged ``` Assets/EnemySkinKit/package.json ``` in ``` ThunderKit/Staging/EnemySkinKit/package.json
+      ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655343508632
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      staged ``` Assets/EnemySkinKit/Editor ``` in ``` ThunderKit/Staging/EnemySkinKit/Editor
+      ```'
+    context:
+    - "Copied Files\r\n\r\n 1. ThunderKit/Staging/EnemySkinKit/Editor\\ArmatureMapEditor.cs\r\n\r\n
+      2. ThunderKit/Staging/EnemySkinKit/Editor\\ArmatureMapEditor.cs.meta\r\n\r\n
+      3. ThunderKit/Staging/EnemySkinKit/Editor\\AudioActionDrawer.cs\r\n\r\n 4.
+      ThunderKit/Staging/EnemySkinKit/Editor\\AudioActionDrawer.cs.meta\r\n\r\n 5.
+      ThunderKit/Staging/EnemySkinKit/Editor\\AudioListActionDrawer.cs\r\n\r\n 6.
+      ThunderKit/Staging/EnemySkinKit/Editor\\AudioListActionDrawer.cs.meta\r\n\r\n
+      7. ThunderKit/Staging/EnemySkinKit/Editor\\EnemySkinKitEditorException.cs\r\n\r\n
+      8. ThunderKit/Staging/EnemySkinKit/Editor\\EnemySkinKitEditorException.cs.meta\r\n\r\n
+      9. ThunderKit/Staging/EnemySkinKit/Editor\\MaterialActionDrawer.cs\r\n\r\n
+      10. ThunderKit/Staging/EnemySkinKit/Editor\\MaterialActionDrawer.cs.meta\r\n\r\n
+      11. ThunderKit/Staging/EnemySkinKit/Editor\\SkinModBuilderEditor.cs\r\n\r\n
+      12. ThunderKit/Staging/EnemySkinKit/Editor\\SkinModBuilderEditor.cs.meta\r\n\r\n
+      13. ThunderKit/Staging/EnemySkinKit/Editor\\SkinnedMeshActionDrawer.cs\r\n\r\n
+      14. ThunderKit/Staging/EnemySkinKit/Editor\\SkinnedMeshActionDrawer.cs.meta\r\n\r\n
+      15. ThunderKit/Staging/EnemySkinKit/Editor\\StaticMeshActionDrawer.cs\r\n\r\n
+      16. ThunderKit/Staging/EnemySkinKit/Editor\\StaticMeshActionDrawer.cs.meta\r\n\r\n
+      17. ThunderKit/Staging/EnemySkinKit/Editor\\TempMod.cs\r\n\r\n 18. ThunderKit/Staging/EnemySkinKit/Editor\\TempMod.cs.meta"
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655340361337
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      staged ``` Assets/EnemySkinKit/EnemyRigs ``` in ``` ThunderKit/Staging/EnemySkinKit/EnemyRigs
+      ```'
+    context:
+    - "Copied Files\r\n\r\n 1. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\BaboonHawk.meta\r\n\r\n
+      2. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Bracken.meta\r\n\r\n 3. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Coilhead.meta\r\n\r\n
+      4. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\EarthLeviathan.meta\r\n\r\n 5.
+      ThunderKit/Staging/EnemySkinKit/EnemyRigs\\EyelessDog.meta\r\n\r\n 6. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\GhostGirl.meta\r\n\r\n
+      7. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Giant.meta\r\n\r\n 8. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\HoarderBug.meta\r\n\r\n
+      9. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Hygrodere.meta\r\n\r\n 10. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Jester.meta\r\n\r\n
+      11. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Nutcracker.meta\r\n\r\n 12.
+      ThunderKit/Staging/EnemySkinKit/EnemyRigs\\SnareFlea.meta\r\n\r\n 13. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Spider.meta\r\n\r\n
+      14. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\SporeLizard.meta\r\n\r\n 15.
+      ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Thumper.meta\r\n\r\n 16. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\BaboonHawk\\metarig.prefab\r\n\r\n
+      17. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\BaboonHawk\\metarig.prefab.meta\r\n\r\n
+      18. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Bracken\\AnimContainer.prefab\r\n\r\n
+      19. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Bracken\\AnimContainer.prefab.meta\r\n\r\n
+      20. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Bracken\\metarig.prefab\r\n\r\n
+      21. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Bracken\\metarig.prefab.meta\r\n\r\n
+      22. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Coilhead\\metarig.prefab\r\n\r\n
+      23. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Coilhead\\metarig.prefab.meta\r\n\r\n
+      24. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\EarthLeviathan\\Bone.prefab\r\n\r\n
+      25. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\EarthLeviathan\\Bone.prefab.meta\r\n\r\n
+      26. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\EyelessDog\\Armature.prefab\r\n\r\n
+      27. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\EyelessDog\\Armature.prefab.meta\r\n\r\n
+      28. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\GhostGirl\\metarig.prefab\r\n\r\n
+      29. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\GhostGirl\\metarig.prefab.meta\r\n\r\n
+      30. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Giant\\metarig.prefab\r\n\r\n
+      31. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Giant\\metarig.prefab.meta\r\n\r\n
+      32. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\HoarderBug\\Armature.prefab\r\n\r\n
+      33. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\HoarderBug\\Armature.prefab.meta\r\n\r\n
+      34. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Hygrodere\\Armature.prefab\r\n\r\n
+      35. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Hygrodere\\Armature.prefab.meta\r\n\r\n
+      36. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Jester\\metarig.prefab\r\n\r\n
+      37. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Jester\\metarig.prefab.meta\r\n\r\n
+      38. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Nutcracker\\metarig.prefab\r\n\r\n
+      39. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Nutcracker\\metarig.prefab.meta\r\n\r\n
+      40. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\SnareFlea\\Armature.prefab\r\n\r\n
+      41. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\SnareFlea\\Armature.prefab.meta\r\n\r\n
+      42. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Spider\\Armature.prefab\r\n\r\n
+      43. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Spider\\Armature.prefab.meta\r\n\r\n
+      44. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\SporeLizard\\Armature.prefab\r\n\r\n
+      45. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\SporeLizard\\Armature.prefab.meta\r\n\r\n
+      46. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Thumper\\metarig.prefab\r\n\r\n
+      47. ThunderKit/Staging/EnemySkinKit/EnemyRigs\\Thumper\\metarig.prefab.meta"
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655337673661
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      staged ``` Assets/EnemySkinKit/Metadata/README.md ``` in ``` ThunderKit/Staging/EnemySkinKit/README.md
+      ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655337573768
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      staged ``` Assets/EnemySkinKit/Metadata/icon.png ``` in ``` ThunderKit/Staging/EnemySkinKit/icon.png
+      ```'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638461655336794456
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461655336744519
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      Clearing PipelineJob error states'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638461655336739475
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      Execute Pipeline'
+    context: []

@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9af1c6015733a42be940cc462aa7ed, type: 3}
+  m_Name: Log 134
+  m_EditorClassIdentifier: 
+  pipeline: {fileID: 11400000, guid: 540379a749326bf4d85d741d1a3fe8b0, type: 2}
+  creationDate:
+    ticks: 638461653590825378
+  entries:
+  - logLevel: 2
+    internalTime:
+      ticks: 638461653598026483
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      source
+
+      Parameter name: The source path cannot be empty.'
+    context:
+    - "Stacktrace\r\nsource\r\nParameter name: The source path cannot be empty.\r\n\r\n 
+      at UnityEditor.FileUtil.CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty
+      (System.String source, System.String dest) [0x00036] in <2e279d988b9d4542841de511fbfdf8c2>:0
+      \r\n\r\n  at UnityEditor.FileUtil.CopyFileOrDirectory (System.String source,
+      System.String dest) [0x00001] in <2e279d988b9d4542841de511fbfdf8c2>:0 \r\n\r\n 
+      at UnityEditor.FileUtil.ReplaceFile (System.String src, System.String dst)
+      [0x00012] in <2e279d988b9d4542841de511fbfdf8c2>:0 \r\n\r\n  at ThunderKit.Core.Pipelines.Jobs.StageManifestFiles.Execute
+      (ThunderKit.Core.Pipelines.Pipeline pipeline) [0x000fb] in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Jobs\\StageManifestFiles.cs:30](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Jobs\\StageManifestFiles.cs#30)
+      \r\n\r\n  at ThunderKit.Core.Pipelines.Pipeline.ExecuteJob () [0x0000e] in
+      [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs:281](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs#281)
+      \r\n\r\n  at ThunderKit.Core.Pipelines.Pipeline.ExecuteManifestLoop () [0x00085]
+      in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs:295](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs#295)
+      \r\n\r\n  at ThunderKit.Core.Pipelines.Pipeline.Execute () [0x003ae] in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs:225](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs#225) "
+  - logLevel: 0
+    internalTime:
+      ticks: 638461653597866649
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      staged ``` Assets/EnemySkinKit/Metadata/icon.png ``` in ``` ThunderKit/Staging/EnemySkinKit/icon.png
+      ```'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638461653592604754
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461653592544815
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      Clearing PipelineJob error states'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638461653592514844
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)[EnemySkinKit](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      Execute Pipeline'
+    context: []

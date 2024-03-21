@@ -1,0 +1,24 @@
+{
+  "name": "com.antler-shed.enemy-skin-kit",
+  "version": "0.0.1",
+  "displayName": "Enemy Skin Kit",
+  "description": "",
+  "unity": "2022.3",
+  "unityRelease": "9f1",
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "dependencies": {},
+ "keywords": [
+    "skin",
+    "lethalcompany",
+    "enemy",
+    "toolkit",
+    "kit"
+  ],
+  "author": {
+    "name": "Yinigma",
+    "email": "",
+    "url": ""
+  }
+}

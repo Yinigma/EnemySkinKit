@@ -1,0 +1,572 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9af1c6015733a42be940cc462aa7ed, type: 3}
+  m_Name: Log 46
+  m_EditorClassIdentifier: 
+  pipeline: {fileID: 11400000, guid: 540379a749326bf4d85d741d1a3fe8b0, type: 2}
+  creationDate:
+    ticks: 638442731307560552
+  entries:
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731596977813
+    message: '[EnemySkinsPackage](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Finished execution'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731595853771
+    message: '[EnemySkinsPackage(5 - Zip)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      archived ``` ThunderKit/Staging/EnemySkinKit ``` into ``` ThunderKit/Staging/EnemySkinKit.zip
+      ```'
+    context:
+    - "Copied Files\r\n\r\n 1. ThunderKit\\Staging\\EnemySkinKit.zip\r\n\r\n 2. ThunderKit\\Staging\\EnemySkinKit\\icon.png\r\n\r\n
+      3. ThunderKit\\Staging\\EnemySkinKit\\README.md\r\n\r\n 4. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\EntitySkinKit.dll\r\n\r\n
+      5. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\AssetBundles\\AssetBundleStaging\r\n\r\n
+      6. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\AssetBundles\\AssetBundleStaging.manifest\r\n\r\n
+      7. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\AssetBundles\\testassets\r\n\r\n
+      8. ThunderKit\\Staging\\EnemySkinKit\\plugins\\EnemySkinKit\\AssetBundles\\testassets.manifest"
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731594085193
+    message: '[EnemySkinsPackage(5 - Zip)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731593575539
+    message: '[EnemySkinsPackage(4 - StageThunderstoreManifest)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731592906155
+    message: '[EnemySkinsPackage(3 - Copy)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      ``` <AssetBundleStaging> ``` to ``` <ManifestPluginStaging>/AssetBundles ```
+
+      
+
+      Copied
+      ``` ThunderKit/AssetBundleStaging ``` to ``` ThunderKit/Staging/EnemySkinKit/plugins/EnemySkinKit/AssetBundles
+      ```'
+    context:
+    - "Copied Files\r\n\r\n 1. ThunderKit/Staging/EnemySkinKit/plugins/EnemySkinKit/AssetBundles\\AssetBundleStaging\r\n\r\n
+      2. ThunderKit/Staging/EnemySkinKit/plugins/EnemySkinKit/AssetBundles\\AssetBundleStaging.manifest\r\n\r\n
+      3. ThunderKit/Staging/EnemySkinKit/plugins/EnemySkinKit/AssetBundles\\testassets\r\n\r\n
+      4. ThunderKit/Staging/EnemySkinKit/plugins/EnemySkinKit/AssetBundles\\testassets.manifest"
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731591976926
+    message: '[EnemySkinsPackage(3 - Copy)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731591232555
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Build Completed: ``` ThunderKit/Libraries/EntitySkinKit.dll ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731581085996
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      staging ``` ThunderKit/Libraries ``` in ``` ThunderKit/Staging/EnemySkinKit/plugins/EnemySkinKit
+      ```
+
+'
+    context:
+    - "Assembly Files\r\nFrom: ThunderKit/Libraries\\EntitySkinKit.dll\r\n  To: ThunderKit/Staging/EnemySkinKit/plugins/EnemySkinKit/EntitySkinKit.dll\r\n\r\n"
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731580276704
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs(16,37): warning
+      CS0649: Field ''ArmatureReflector.source'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs (16:37)
+
+      [Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs(16,37):
+      warning CS0649: Field ''ArmatureReflector.source'' is never assigned to, and
+      will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs#16)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731579437311
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(26,31): warning CS0649: Field
+      ''BrackenSkin.leafMaterialAction'' is never assigned to, and will always have
+      its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (26:31)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(26,31):
+      warning CS0649: Field ''BrackenSkin.leafMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#26)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731578687819
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(30,31): warning CS0649: Field
+      ''BrackenSkin.rightEyeMaterialAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (30:31)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(30,31):
+      warning CS0649: Field ''BrackenSkin.rightEyeMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#30)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731577993492
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(69,21): warning CS0649: Field ''StaticMeshAction.replacementMesh''
+      is never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (69:21)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(69,21):
+      warning CS0649: Field ''StaticMeshAction.replacementMesh'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#69)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731577304093
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs(11,38):
+      warning CS0649: Field ''ArmatureMapGenerator.sourceMesh'' is never assigned
+      to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs (11:38)
+
+      [Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs(11,38):
+      warning CS0649: Field ''ArmatureMapGenerator.sourceMesh'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs#11)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731576594558
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs(10,38): warning
+      CS0649: Field ''ArmatureReflector.mapGenerator'' is never assigned to, and
+      will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs (10:38)
+
+      [Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs(10,38):
+      warning CS0649: Field ''ArmatureReflector.mapGenerator'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs#10)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731575885217
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(33,28): warning CS0649:
+      Field ''BrackenSkin.enragedAudioAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (33:28)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(33,28):
+      warning CS0649: Field ''BrackenSkin.enragedAudioAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#33)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731573527210
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(25,31): warning CS0649:
+      Field ''BrackenSkin.leafMaterialAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (25:31)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(25,31):
+      warning CS0649: Field ''BrackenSkin.leafMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#25)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731572697814
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(114,35): warning CS0649: Field ''MaterialAction.actionType''
+      is never assigned to, and will always have its default value '
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (114:35)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(114,35):
+      warning CS0649: Field ''MaterialAction.actionType'' is never assigned to, and
+      will always have its default value ](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#114)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731565543975
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(13,34): warning CS0649:
+      Field ''BrackenSkin.bodyMeshAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (13:34)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(13,34):
+      warning CS0649: Field ''BrackenSkin.bodyMeshAction'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#13)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731558676272
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(19,33): warning CS0649:
+      Field ''BrackenSkin.rightEyeMeshAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (19:33)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(19,33):
+      warning CS0649: Field ''BrackenSkin.rightEyeMeshAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#19)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731550843098
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(29,31): warning CS0649:
+      Field ''BrackenSkin.rightEyeMaterialAction'' is never assigned to, and will
+      always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (29:31)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(29,31):
+      warning CS0649: Field ''BrackenSkin.rightEyeMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#29)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731548545252
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(155,32): warning CS0649: Field ''AudioAction.actionType''
+      is never assigned to, and will always have its default value '
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (155:32)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(155,32):
+      warning CS0649: Field ''AudioAction.actionType'' is never assigned to, and
+      will always have its default value ](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#155)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731544479018
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(14,34): warning CS0649: Field
+      ''BrackenSkin.bodyMeshAction'' is never assigned to, and will always have its
+      default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (14:34)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(14,34):
+      warning CS0649: Field ''BrackenSkin.bodyMeshAction'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#14)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731543779577
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(18,33): warning CS0649: Field
+      ''BrackenSkin.leftEyeMeshAction'' is never assigned to, and will always have
+      its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (18:33)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(18,33):
+      warning CS0649: Field ''BrackenSkin.leftEyeMeshAction'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#18)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731543090023
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(27,31): warning CS0649:
+      Field ''BrackenSkin.leftEyeMaterialAction'' is never assigned to, and will
+      always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (27:31)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(27,31):
+      warning CS0649: Field ''BrackenSkin.leftEyeMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#27)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731542370635
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs(12,30):
+      warning CS0649: Field ''ArmatureMapGenerator.tfMap'' is never assigned to,
+      and will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs (12:30)
+
+      [Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs(12,30):
+      warning CS0649: Field ''ArmatureMapGenerator.tfMap'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs#12)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731537839606
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(24,31): warning CS0649: Field
+      ''BrackenSkin.bodyMaterialAction'' is never assigned to, and will always have
+      its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (24:31)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(24,31):
+      warning CS0649: Field ''BrackenSkin.bodyMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#24)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731536965144
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(20,33): warning CS0649: Field
+      ''BrackenSkin.rightEyeMeshAction'' is never assigned to, and will always have
+      its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (20:33)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(20,33):
+      warning CS0649: Field ''BrackenSkin.rightEyeMeshAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#20)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731536085743
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(17,33): warning CS0649:
+      Field ''BrackenSkin.leftEyeMeshAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (17:33)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(17,33):
+      warning CS0649: Field ''BrackenSkin.leftEyeMeshAction'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#17)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731535366379
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(23,31): warning CS0649:
+      Field ''BrackenSkin.bodyMaterialAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (23:31)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(23,31):
+      warning CS0649: Field ''BrackenSkin.bodyMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#23)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731534706975
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(36,28): warning CS0649: Field
+      ''BrackenSkin.neckCrackAudioAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (36:28)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(36,28):
+      warning CS0649: Field ''BrackenSkin.neckCrackAudioAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#36)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731534077417
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(19,21): warning CS0649: Field ''SkinnedMeshAction.replacementMesh''
+      is never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (19:21)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(19,21):
+      warning CS0649: Field ''SkinnedMeshAction.replacementMesh'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#19)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731533497909
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs(10,38):
+      warning CS0649: Field ''ArmatureMapGenerator.destMesh'' is never assigned to,
+      and will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs (10:38)
+
+      [Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs(10,38):
+      warning CS0649: Field ''ArmatureMapGenerator.destMesh'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureMapGenerator.cs#10)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731532958381
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(157,26): warning CS0649: Field ''AudioAction.replacementClip''
+      is never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (157:26)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(157,26):
+      warning CS0649: Field ''AudioAction.replacementClip'' is never assigned to,
+      and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#157)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731532468761
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(67,37): warning CS0649: Field ''StaticMeshAction.actionType''
+      is never assigned to, and will always have its default value '
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (67:37)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(67,37):
+      warning CS0649: Field ''StaticMeshAction.actionType'' is never assigned to,
+      and will always have its default value ](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#67)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731532009230
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(34,28): warning CS0649: Field
+      ''BrackenSkin.enragedAudioAction'' is never assigned to, and will always have
+      its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (34:28)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(34,28):
+      warning CS0649: Field ''BrackenSkin.enragedAudioAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#34)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731531609440
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(28,31): warning CS0649: Field
+      ''BrackenSkin.leftEyeMaterialAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs (28:31)
+
+      [Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs(28,31):
+      warning CS0649: Field ''BrackenSkin.leftEyeMaterialAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\BrackenSkinTemplate.cs#28)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731531249657
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(115,25): warning CS0649: Field ''MaterialAction.replacementMaterial''
+      is never assigned to, and will always have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (115:25)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(115,25):
+      warning CS0649: Field ''MaterialAction.replacementMaterial'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#115)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731530934932
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs(13,37): warning
+      CS0649: Field ''ArmatureReflector.target'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs (13:37)
+
+      [Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs(13,37):
+      warning CS0649: Field ''ArmatureReflector.target'' is never assigned to, and
+      will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\ArmatureReflection\ArmatureReflector.cs#13)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731530650130
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\SkinAction.cs(17,38): warning CS0649: Field ''SkinnedMeshAction.actionType''
+      is never assigned to, and will always have its default value '
+    context:
+    - 'Assets\EnemySkins\Scripts\SkinAction.cs (17:38)
+
+      [Assets\EnemySkins\Scripts\SkinAction.cs(17,38):
+      warning CS0649: Field ''SkinnedMeshAction.actionType'' is never assigned to,
+      and will always have its default value ](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\SkinAction.cs#17)'
+  - logLevel: 1
+    internalTime:
+      ticks: 638442731530410377
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(35,28): warning CS0649:
+      Field ''BrackenSkin.neckCrackAudioAction'' is never assigned to, and will always
+      have its default value null'
+    context:
+    - 'Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs (35:28)
+
+      [Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs(35,28):
+      warning CS0649: Field ''BrackenSkin.neckCrackAudioAction'' is never assigned
+      to, and will always have its default value null](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\VanillaTemplates\BrackenSkin.cs#35)'
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731362339574
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Building : ThunderKit/Libraries/EntitySkinKit.dll'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731357412452
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731343378658
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      Creating 1 AssetBundles'
+    context:
+    - 'testassets
+
+      [BitoSkin](assetlink://Assets%2fEnemySkins%2fTestAssets%2fBitoSkin.asset)
+
+      
+
+      [brackenSkinTest](assetlink://Assets%2fEnemySkins%2fTestAssets%2fbrackenSkinTest.fbx)
+
+      
+
+      [Lit](assetlink://Packages%2fcom.unity.render-pipelines.high-definition%2fRuntime%2fMaterial%2fLit%2fLit.shader)
+
+      
+
+      [DefaultHDMaterial](assetlink://Packages%2fcom.unity.render-pipelines.high-definition%2fRuntime%2fRenderPipelineResources%2fMaterial%2fDefaultHDMaterial.mat)
+
+      
+
+      
+
+'
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731320401769
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731320251924
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      staged ``` Assets/EnemySkins/Metadata/README.md ``` in ``` ThunderKit/Staging/EnemySkinKit/README.md
+      ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731320131906
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      staged ``` Assets/EnemySkins/Metadata/icon.png ``` in ``` ThunderKit/Staging/EnemySkinKit/icon.png
+      ```'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731314560655
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638442731314500717
+    message: '[EnemySkinsPackage](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Clearing PipelineJob error states'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638442731314235937
+    message: '[EnemySkinsPackage](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
+      Execute Pipeline'
+    context: []

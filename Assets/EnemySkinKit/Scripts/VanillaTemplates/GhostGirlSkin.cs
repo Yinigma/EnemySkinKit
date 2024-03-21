@@ -1,0 +1,58 @@
+using AntlerShed.EnemySkinKit.SkinAction;
+using AntlerShed.SkinRegistry;
+using UnityEngine;
+
+namespace AntlerShed.EnemySkinKit.Vanilla
+{
+    [CreateAssetMenu(fileName = "GhostGirlSkin", menuName = "EnemySkinKit/Skins/GhostGirl", order = 1)]
+    public class GhostGirlSkin : BaseSkin
+    {
+        [SerializeField]
+        private MaterialAction bodyMaterialAction;
+        [SerializeField]
+        private MaterialAction leftEyeMaterialAction;
+        [SerializeField]
+        private MaterialAction rightEyeMaterialAction;
+
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+
+        [SerializeField]
+        private StaticMeshAction leftEyeMeshAction;
+        [SerializeField]
+        private StaticMeshAction rightEyeMeshAction;
+
+        [SerializeField]
+        private AudioListAction hauntingCuesAudioListAction;
+        [SerializeField]
+        private AudioAction breatheAudioAction;
+        [SerializeField]
+        private AudioAction skipAndWalkAudioAction;
+        [SerializeField]
+        private AudioAction heartBeatAudioAction;
+        [SerializeField]
+        private ArmatureAttachment[] attachments;
+
+        public override string EnemyId => EnemySkinRegistry.GHOST_GIRL_ID;
+
+        public override Skinner CreateSkinner()
+        {
+            return new GhostGirlSkinner
+            (
+                muteEffects, 
+                muteVoice,
+                attachments,
+                bodyMaterialAction, 
+                leftEyeMaterialAction, 
+                rightEyeMaterialAction, 
+                bodyMeshAction, 
+                leftEyeMeshAction, 
+                rightEyeMeshAction,
+                hauntingCuesAudioListAction,
+                breatheAudioAction,
+                skipAndWalkAudioAction,
+                heartBeatAudioAction
+            );
+        }
+    }
+}

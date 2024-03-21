@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9af1c6015733a42be940cc462aa7ed, type: 3}
+  m_Name: Log 133
+  m_EditorClassIdentifier: 
+  pipeline: {fileID: 11400000, guid: 540379a749326bf4d85d741d1a3fe8b0, type: 2}
+  creationDate:
+    ticks: 638461652661184802
+  entries:
+  - logLevel: 2
+    internalTime:
+      ticks: 638461652662388957
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinKit%2fEnemySkinsPackage.asset)
+      [EnemySkinKit.Identity.Dependencies](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      has an unassigned entry'
+    context:
+    - "Stacktrace\r\n[EnemySkinKit.Identity.Dependencies](assetlink://Assets%2fEnemySkinKit%2fEnemySkinKit.asset)
+      has an unassigned entry\r\n\r\n  at ThunderKit.Core.Manifests.Manifest+<EnumerateManifests>d__3.MoveNext
+      () [0x00124] in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Manifests\\Manifest.cs:37](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Manifests\\Manifest.cs#37)
+      \r\n\r\n  at System.Linq.Set`1[TElement].UnionWith (System.Collections.Generic.IEnumerable`1[T]
+      other) [0x00018] in <dab7f68612224ba3ae40f651d44f9d4c>:0 \r\n\r\n  at System.Linq.Enumerable+DistinctIterator`1[TSource].FillSet
+      () [0x0000b] in <dab7f68612224ba3ae40f651d44f9d4c>:0 \r\n\r\n  at System.Linq.Enumerable+DistinctIterator`1[TSource].ToArray
+      () [0x00000] in <dab7f68612224ba3ae40f651d44f9d4c>:0 \r\n\r\n  at System.Linq.Enumerable.ToArray[TSource]
+      (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <dab7f68612224ba3ae40f651d44f9d4c>:0
+      \r\n\r\n  at ThunderKit.Core.Pipelines.Pipeline.Execute () [0x000de] in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs:195](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs#195) "
