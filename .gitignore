@@ -12,6 +12,8 @@
 Packages/
 UIElementsSchema/
 Assets/Settings/
+Assets/ThunderKitSettings/Logs/EnemySkinsPackage/
+ThunderKit/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
