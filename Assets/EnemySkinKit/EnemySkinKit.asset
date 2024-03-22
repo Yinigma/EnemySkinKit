@@ -19,7 +19,6 @@ MonoBehaviour:
   - {fileID: 2800000, guid: e5d7d61539c0a964a9237d3ada411c0e, type: 3}
   - {fileID: 4900000, guid: af2791466000e754ca04c18118bab6b6, type: 3}
   - {fileID: 102900000, guid: 2b389f3bf3f02584aa810f9a517cf70d, type: 3}
-  - {fileID: 102900000, guid: 1e623d5f96c91a148b3092dbbb87c8d3, type: 3}
   - {fileID: 102900000, guid: fe35745b34ae6f74583c5f3635dfa056, type: 3}
   - {fileID: 4900000, guid: 7c579c66788359a4cb44f7a6a90d7636, type: 3}
 --- !u!114 &-2373352398757655531
@@ -36,7 +35,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StagingPaths:
   - <ManifestStagingRoot>
-  url: 
+  url: https://thunderstore.io/c/lethal-company/p/AntlerShed/EnemySkinKit/
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +88,6 @@ MonoBehaviour:
   Author: Yinigma
   Name: EnemySkinKit
   Description: Toolkit for making enemy skins in the unity editor
-  Version: 0.1.0
+  Version: 0.2.1
   Dependencies:
   - {fileID: 11400000, guid: ea9d9b9bbded233ce6ae6857edd3ae4d, type: 2}
