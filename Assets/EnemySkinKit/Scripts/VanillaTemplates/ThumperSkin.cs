@@ -4,15 +4,20 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "ThumperSkin", menuName = "EnemySkinKit/Skins/ThumperSkin", order = 1)]
+    [CreateAssetMenu(fileName = "ThumperSkin", menuName = "EnemySkinKit/Skins/ThumperSkin", order = 15)]
     public class ThumperSkin : BaseSkin
     {
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
+        [Header("Materials")]
         [SerializeField]
         private MaterialAction bodyMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+        [Space(10)]
+
+        [Header("Audio")]
         [SerializeField]
         private AudioListAction longRoarsAudioListAction;
         [SerializeField]
@@ -25,6 +30,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction eatPlayerAudioAction;
         [SerializeField]
         private AudioAction biteAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

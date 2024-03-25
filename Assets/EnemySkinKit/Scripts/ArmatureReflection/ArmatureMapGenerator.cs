@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.ArmatureReflection
 {
-    [CreateAssetMenu(fileName = "ArmatureMap", menuName = "EnemySkinKit/Animation/ArmatureMapping", order = 1)]
+    [CreateAssetMenu(fileName = "ArmatureMap", menuName = "EnemySkinKit/ArmatureMapping", order = 1)]
     public class ArmatureMapGenerator : ScriptableObject
     {
         [SerializeField]

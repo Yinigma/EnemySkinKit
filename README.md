@@ -27,6 +27,7 @@ https://github.com/PassivePicasso/ThunderKit
 ## Setup with Thunderkit
 
 1.Create up a new 3D (HDRP) project in Unity (or get a project template like this one https://github.com/EvaisaDev/LethalCompanyUnityTemplate).
+If your project still has HDRP starter assets, you should delete them. This will be the the "TutorialInfo" folder, the "ReadMe" asset, and the "Outdoor Scene." The "TutorialInfo" folder is the most important, as this contains scripts that will conflict with what we're going to try and import from the game data later. 
 
 2.Now, we're going to get ThunderKit. ThunderKit is a package manager for making mods in the unity editor. Go to Window > Package Manager to open up the package manager window.
 
@@ -52,9 +53,7 @@ https://github.com/PassivePicasso/ThunderKit
 
 7.Click "import" and let Thunderkit do its thing. It'll ask you to restart your project a couple of times. After it's done, you'll have the necessary game code that this and other mods depend on.
 
-ThunderKit might not import the Assembly-CSharp.dll from Lethal Company. If this is the case, navigate to the same folder you found your Lethal Company.exe in, go to "Lethal Company_Data"/Managed and copy (DO NOT MOVE) Assembly-CSharp.dll to <YOUR_UNITY_PROJECT>/Packages/LethalCompany.
-
-Also 0Harmony2.dll and BepinEx.Harmony.dll (both of them are in <YOUR_UNITY_PROJECT>/Packages/BepInExPack/BepInExPack/BepInEx/core) might give you compiler errors. For use with this project, you can delete them.
+ThunderKit will not import the Assembly-CSharp.dll from Lethal Company if you didn't properly dispose of the unneeded HDRP starter files. If this is the case, navigate to the same folder you found your Lethal Company.exe in, go to "Lethal Company_Data"/Managed and copy (DO NOT MOVE) Assembly-CSharp.dll to <YOUR_UNITY_PROJECT>/Packages/LethalCompany.
 
 8.At this point we're nearly done with the setup. Now we're gonna get this mod's code, along with its dependencies. Go back to the Thunderstore Settings menu and navigate to "Package Source Settings." Click "Add" and from the dropdown select "Thunderstore Source." This will add a new entry to the package source list called "ThunderStoreSource."
 
@@ -76,9 +75,13 @@ https://thunderstore.io/c/lethal-company
 
 ![EnemySkinKit in the ThunderKit package manager](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/ThunderKitGetSkinKit.PNG?raw=true)
 
-12.Verify that the mod has been installed by right clicking anywhere in the project window (the little file explorer at the bottom of unity's default layout) and go to Create. If you find options for "EnemySkinKit" it's installed and you should be good to go.
+12.An annoying extra step we need to take is getting rid of some BepInEx libraries that I guess Unity doesn't agree with. Navigate to <YOUR_UNITY_PROJECT>/Packages/BepInExPack/BepInExPack/BepInEx/core and delete 0Harmony20.dll and BepInEx.Harmony.dll
 
-## Codeless Method
+![The files that must be deleted](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/KillTargets.png?raw=true)
+
+13.Verify that the mod has been installed by right clicking anywhere in the project window (the little file explorer at the bottom of unity's default layout) and go to Create. If you find options for "EnemySkinKit" it's installed and you should be good to go.
+
+## Code-Free Method
 
 Now you should have all the stuff you need to start making skins.
 

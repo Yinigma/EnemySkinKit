@@ -4,24 +4,28 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "GhostGirlSkin", menuName = "EnemySkinKit/Skins/GhostGirl", order = 1)]
+    [CreateAssetMenu(fileName = "GhostGirlSkin", menuName = "EnemySkinKit/Skins/GhostGirl", order = 8)]
     public class GhostGirlSkin : BaseSkin
     {
+        [Header("Materials")]
         [SerializeField]
         private MaterialAction bodyMaterialAction;
         [SerializeField]
         private MaterialAction leftEyeMaterialAction;
         [SerializeField]
         private MaterialAction rightEyeMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
         [SerializeField]
         private SkinnedMeshAction bodyMeshAction;
-
         [SerializeField]
         private StaticMeshAction leftEyeMeshAction;
         [SerializeField]
         private StaticMeshAction rightEyeMeshAction;
+        [Space(10)]
 
+        [Header("Audio")]
         [SerializeField]
         private AudioListAction hauntingCuesAudioListAction;
         [SerializeField]
@@ -30,6 +34,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction skipAndWalkAudioAction;
         [SerializeField]
         private AudioAction heartBeatAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

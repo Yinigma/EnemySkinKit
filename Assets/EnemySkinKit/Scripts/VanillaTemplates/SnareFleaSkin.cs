@@ -4,15 +4,20 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "SnareFleaSkin", menuName = "EnemySkinKit/Skins/SnareFleaSkin", order = 1)]
+    [CreateAssetMenu(fileName = "SnareFleaSkin", menuName = "EnemySkinKit/Skins/SnareFleaSkin", order = 13)]
     public class SnareFleaSkin : BaseSkin
     {
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
+        [Header("Materials")]
         [SerializeField]
         private MaterialAction bodyMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+        [Space(10)]
+
+        [Header("Audio")]
         [SerializeField]
         private AudioListAction shrieksAudioListAction;
         [SerializeField]
@@ -21,6 +26,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction hitGroundAudioAction;
         [SerializeField]
         private AudioAction hitAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

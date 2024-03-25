@@ -12,7 +12,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string TEETH_BOTTOM_PATH = "MouthDogModel/AnimContainer/Armature/Neck1Container/Neck1/Neck2/JawLower/TeethBottom";
         protected const string LOD0_PATH = "MouthDogModel/ToothDogBody";
         protected const string LOD1_PATH = "MouthDogModel/ToothDogBodyLOD1";
-        protected const string ANCHOR_PATH = "MouthDogModel/AnimContainer/Armature";
+        protected const string ANCHOR_PATH = "MouthDogModel/AnimContainer";
         protected Material vanillaBodyMaterial;
         protected Material vanillaTopTeethMaterial;
         protected Material vanillaBottomTeethMaterial;
@@ -85,7 +85,13 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>()
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                enemy.transform.Find(ANCHOR_PATH),
+                new Dictionary<string, Transform>() 
+                {
+                    //what is this rig?
+                    { "Armature", enemy.transform.Find($"{ANCHOR_PATH}/Armature") },
+                    { "Neck1Container", enemy.transform.Find($"{ANCHOR_PATH}/Armature/Neck1Container") }
+                }
             );
         }
 

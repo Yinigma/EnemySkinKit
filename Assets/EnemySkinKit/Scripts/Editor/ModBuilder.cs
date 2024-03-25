@@ -1,4 +1,6 @@
+using AntlerShed.EnemySkinKit;
 using AntlerShed.EnemySkinKit.Vanilla;
+using AntlerShed.SkinRegistry;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -156,9 +158,11 @@ namespace AntlerShed.EnemySkinKit
             }
             Directory.CreateDirectory(assetsPath);
 
+            string assetBundleName = $"{sanitizedAuthor}_{sanitizedModName}_{ASSET_BUNDLE_NAME}";
+
             //Asset bundle creation
             AssetBundleBuild bundle = new AssetBundleBuild();
-            bundle.assetBundleName = $"{sanitizedAuthor}_{sanitizedModName}_{ASSET_BUNDLE_NAME}";
+            bundle.assetBundleName = assetBundleName;
             bundle.assetNames = skins.Select((skin) => AssetDatabase.GetDependencies(AssetDatabase.GetAssetPath(skin), true))
                 .Aggregate
                 (
@@ -192,7 +196,7 @@ namespace AntlerShed.EnemySkinKit
             sourceCodeFilePath = Path.Combine(pluginPath, sanitizedPluginName + ".cs");
             using (StreamWriter pluginSourceFile = new StreamWriter(sourceCodeFilePath, false))
             {
-                pluginSourceFile.WriteLine(createSkinModSource(sanitizedGUID, sanitizedModName, major, minor, patch, sanitizedPluginName, sanitizedNamespace, skins));
+                pluginSourceFile.WriteLine(createSkinModSource(sanitizedGUID, sanitizedModName, assetBundleName, major, minor, patch, sanitizedPluginName, sanitizedNamespace, skins));
             }
             assemblyFilePath = Path.Combine(pluginPath, sanitizedAssemblyName + ".asmdef");
             using (StreamWriter assemblyFile = new StreamWriter(assemblyFilePath, false))
@@ -202,6 +206,7 @@ namespace AntlerShed.EnemySkinKit
 
             AssetDatabase.ImportAsset(sourceCodeFilePath);
             AssetDatabase.ImportAsset(assemblyFilePath);
+            
             CompilationPipeline.compilationFinished += onCompilationFinished;
             CompilationPipeline.assemblyCompilationFinished += onAssemblyCompilationFinished;
         }
@@ -232,11 +237,6 @@ namespace AntlerShed.EnemySkinKit
 
                 //Zip up mod folder
                 ZipFile.CreateFromDirectory(stagingPath, zipPath);
-                //Hide the evidence
-                if (File.Exists(stagingPath + ".meta"))
-                {
-                    File.Delete(stagingPath + ".meta");
-                }
                 Directory.Delete(stagingPath, true);
                 
             }
@@ -271,7 +271,7 @@ namespace AntlerShed.EnemySkinKit
             return $"EnemySkinRegistry.RegisterSkin(bundle.LoadAsset<{skin.GetType().Name}>(\"{AssetDatabase.GetAssetPath(skin)}\"));";
         }
 
-        private string createSkinModSource(string modGUID, string modName, uint major, uint minor, uint patch, string pluginClassName, string namespaceText, BaseSkin[] skins)
+        private string createSkinModSource(string modGUID, string modName, string bundleName, uint major, uint minor, uint patch, string pluginClassName, string namespaceText, BaseSkin[] skins)
         {
             return
                 "//This is generated code and shouldn't be modified unless it's taken out of its original environment\n" +
@@ -284,8 +284,8 @@ namespace AntlerShed.EnemySkinKit
                 $"namespace {namespaceText}\n" +
                 "{\n" +
                 $"\t[BepInPlugin(\"{modGUID}\", \"{modName}\", \"{major}.{minor}.{patch}\")]\n" +
-                $"\t[BepInDependency({nameof(EnemySkinKit)}.modGUID)]\n" +
-                $"\t[BepInDependency(EnemySkinRegistry.modGUID)]\n" +
+                $"\t[BepInDependency(\"{EnemySkinKit.modGUID}\")]\n" +
+                $"\t[BepInDependency(\"{EnemySkinRegistry.modGUID}\")]\n" +
                 $"\tpublic class {pluginClassName} : BaseUnityPlugin\n" +
                 "\t{\n" +
                 $"\t\tpublic const string modGUID = \"{modGUID}\";\n" +
@@ -298,7 +298,7 @@ namespace AntlerShed.EnemySkinKit
                 "\t\t\t\tSystem.IO.Path.Combine\n" +
                 "\t\t\t\t(\n" +
                 "\t\t\t\t\tSystem.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),\n" +
-                $"\t\t\t\t\t\"AssetBundles/{ASSET_BUNDLE_NAME}\"\n" +
+                $"\t\t\t\t\t\"AssetBundles/{bundleName}\"\n" +
                 "\t\t\t\t)\n" +
                 "\t\t\t);\n" +
                 $"{skins.Select((skin) => "\t\t\t" + createTemplateSkinEntrySource(skin)).Aggregate("", (str, line) => str + line)}\n" +
@@ -338,7 +338,7 @@ namespace AntlerShed.EnemySkinKit
                 $"\t\"version_number\": \"{major}.{minor}.{patch}\",\n" +
                 "\t\"website_url\": \"\",\n" +
                 $"\t\"description\": \"{description}\",\n" +
-                "\t\"dependencies\": []\n" +
+                "\t\"dependencies\": [\"AntlerShed-EnemySkinKit-0.2.8\"]\n" +
                 "}";
         }
 

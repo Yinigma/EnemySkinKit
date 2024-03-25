@@ -35,7 +35,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StagingPaths:
   - <ManifestStagingRoot>
-  url: https://thunderstore.io/c/lethal-company/p/AntlerShed/EnemySkinKit/
+  url: https://github.com/Yinigma/EnemySkinKit
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +88,7 @@ MonoBehaviour:
   Author: Yinigma
   Name: EnemySkinKit
   Description: Toolkit for making enemy skins in the unity editor
-  Version: 0.2.3
+  Version: 0.2.8
   Dependencies:
   - {fileID: 11400000, guid: ea9d9b9bbded233ce6ae6857edd3ae4d, type: 2}
+  - {fileID: 11400000, guid: c4ce1456f051853125e4018bc252fa4d, type: 2}

@@ -27,6 +27,7 @@ https://github.com/PassivePicasso/ThunderKit
 ## Setup with Thunderkit
 
 1.Create up a new 3D (HDRP) project in Unity (or get a project template like this one https://github.com/EvaisaDev/LethalCompanyUnityTemplate).
+If your project still has HDRP starter assets, you should delete them. This will be the the "TutorialInfo" folder, the "ReadMe" asset, and the "Outdoor Scene." The "TutorialInfo" folder is the most important, as this contains scripts that will conflict with what we're going to try and import from the game data later. 
 
 2.Now, we're going to get ThunderKit. ThunderKit is a package manager for making mods in the unity editor. Go to Window > Package Manager to open up the package manager window.
 
@@ -52,9 +53,7 @@ https://github.com/PassivePicasso/ThunderKit
 
 7.Click "import" and let Thunderkit do its thing. It'll ask you to restart your project a couple of times. After it's done, you'll have the necessary game code that this and other mods depend on.
 
-ThunderKit might not import the Assembly-CSharp.dll from Lethal Company. If this is the case, navigate to the same folder you found your Lethal Company.exe in, go to "Lethal Company_Data"/Managed and copy (DO NOT MOVE) Assembly-CSharp.dll to <YOUR_UNITY_PROJECT>/Packages/LethalCompany.
-
-Also 0Harmony2.dll and BepinEx.Harmony.dll (both of them are in <YOUR_UNITY_PROJECT>/Packages/BepInExPack/BepInExPack/BepInEx/core) might give you compiler errors. For use with this project, you can delete them.
+ThunderKit will not import the Assembly-CSharp.dll from Lethal Company if you didn't properly dispose of the unneeded HDRP starter files. If this is the case, navigate to the same folder you found your Lethal Company.exe in, go to "Lethal Company_Data"/Managed and copy (DO NOT MOVE) Assembly-CSharp.dll to <YOUR_UNITY_PROJECT>/Packages/LethalCompany.
 
 8.At this point we're nearly done with the setup. Now we're gonna get this mod's code, along with its dependencies. Go back to the Thunderstore Settings menu and navigate to "Package Source Settings." Click "Add" and from the dropdown select "Thunderstore Source." This will add a new entry to the package source list called "ThunderStoreSource."
 
@@ -76,9 +75,13 @@ https://thunderstore.io/c/lethal-company
 
 ![EnemySkinKit in the ThunderKit package manager](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/ThunderKitGetSkinKit.PNG?raw=true)
 
-12.Verify that the mod has been installed by right clicking anywhere in the project window (the little file explorer at the bottom of unity's default layout) and go to Create. If you find options for "EnemySkinKit" it's installed and you should be good to go.
+12.An annoying extra step we need to take is getting rid of some BepInEx libraries that I guess Unity doesn't agree with. Navigate to <YOUR_UNITY_PROJECT>/Packages/BepInExPack/BepInExPack/BepInEx/core and delete 0Harmony20.dll and BepInEx.Harmony.dll
 
-## Codeless Method
+![The files that must be deleted](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/KillTargets.png?raw=true)
+
+13.Verify that the mod has been installed by right clicking anywhere in the project window (the little file explorer at the bottom of unity's default layout) and go to Create. If you find options for "EnemySkinKit" it's installed and you should be good to go.
+
+## Code-Free Method
 
 Now you should have all the stuff you need to start making skins.
 
@@ -156,7 +159,7 @@ Just don't be a dope like me and leave the scale at zero in your example image.
 - Version - Your mod's version, separated by major, minor, and patch. Check the tooltips or use good ol' google to find out when you should increment these numbers.
 - Skins - the skin scriptable objects to include in your mod. Just hit the plus button or set the amount of skins by entering a number in the skins size field. Drag and drop any skins you've created using the previous steps into this list.
 
-5.Click the "Create Mod" button.
+5.Click the "Create Mod" button. If a message pops up saying that a file failed to write, hit "cancel" on that dialog instead of "try again" or "force quit."
 
 6.If successful, your mod files and the generated code will be saved to a zip file located in a folder called "EnemySkinKit" in the unity project folder (the same level as the assets folder).
 
@@ -209,6 +212,15 @@ Once both of those fields have been added, the ArmatureMap in the inspector shou
 ![Expanded Armature Map in the inspector](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/ArmatureMapComplete.PNG?raw=true)
 
 Don't forget to unlock the inspector if you locked it.
+
+Also certain enemies have special cases where you can't name the bone you're mapping to whatever you like and instead have to ensure that it matches in the armature itself. This is because these bones affect deform bones, but aren't listed in the skinned mesh as one of the bone transforms. Here's a table with all of them.
+
+| Nutcracker     | Eyeless Dog    | Bunker Spider | Hoarder Bug | Forest Keeper |
+|----------------|----------------|---------------|-------------|---------------|
+| spinecontainer | Armature       | Armature      | Armature    | metarig       |
+|                | Neck1Container |               |             |               |
+
+With the exception of Neck1Container and spinecontainer, all of these are the armature root, so all you'll need to worry about with them is giving your root, or a child of it, the same name. The other two you'll just want to have a root bone for the blind dog's neck and the nutcracker's torso respectively. 
 
 That's about as hairy as it gets. For actually creating the Skinned Meshes, I'd recommend getting one of the FBX files that come packaged with this mod. The folder for that is in the same folder as the EnemyRigs folder. You can get a rigged model in the correct position and import it to blender or your poison of choice and work from there. Teaching how to create and rig a skeletal mesh is a little beyond the scope of this little ReadMe. But there are plenty of resources out there for you to get started if you're new. Good luck!
 

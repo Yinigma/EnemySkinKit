@@ -16,21 +16,28 @@ namespace AntlerShed.EnemySkinKit
 
         public static List<GameObject> ApplyAttachments(ArmatureAttachment[] attachments, SkinnedMeshRenderer renderer)
         {
-            List<GameObject> activeAttachments = new List<GameObject>();
-            foreach (ArmatureAttachment attachment in attachments)
+            if(renderer!=null)
             {
-                try
+                List<GameObject> activeAttachments = new List<GameObject>();
+                foreach (ArmatureAttachment attachment in attachments)
                 {
-                    Transform parent = renderer.bones.First((tf) => tf.name.Equals(attachment.boneId));
-                    GameObject instance = GameObject.Instantiate(attachment.attachment, parent);
-                    instance.transform.localPosition = attachment.location;
-                    instance.transform.localRotation = Quaternion.Euler(attachment.rotation);
-                    instance.transform.localScale = attachment.scale;
-                    activeAttachments.Add(instance);
+                    try
+                    {
+                        Transform parent = renderer.bones.First((tf) => tf.name.Equals(attachment.boneId));
+                        GameObject instance = GameObject.Instantiate(attachment.attachment, parent);
+                        instance.transform.localPosition = attachment.location;
+                        instance.transform.localRotation = Quaternion.Euler(attachment.rotation);
+                        instance.transform.localScale = attachment.scale;
+                        activeAttachments.Add(instance);
+                    }
+                    catch (Exception e)
+                    {
+                        if (EnemySkinKit.LogLevelSetting >= LogLevel.ERROR) { EnemySkinKit.SkinKitLogger.LogError(e.StackTrace); }
+                    }
                 }
-                catch (Exception e) { }
+                return activeAttachments;
             }
-            return activeAttachments;
+            return new List<GameObject>();
         }
 
         public static void RemoveAttachments(List<GameObject> attachments)

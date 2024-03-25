@@ -4,19 +4,10 @@ using AntlerShed.SkinRegistry;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "BrackenSkin", menuName = "EnemySkinKit/Skins/BrackenSkin", order = 1)]
+    [CreateAssetMenu(fileName = "BrackenSkin", menuName = "EnemySkinKit/Skins/BrackenSkin", order = 2)]
     public class BrackenSkin : BaseSkin
     {
-        //Skinned Meshes
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
-        //Static Meshes
-        [SerializeField]
-        private StaticMeshAction leftEyeMeshAction;
-        [SerializeField]
-        private StaticMeshAction rightEyeMeshAction;
-
+        [Header("Materials")]
         //Materials
         [SerializeField]
         private MaterialAction bodyMaterialAction;
@@ -26,11 +17,27 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private MaterialAction leftEyeMaterialAction;
         [SerializeField]
         private MaterialAction rightEyeMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
+        //Skinned Meshes
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+        //Static Meshes
+        [SerializeField]
+        private StaticMeshAction leftEyeMeshAction;
+        [SerializeField]
+        private StaticMeshAction rightEyeMeshAction;
+        [Space(10)]
+
+        [Header("Audio")]
         [SerializeField]
         private AudioAction angerAudioAction;
         [SerializeField]
         private AudioAction neckSnapAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

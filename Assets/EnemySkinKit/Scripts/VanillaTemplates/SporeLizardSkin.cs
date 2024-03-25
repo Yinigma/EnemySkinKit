@@ -4,15 +4,20 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "SporeLizardSkin", menuName = "EnemySkinKit/Skins/SporeLizardSkin", order = 1)]
+    [CreateAssetMenu(fileName = "SporeLizardSkin", menuName = "EnemySkinKit/Skins/SporeLizardSkin", order = 14)]
     public class SporeLizardSkin : BaseSkin
     {
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
+        [Header("Materials")]
         [SerializeField]
         private MaterialAction bodyMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+        [Space(10)]
+
+        [Header("Audio")]
         [SerializeField]
         private AudioListAction frightenedAudioListAction;
         [SerializeField]
@@ -27,6 +32,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction rattleTailAudioAction;
         [SerializeField]
         private AudioAction biteAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

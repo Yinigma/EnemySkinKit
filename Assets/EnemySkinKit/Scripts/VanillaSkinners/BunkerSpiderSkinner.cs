@@ -11,7 +11,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string BODY_PATH = "MeshContainer/MeshRenderer";
         protected const string LEFT_FANG_PATH = "MeshContainer/AnimContainer/Armature/Head/LeftFang";
         protected const string RIGHT_FANG_PATH = "MeshContainer/AnimContainer/Armature/Head/RightFang";
-        protected const string ANCHOR_PATH = "MeshContainer/AnimContainer/Armature";
+        protected const string ANCHOR_PATH = "MeshContainer/AnimContainer";
 
         protected Material vanillaBodyMaterial;
         protected Material vanillaLeftFangMaterial;
@@ -90,7 +90,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 {
                     enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                enemy.transform.Find(ANCHOR_PATH),
+                new Dictionary<string, Transform>() { { "Armature", enemy.transform.Find($"{ANCHOR_PATH}/Armature") } }
             );
         }
 

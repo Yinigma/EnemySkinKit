@@ -11,7 +11,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LOD0_PATH = "FGiantModelContainer/BodyLOD0";
         protected const string LOD1_PATH = "FGiantModelContainer/BodyLOD1";
         protected const string LOD2_PATH = "FGiantModelContainer/BodyLOD2";
-        protected const string ANCHOR_PATH = "FGiantModelContainer/AnimContainer/metarig";
+        protected const string ANCHOR_PATH = "FGiantModelContainer/AnimContainer";
 
         protected Material vanillaBodyMaterial;
         protected AudioClip vanillaFarWideAudio;
@@ -55,7 +55,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                enemy.transform.Find(ANCHOR_PATH),
+                new Dictionary<string, Transform>() { { "metarig", enemy.transform.Find($"{ANCHOR_PATH}/metarig") } }
             );
         }
 

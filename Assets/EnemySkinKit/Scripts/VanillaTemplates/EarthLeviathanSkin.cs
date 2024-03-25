@@ -4,17 +4,22 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "EarthLeviathanSkin", menuName = "EnemySkinKit/Skins/EarthLeviathan", order = 1)]
+    [CreateAssetMenu(fileName = "EarthLeviathanSkin", menuName = "EnemySkinKit/Skins/EarthLeviathan", order = 5)]
     public class EarthLeviathanSkin : BaseSkin
     {
-        //Skinned Meshes
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
+        [Header("Materials")]
         //Materials
         [SerializeField]
         private MaterialAction bodyMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
+        //Skinned Meshes
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+        [Space(10)]
+
+        [Header("Audio")]
         [SerializeField]
         private AudioListAction groundRumbleAudioListAction;
         [SerializeField]
@@ -25,6 +30,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction hitGroundAudioAction;
         [SerializeField]
         private AudioAction emergeAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

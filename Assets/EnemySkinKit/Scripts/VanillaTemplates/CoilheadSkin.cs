@@ -4,17 +4,10 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "CoilheadSkin", menuName = "EnemySkinKit/Skins/CoilheadSkin", order = 1)]
+    [CreateAssetMenu(fileName = "CoilheadSkin", menuName = "EnemySkinKit/Skins/CoilheadSkin", order = 4)]
     public class CoilheadSkin : BaseSkin
     {
-        //Skinned Meshes
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
-        //Static Meshes
-        [SerializeField]
-        private StaticMeshAction headMeshAction;
-
+        [Header("Materials")]
         //Materials
         [SerializeField]
         private MaterialAction bodyMaterialAction;
@@ -22,9 +15,23 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private MaterialAction rustMaterialAction;
         [SerializeField]
         private MaterialAction headMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
+        //Skinned Meshes
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+        //Static Meshes
+        [SerializeField]
+        private StaticMeshAction headMeshAction;
+        [Space(10)]
+
+        [Header("Audio")]
         [SerializeField]
         private AudioListAction springNoisesAudioListAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

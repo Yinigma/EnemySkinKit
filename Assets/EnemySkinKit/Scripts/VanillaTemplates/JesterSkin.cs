@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "JesterSkin", menuName = "EnemySkinKit/Skins/JesterSkin", order = 1)]
+    [CreateAssetMenu(fileName = "JesterSkin", menuName = "EnemySkinKit/Skins/JesterSkin", order = 11)]
     public class JesterSkin : BaseSkin
     {
+        [Header("Materials")]
         [SerializeField]
         private MaterialAction skullMaterialAction;
         [SerializeField]
@@ -17,6 +18,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private MaterialAction crankMaterialAction;
         [SerializeField]
         private MaterialAction bodyMaterialAction;
+        [Space(10)]
+
+        [Header("Meshes")]
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
 
         [SerializeField]
         private StaticMeshAction skullLOD0Action;
@@ -33,10 +39,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private StaticMeshAction lidMeshAction;
         [SerializeField]
         private StaticMeshAction crankMeshAction;
+        [Space(10)]
 
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
+        [Header("Audio")]
         [SerializeField]
         private AudioAction popGoesTheWeaselMusicAudioAction;
         [SerializeField]
@@ -45,6 +50,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction screamingAudioAction;
         [SerializeField]
         private AudioAction killPlayerAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

@@ -1,7 +1,8 @@
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
+using AntlerShed.SkinRegistry.Events;
+using GameNetcodeStuff;
 using System.Collections.Generic;
-using System.Net.Mail;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
@@ -11,7 +12,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LEFT_EYE_PATH = "DressGirlModel/AnimContainer/metarig/spine/spine.002/spine.003/spine.004/spine.006/Icosphere";
         protected const string RIGHT_EYE_PATH = "DressGirlModel/AnimContainer/metarig/spine/spine.002/spine.003/spine.004/spine.006/Icosphere.001";
         protected const string BODY_PATH = "DressGirlModel/basemesh";
-        protected const string ANCHOR_PATH = "DressGirlModel/AnimContainer/metarig";
+        protected const string ANCHOR_PATH = "DressGirlModel/AnimContainer";
 
         protected Material vanillaBodyMaterial;
         protected Material vanillaLeftEyeMaterial;
@@ -38,6 +39,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioListAction HauntingSoundsAction { get; }
         protected AudioAction HeartbeatSoundAction { get; }
         protected ArmatureAttachment[] Attachments { get; }
+
+        private GhostGirlDisappearEventHandler eventHandler;
 
         public GhostGirlSkinner
         (
@@ -85,14 +88,19 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaBreatheSound = BreatheSoundAction.Apply(ref enemy.GetComponent<DressGirlAI>().breathingSFX);
             vanillaHeartbeatSound = HeartbeatSoundAction.ApplyToSource(enemy.GetComponent<DressGirlAI>().heartbeatMusic);
 
-            BodyMeshAction.Apply
+            GameObject moddedGO = BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                enemy.transform.Find(ANCHOR_PATH),
+                new Dictionary<string, Transform>() { { "metarig", enemy.transform.Find($"{ANCHOR_PATH}/metarig") } }
             );
+
+            eventHandler = new GhostGirlDisappearEventHandler(moddedGO);
+
+            EnemySkinRegistry.RegisterEnemyEventHandler(enemy.GetComponent<DressGirlAI>(), eventHandler);
         }
 
         public override void Remove(GameObject enemy)
@@ -119,6 +127,66 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 },
                 enemy.transform.Find(ANCHOR_PATH)
             );
+
+            EnemySkinRegistry.RemoveEnemyEventHandler(enemy.GetComponent<DressGirlAI>(), eventHandler);
         }
+
+    }
+
+    class GhostGirlDisappearEventHandler : GhostGirlEventHandler
+    {
+
+        private GameObject ModdedMeshGO { get; }
+
+        internal GhostGirlDisappearEventHandler(GameObject ghostGirl)
+        {
+            ModdedMeshGO = ghostGirl;
+        }
+
+        public void OnHit(EnemyAI enemy, PlayerControllerB attackingPlayer) { }
+
+        public void OnStun(EnemyAI enemy, PlayerControllerB attackingPlayer) { }
+
+        public void OnKilled(EnemyAI enemy) { }
+
+        public void OnSpawn(EnemyAI enemy) { }
+
+        public void OnSpawnFinished(EnemyAI enemy) { }
+
+        public void OnTargetPlayer(EnemyAI enemy, PlayerControllerB target) { }
+
+        public void Update(EnemyAI enemy) { }
+
+        public void OnDestroy(EnemyAI enemy) { }
+
+        public void OnChoosePlayer(DressGirlAI ghostGirl, PlayerControllerB target) { }
+
+        public void OnStartChasing(DressGirlAI ghostGirl) { }
+
+        public void OnStopChasing(DressGirlAI ghostGirl) { }
+
+        public void OnKillPlayer(DressGirlAI ghostGirl, PlayerControllerB player) { }
+
+        public void OnHide(DressGirlAI ghostGirl)
+        {
+            if (EnemySkinKit.LogLevelSetting >= LogLevel.INFO) EnemySkinKit.SkinKitLogger.LogInfo("Got Ghost Girl Hide Event");
+            SkinnedMeshRenderer renderer = ModdedMeshGO?.GetComponentInChildren<SkinnedMeshRenderer>();
+            if (renderer != null)
+            {
+                renderer.gameObject.layer = LayerMask.NameToLayer("EnemiesNotRendered");
+            }
+        }
+
+        public void OnShow(DressGirlAI ghostGirl)
+        {
+            if (EnemySkinKit.LogLevelSetting >= LogLevel.INFO) EnemySkinKit.SkinKitLogger.LogInfo("Got Ghost Girl Show Event");
+            SkinnedMeshRenderer renderer = ModdedMeshGO?.GetComponentInChildren<SkinnedMeshRenderer>();
+            if(renderer != null)
+            {
+                renderer.gameObject.layer = LayerMask.NameToLayer("Enemies");
+            }
+        }
+
+        public void OnStartToDisappear(DressGirlAI ghostGirl) { }
     }
 }

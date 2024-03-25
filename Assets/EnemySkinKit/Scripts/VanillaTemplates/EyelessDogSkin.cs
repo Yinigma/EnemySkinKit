@@ -4,19 +4,10 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "EyelessDogSkin", menuName = "EnemySkinKit/Skins/EyelessDog", order = 1)]
+    [CreateAssetMenu(fileName = "EyelessDogSkin", menuName = "EnemySkinKit/Skins/EyelessDog", order = 6)]
     public class EyelessDogSkin : BaseSkin
     {
-        //Skinned Meshes
-        [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
-
-        //Static Meshes
-        [SerializeField]
-        private StaticMeshAction topTeethMeshAction;
-        [SerializeField]
-        private StaticMeshAction bottomTeethMeshAction;
-
+        [Header("Materials")]
         //Materials
         [SerializeField]
         private MaterialAction bodyMaterialAction;
@@ -24,13 +15,29 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private MaterialAction topTeethMaterialAction;
         [SerializeField]
         private MaterialAction bottomTeethMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
+        //Skinned Meshes
+        [SerializeField]
+        private SkinnedMeshAction bodyMeshAction;
+        //Static Meshes
+        [SerializeField]
+        private StaticMeshAction topTeethMeshAction;
+        [SerializeField]
+        private StaticMeshAction bottomTeethMeshAction;
+        [Space(10)]
+
+        [Header("Audio")]
         [SerializeField]
         private AudioAction screamAudioAction;
         [SerializeField]
         private AudioAction killPlayerAudioAction;
         [SerializeField]
         private AudioAction breathingAudioAction;
+        [Space(10)]
+
+        [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

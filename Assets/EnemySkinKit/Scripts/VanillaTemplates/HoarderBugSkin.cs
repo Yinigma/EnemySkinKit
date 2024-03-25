@@ -4,24 +4,28 @@ using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    [CreateAssetMenu(fileName = "HoarderBugSkin", menuName = "EnemySkinKit/Skins/HoarderBug", order = 1)]
+    [CreateAssetMenu(fileName = "HoarderBugSkin", menuName = "EnemySkinKit/Skins/HoarderBug", order = 9)]
     public class HoarderBugSkin : BaseSkin
     {
+        [Header("Materials")]
         [SerializeField]
         private MaterialAction bodyMaterialAction;
         [SerializeField]
         private MaterialAction leftWingMaterialAction;
         [SerializeField]
         private MaterialAction rightWingMaterialAction;
+        [Space(10)]
 
+        [Header("Meshes")]
         [SerializeField]
         private SkinnedMeshAction bodyMeshAction;
-
         [SerializeField]
         private StaticMeshAction leftWingMeshAction;
         [SerializeField]
         private StaticMeshAction rightWingMeshAction;
+        [Space(10)]
 
+        [Header("Audio")]
         [SerializeField]
         private AudioListAction chitterAudioListAction;
         [SerializeField]
@@ -32,6 +36,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction flyAudioAction;
         [SerializeField]
         private AudioAction hitPlayerAudioAction;
+        [Space(10)]
+
+        [Header("Audio Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
 

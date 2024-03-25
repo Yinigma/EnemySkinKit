@@ -32,29 +32,48 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         /// </summary>
         /// <param name="vanilla">the array of skinned mesh renderers to operate on. This is an array so multiple LOD meshes can be dealt with in the same way.</param>
         /// <param name="anchor">the transform that will be the parent of the replacement prefab if applicable. It's up to the author of any custom enemies to decide what is an appopriate anchor.</param>
-        public void Apply(SkinnedMeshRenderer[] vanilla, Transform anchor, Dictionary<string, Transform> additionalTransforms = null)
+        /// <return></return>
+        public GameObject Apply(SkinnedMeshRenderer[] vanilla, Transform anchor, Dictionary<string, Transform> additionalTransforms = null)
         {
-            switch(actionType)
+            GameObject moddedSkin = null;
+            if (vanilla != null)
             {
-                case SkinnedMeshActionType.HIDE:
-                    foreach(SkinnedMeshRenderer renderer in vanilla)
-                    {
-                        renderer.enabled = false;
-                    }
-                    break;
-                case SkinnedMeshActionType.REPLACE:
-                    foreach (SkinnedMeshRenderer renderer in vanilla)
-                    {
-                        renderer.enabled = false;
-                    }
-                    GameObject moddedSkin = UnityEngine.Object.Instantiate(replacementObject, anchor);
-                    ArmatureReflector armatureReflector = moddedSkin.AddComponent<ArmatureReflector>();
-                    //todo - descriptive error here for if the replacement object doesn't have a mesh renderer
-                    armatureReflector.Init(moddedSkin.GetComponentInChildren<SkinnedMeshRenderer>(), vanilla[0], armatureMap, additionalTransforms);
-                    break;
-                case SkinnedMeshActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case SkinnedMeshActionType.HIDE:
+                        foreach (SkinnedMeshRenderer renderer in vanilla)
+                        {
+                            renderer.enabled = false;
+                        }
+                        break;
+                    case SkinnedMeshActionType.REPLACE:
+                        foreach (SkinnedMeshRenderer renderer in vanilla)
+                        {
+                            renderer.enabled = false;
+                        }
+                        moddedSkin = UnityEngine.Object.Instantiate(replacementObject, anchor);
+                        SkinnedMeshRenderer customRenderer = moddedSkin.GetComponentInChildren<SkinnedMeshRenderer>();
+                        if (customRenderer != null)
+                        {
+                            customRenderer.gameObject.layer = LayerMask.NameToLayer("Enemies");
+                            ArmatureReflector armatureReflector = moddedSkin.AddComponent<ArmatureReflector>();
+                            armatureReflector.Init(customRenderer, vanilla[0], armatureMap, additionalTransforms);
+                        }
+                        else
+                        {
+                            GameObject.Destroy(customRenderer);
+                            if (EnemySkinKit.LogLevelSetting >= LogLevel.ERROR) EnemySkinKit.SkinKitLogger.LogError("The given prefab for a skinned mesh action did not contain a skinned mesh renderer in its hierarchy.");
+                        }
+                        break;
+                    case SkinnedMeshActionType.RETAIN:
+                        break;
+                }
             }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Skinned Mesh Renderer was null. Skipping Apply."); }
+            }
+            return moddedSkin;
         }
 
         /// <summary>
@@ -64,23 +83,30 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         /// <param name="anchor">the parent transform of the replacement prefab instance if applicable</param>
         public void Remove(SkinnedMeshRenderer[] vanilla, Transform anchor)
         {
-            switch (actionType)
+            if (vanilla != null)
             {
-                case SkinnedMeshActionType.HIDE:
-                    foreach (SkinnedMeshRenderer renderer in vanilla)
-                    {
-                        renderer.enabled = true;
-                    }
-                    break;
-                case SkinnedMeshActionType.REPLACE:
-                    foreach (SkinnedMeshRenderer renderer in vanilla)
-                    {
-                        renderer.enabled = true;
-                    }
-                    GameObject.Destroy(anchor.GetComponentInChildren<ArmatureReflector>(true).gameObject);
-                    break;
-                case SkinnedMeshActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case SkinnedMeshActionType.HIDE:
+                        foreach (SkinnedMeshRenderer renderer in vanilla)
+                        {
+                            renderer.enabled = true;
+                        }
+                        break;
+                    case SkinnedMeshActionType.REPLACE:
+                        foreach (SkinnedMeshRenderer renderer in vanilla)
+                        {
+                            renderer.enabled = true;
+                        }
+                        GameObject.Destroy(anchor.GetComponentInChildren<ArmatureReflector>(true).gameObject);
+                        break;
+                    case SkinnedMeshActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Skinned Mesh Renderer was null. Skipping remove."); }
             }
         }
     }
@@ -102,33 +128,47 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public Mesh Apply(MeshFilter vanilla)
         {
             Mesh vanillaMesh = null;
-            switch (actionType)
+            if (vanilla != null)
             {
-                case StaticMeshActionType.HIDE:
-                    vanilla.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                    break;
-                case StaticMeshActionType.REPLACE:
-                    vanillaMesh = vanilla.mesh;
-                    vanilla.mesh = replacementMesh;
-                    break;
-                case StaticMeshActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case StaticMeshActionType.HIDE:
+                        vanilla.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                        break;
+                    case StaticMeshActionType.REPLACE:
+                        vanillaMesh = vanilla.mesh;
+                        vanilla.mesh = replacementMesh;
+                        break;
+                    case StaticMeshActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Mesh Filter was null. Skipping Apply."); }
             }
             return vanillaMesh;
         }
 
         public void Remove(MeshFilter vanilla, Mesh vanillaMesh)
         {
-            switch (actionType)
+            if (vanilla != null)
             {
-                case StaticMeshActionType.HIDE:
-                    vanilla.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                    break;
-                case StaticMeshActionType.REPLACE:
-                    vanilla.mesh = vanillaMesh;
-                    break;
-                case StaticMeshActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case StaticMeshActionType.HIDE:
+                        vanilla.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                        break;
+                    case StaticMeshActionType.REPLACE:
+                        vanilla.mesh = vanillaMesh;
+                        break;
+                    case StaticMeshActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Mesh Filter was null. Skipping remove."); }
             }
         }
     }
@@ -148,27 +188,45 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public Material Apply(Renderer vanillaRenderer, int materialIndex)
         {
             Material vanillaMaterial = null;
-            switch (actionType)
+            if (vanillaRenderer != null)
             {
-                case MaterialActionType.REPLACE:
-                    vanillaMaterial = vanillaRenderer.materials[materialIndex];
-                    vanillaRenderer.materials[materialIndex] = replacementMaterial;
-                    break;
-                case MaterialActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case MaterialActionType.REPLACE:
+                        vanillaMaterial = vanillaRenderer.materials[materialIndex];
+                        Material[] mats = vanillaRenderer.materials;
+                        mats[materialIndex] = replacementMaterial;
+                        vanillaRenderer.materials = mats;
+                        break;
+                    case MaterialActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning( "Vanilla Renderer was null for Material Action. Skipping Apply." ); }
             }
             return vanillaMaterial;
         }
 
         public void Remove(Renderer vanillaRenderer, int materialIndex, Material vanillaMaterial)
         {
-            switch (actionType)
+            if (vanillaRenderer != null)
             {
-                case MaterialActionType.REPLACE:
-                    vanillaRenderer.materials[materialIndex] = vanillaMaterial;
-                    break;
-                case MaterialActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case MaterialActionType.REPLACE:
+                        Material[] mats = vanillaRenderer.materials;
+                        mats[materialIndex] = vanillaMaterial;
+                        vanillaRenderer.materials = mats;
+                        break;
+                    case MaterialActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Renderer was null for Material Action. Skipping remove."); }
             }
         }
     }
@@ -189,19 +247,27 @@ namespace AntlerShed.EnemySkinKit.SkinAction
 
         public AudioClip Apply(ref AudioClip vanillaRef)
         {
+            
             AudioClip vanillaClip = null;
-            switch (actionType)
+            if (vanillaRef != null)
             {
-                case AudioActionType.MUTE:
-                    vanillaClip = vanillaRef;
-                    vanillaRef = AudioClip.Create("empty", 1, 1, 1000, false);
-                    break;
-                case AudioActionType.REPLACE:
-                    vanillaClip = vanillaRef;
-                    vanillaRef = replacementClip;
-                    break;
-                case AudioActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case AudioActionType.MUTE:
+                        vanillaClip = vanillaRef;
+                        vanillaRef = AudioClip.Create("empty", 1, 1, 1000, false);
+                        break;
+                    case AudioActionType.REPLACE:
+                        vanillaClip = vanillaRef;
+                        vanillaRef = replacementClip;
+                        break;
+                    case AudioActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip was null for Audio Action. Skipping Apply."); }
             }
             return vanillaClip;
         }
@@ -217,48 +283,69 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public AudioClip ApplyToSource(AudioSource vanillaSource)
         {
             AudioClip vanillaClip = null;
-            switch (actionType)
+            if (vanillaSource != null)
             {
-                case AudioActionType.MUTE:
-                    vanillaSource.mute = true;
-                    break;
-                case AudioActionType.REPLACE:
-                    vanillaClip = vanillaSource.clip;
-                    vanillaSource.clip = replacementClip;
-                    break;
-                case AudioActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case AudioActionType.MUTE:
+                        vanillaSource.mute = true;
+                        break;
+                    case AudioActionType.REPLACE:
+                        vanillaClip = vanillaSource.clip;
+                        vanillaSource.clip = replacementClip;
+                        break;
+                    case AudioActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla AudioSource was null for Audio Action. Skipping apply."); }
             }
             return vanillaClip;
         }
 
         public void Remove(ref AudioClip vanillaRef, AudioClip vanillaClip)
         {
-            switch (actionType)
+            if (vanillaRef != null)
             {
-                case AudioActionType.MUTE:
-                    vanillaRef = vanillaClip;
-                    break;
-                case AudioActionType.REPLACE:
-                    vanillaRef = vanillaClip;
-                    break;
-                case AudioActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case AudioActionType.MUTE:
+                        vanillaRef = vanillaClip;
+                        break;
+                    case AudioActionType.REPLACE:
+                        vanillaRef = vanillaClip;
+                        break;
+                    case AudioActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip was null for Audio Action. Skipping remove."); }
             }
         }
 
         public void RemoveFromSource(AudioSource vanillaSource, AudioClip vanillaClip)
         {
-            switch (actionType)
+            if (vanillaSource != null)
             {
-                case AudioActionType.MUTE:
-                    vanillaSource.mute = false;
-                    break;
-                case AudioActionType.REPLACE:
-                    vanillaSource.clip = vanillaClip;
-                    break;
-                case AudioActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case AudioActionType.MUTE:
+                        vanillaSource.mute = false;
+                        break;
+                    case AudioActionType.REPLACE:
+                        vanillaSource.clip = vanillaClip;
+                        break;
+                    case AudioActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla AudioSource was null for Audio Action. Skipping remove."); }
             }
         }
     }
@@ -281,50 +368,64 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public AudioClip[] Apply(ref AudioClip[] vanillaSource)
         {
             AudioClip[] vanillaClips = null;
-            switch (actionType)
+            if (vanillaSource != null)
             {
-                case AudioListActionType.MUTE:
-                    vanillaClips = new AudioClip[vanillaSource.Length];
-                    for(int i = 0; i <  vanillaSource.Length; i++)
-                    {
-                        vanillaClips[i] = vanillaSource[i];
-                        vanillaSource[i] = AudioClip.Create("empty", 1, 1, 1000, false);
-                    }
-                    break;
-                case AudioListActionType.REPLACE:
-                    vanillaClips = new AudioClip[vanillaSource.Length];
-                    Array.Copy(vanillaSource, vanillaClips, vanillaSource.Length);
-                    vanillaSource = replacementClips;
-                    break;
-                /*case AudioListActionType.PARTIAL_REPLACE:
-                    vanillaClips = new AudioClip[replacementClips.Length];
-                    for (int i = 0; i < replacementClips.Length; i++)
-                    {
-                        vanillaClips[i] = vanillaSource[i];
-                        vanillaSource[i] = replacementClips[i];
-                    }
-                    break;*/
-                case AudioListActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case AudioListActionType.MUTE:
+                        vanillaClips = new AudioClip[vanillaSource.Length];
+                        for (int i = 0; i < vanillaSource.Length; i++)
+                        {
+                            vanillaClips[i] = vanillaSource[i];
+                            vanillaSource[i] = AudioClip.Create("empty", 1, 1, 1000, false);
+                        }
+                        break;
+                    case AudioListActionType.REPLACE:
+                        vanillaClips = new AudioClip[vanillaSource.Length];
+                        Array.Copy(vanillaSource, vanillaClips, vanillaSource.Length);
+                        vanillaSource = replacementClips;
+                        break;
+                    /*case AudioListActionType.PARTIAL_REPLACE:
+                        vanillaClips = new AudioClip[replacementClips.Length];
+                        for (int i = 0; i < replacementClips.Length; i++)
+                        {
+                            vanillaClips[i] = vanillaSource[i];
+                            vanillaSource[i] = replacementClips[i];
+                        }
+                        break;*/
+                    case AudioListActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip Array was null for Audio List Action. Skipping Apply."); }
             }
             return vanillaClips;
         }
 
         public void Remove(ref AudioClip[] vanillaSource, AudioClip[] vanillaClips)
         {
-            switch (actionType)
+            if (vanillaSource != null)
             {
-                case AudioListActionType.MUTE:
-                    vanillaSource = vanillaClips;
-                    break;
-                case AudioListActionType.REPLACE:
-                    vanillaSource = vanillaClips;
-                    break;
-                /*case AudioListActionType.PARTIAL_REPLACE:
-                    Array.Copy(vanillaClips, vanillaSource, replacementClips.Length);
-                    break;*/
-                case AudioListActionType.RETAIN:
-                    break;
+                switch (actionType)
+                {
+                    case AudioListActionType.MUTE:
+                        vanillaSource = vanillaClips;
+                        break;
+                    case AudioListActionType.REPLACE:
+                        vanillaSource = vanillaClips;
+                        break;
+                    /*case AudioListActionType.PARTIAL_REPLACE:
+                        Array.Copy(vanillaClips, vanillaSource, replacementClips.Length);
+                        break;*/
+                    case AudioListActionType.RETAIN:
+                        break;
+                }
+            }
+            else
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip Array was null for Audio List Action. Skipping remove."); }
             }
         }
     }

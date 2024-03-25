@@ -8,7 +8,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 {
     public class HoarderBugSkinner : BaseSkinner
     {
-        protected const string ANCHOR_PATH = "HoarderBugModel/AnimContainer/Armature";
+        protected const string ANCHOR_PATH = "HoarderBugModel/AnimContainer";
         protected const string BODY_PATH = "HoarderBugModel/Cube";
         protected const string ORGANS_PATH = "HoarderBugModel/Cube.001";
         protected const string LEFT_WING_PATH = "HoarderBugModel/AnimContainer/Armature/Abdomen/Chest/Head/LeftWing";
@@ -93,7 +93,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 {
                     enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                enemy.transform.Find(ANCHOR_PATH),
+                new Dictionary<string, Transform>() { { "Armature", enemy.transform.Find($"{ANCHOR_PATH}/Armature") } }
             );
             enemy.transform.Find(ORGANS_PATH)?.gameObject.SetActive(false);
         }
