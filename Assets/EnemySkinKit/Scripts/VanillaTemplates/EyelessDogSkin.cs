@@ -35,6 +35,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction killPlayerAudioAction;
         [SerializeField]
         private AudioAction breathingAudioAction;
+        [SerializeField]
+        private AudioAction stunAudioAction;
+        [SerializeField]
+        private AudioAction growlAudioAction;
+        [SerializeField]
+        private AudioAction chasingAudioAction;
+        [SerializeField]
+        private AudioAction lungeAudioAction;
+        [SerializeField]
+        private AudioListAction footstepsAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -47,8 +57,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new EyelessDogSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 bodyMeshAction,
                 topTeethMeshAction,
@@ -58,7 +66,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 bottomTeethMaterialAction,
                 screamAudioAction,
                 killPlayerAudioAction,
-                breathingAudioAction
+                breathingAudioAction,
+                stunAudioAction,
+                growlAudioAction,
+                chasingAudioAction,
+                lungeAudioAction,
+                footstepsAudioListAction
             );
         }
     }

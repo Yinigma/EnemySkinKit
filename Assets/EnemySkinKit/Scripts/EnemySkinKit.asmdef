@@ -9,7 +9,8 @@
     "precompiledReferences": [
         "BepInEx.dll",
         "Assembly-CSharp.dll",
-        "EnemySkinRegistry.dll"
+        "EnemySkinRegistry.dll",
+        "Unity.Netcode.Runtime.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

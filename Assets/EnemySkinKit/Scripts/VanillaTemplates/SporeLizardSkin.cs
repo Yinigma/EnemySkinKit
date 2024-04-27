@@ -32,6 +32,10 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction rattleTailAudioAction;
         [SerializeField]
         private AudioAction biteAudioAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioListAction footstepsAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -44,8 +48,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new SporeLizardSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 bodyMaterialAction, 
                 bodyMeshAction,
@@ -55,7 +57,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 puffAudioAction,
                 nervousMumbleAudioAction,
                 rattleTailAudioAction,
-                biteAudioAction
+                biteAudioAction,
+                hitBodyAudioAction,
+                footstepsAudioListAction
             );
         }
     }

@@ -19,7 +19,21 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction farWideAudioAction;
+        private AudioAction stunAudioAction;
+        [SerializeField]
+        private AudioAction roarAudioAction;
+        [SerializeField]
+        private AudioAction eatPlayerAudioAction;
+        [SerializeField]
+        private AudioAction fallAudioAction;
+        [SerializeField]
+        private AudioAction deathCryAudioAction;
+        [SerializeField]
+        private AudioListAction stompAudioListAction;
+        [SerializeField]
+        private AudioListAction rumbleAudioListAction;
+        [SerializeField]
+        private AudioAction burnAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -30,7 +44,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override Skinner CreateSkinner()
         {
-            return new ForestKeeperSkinner(muteEffects, muteVoice, attachments, bodyMaterialAction, bodyMeshAction, farWideAudioAction);
+            return new ForestKeeperSkinner
+            (
+                attachments, 
+                bodyMaterialAction, 
+                bodyMeshAction,
+                stunAudioAction,
+                roarAudioAction,
+                eatPlayerAudioAction,
+                fallAudioAction,
+                deathCryAudioAction,
+                stompAudioListAction,
+                rumbleAudioListAction,
+                burnAudioAction
+            );
         }
     }
 

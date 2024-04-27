@@ -31,7 +31,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [SerializeField]
         private AudioAction breatheAudioAction;
         [SerializeField]
-        private AudioAction skipAndWalkAudioAction;
+        private AudioListAction skipAndWalkAudioListAction;
         [SerializeField]
         private AudioAction heartBeatAudioAction;
         [Space(10)]
@@ -46,8 +46,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new GhostGirlSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 bodyMaterialAction, 
                 leftEyeMaterialAction, 
@@ -57,7 +55,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 rightEyeMeshAction,
                 hauntingCuesAudioListAction,
                 breatheAudioAction,
-                skipAndWalkAudioAction,
+                skipAndWalkAudioListAction,
                 heartBeatAudioAction
             );
         }

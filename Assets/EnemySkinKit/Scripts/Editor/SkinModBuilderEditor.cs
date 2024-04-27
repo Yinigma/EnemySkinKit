@@ -31,6 +31,7 @@ namespace AntlerShed.EnemySkinKit
             editor.Add(manifest);
 
             editor.Add(new PropertyField(serializedObject.FindProperty("skins")));
+            editor.Add(new PropertyField(serializedObject.FindProperty("configs")));
             Button createButton = new Button();
             createButton.text = "Generate Mod Files";
             createButton.clicked += genModFiles;

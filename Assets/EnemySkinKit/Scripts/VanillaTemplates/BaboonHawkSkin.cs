@@ -22,6 +22,22 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioListAction screamAudioListAction;
         [SerializeField]
         private AudioListAction laughAudioListAction;
+        [SerializeField]
+        private AudioAction intimidateAudioAction;
+        [SerializeField]
+        private AudioAction intimidateVoiceAction;
+        [SerializeField]
+        private AudioAction enterFightAction;
+        [SerializeField]
+        private AudioAction killPlayerAudioAction;
+        [SerializeField]
+        private AudioAction stabAudioAction;
+        [SerializeField]
+        private AudioAction deathAudioAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioListAction footstepsAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -32,7 +48,22 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override Skinner CreateSkinner()
         {
-            return new BaboonHawkSkinner(muteEffects, muteVoice, attachments, bodyMaterialAction, bodyMeshAction, screamAudioListAction, laughAudioListAction);
+            return new BaboonHawkSkinner
+            (
+                attachments, 
+                bodyMaterialAction, 
+                bodyMeshAction, 
+                screamAudioListAction, 
+                laughAudioListAction,
+                intimidateAudioAction,
+                intimidateVoiceAction,
+                enterFightAction,
+                killPlayerAudioAction,
+                stabAudioAction,
+                deathAudioAction,
+                hitBodyAudioAction,
+                footstepsAudioAction
+            );
         }
     }
 }

@@ -1,7 +1,5 @@
 using AntlerShed.EnemySkinKit.SkinAction;
-using AntlerShed.SkinRegistry;
 using System.Collections.Generic;
-using System.Net.Mail;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
@@ -31,8 +29,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public HygrodereSkinner
         (
-            bool muteSoundEffects,
-            bool muteVoice,
             ArmatureAttachment[] attachments,
             MaterialAction slimeMaterialAction, 
             SkinnedMeshAction slimeMeshAction,
@@ -41,7 +37,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             AudioAction hitSlimeAudioAction,
             AudioAction killPlayerAudioAction,
             AudioAction idleAudioAction
-        ) : base(muteSoundEffects, muteVoice)
+        )
         {
             SlimeMaterialAction = slimeMaterialAction;
             SlimeMeshAction = slimeMeshAction;
@@ -55,7 +51,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override void Apply(GameObject enemy)
         {
-            base.Apply(enemy);
             activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(SLIME_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaSlimeMaterial = SlimeMaterialAction.Apply(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             vanillaAgitatedAudio = AgitatedAudioAction.Apply(ref enemy.GetComponent<BlobAI>().agitatedSFX);
@@ -76,7 +71,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override void Remove(GameObject enemy)
         {
-            base.Remove(enemy);
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SlimeMaterialAction.Remove(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSlimeMaterial);
             AgitatedAudioAction.Remove(ref enemy.GetComponent<BlobAI>().agitatedSFX, vanillaAgitatedAudio);

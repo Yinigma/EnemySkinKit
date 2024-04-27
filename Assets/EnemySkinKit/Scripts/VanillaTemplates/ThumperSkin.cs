@@ -30,6 +30,10 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction eatPlayerAudioAction;
         [SerializeField]
         private AudioAction biteAudioAction;
+        [SerializeField]
+        private AudioAction stunAudioAction;
+        [SerializeField]
+        private AudioListAction stompAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -43,8 +47,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new ThumperSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 bodyMaterialAction, 
                 bodyMeshAction,
@@ -53,7 +55,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 biteAudioAction,
                 eatPlayerAudioAction,
                 hitsAudioAction,
-                longRoarsAudioListAction
+                longRoarsAudioListAction,
+                stunAudioAction,
+                stompAudioListAction
             );
         }
     }

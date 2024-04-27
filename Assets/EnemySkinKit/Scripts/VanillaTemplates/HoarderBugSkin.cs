@@ -36,6 +36,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction flyAudioAction;
         [SerializeField]
         private AudioAction hitPlayerAudioAction;
+        [SerializeField]
+        private AudioAction stunAudioAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioListAction footstepsAudioListAction;
         [Space(10)]
 
         [Header("Audio Attachments")]
@@ -48,8 +54,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new HoarderBugSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 bodyMaterialAction,
                 leftWingMaterialAction,
@@ -61,7 +65,10 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 angryChirpsAudioListAction,
                 beginAttackAudioAction,
                 flyAudioAction,
-                hitPlayerAudioAction
+                hitPlayerAudioAction,
+                stunAudioAction,
+                hitBodyAudioAction,
+                footstepsAudioListAction
             );
         }
     }

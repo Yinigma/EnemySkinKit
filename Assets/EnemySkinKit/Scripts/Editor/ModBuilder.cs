@@ -56,6 +56,10 @@ namespace AntlerShed.EnemySkinKit
         [Tooltip("The skins that will be packaged with your mod.")]
         private BaseSkin[] skins;
 
+        [SerializeField]
+        [Tooltip("Any default configurations to include with your mod")]
+        private DefaultSkinConfigurationView[] configs;
+
         private const string ASSET_BUNDLE_NAME = "SkinAssets";
         private const string PLUGINS_FOLDER = "plugins";
         private const string ASSETS_FOLDER = "AssetBundles";
@@ -148,6 +152,7 @@ namespace AntlerShed.EnemySkinKit
                 throw new InvalidModNameException();
             }
 
+            Debug.Log(createSkinModSource(sanitizedGUID, sanitizedModName, "BundleName", major, minor, patch, sanitizedPluginName, sanitizedNamespace, skins, configs));
             stagingPath = Path.Combine( "Assets", $"{sanitizedModName}{STAGING_FOLDER_SUFFIX}");
             pluginPath = Path.Combine(new string[] { stagingPath, PLUGINS_FOLDER, sanitizedModName });
             assetsPath = Path.Combine( pluginPath, ASSETS_FOLDER );
@@ -196,8 +201,9 @@ namespace AntlerShed.EnemySkinKit
             sourceCodeFilePath = Path.Combine(pluginPath, sanitizedPluginName + ".cs");
             using (StreamWriter pluginSourceFile = new StreamWriter(sourceCodeFilePath, false))
             {
-                pluginSourceFile.WriteLine(createSkinModSource(sanitizedGUID, sanitizedModName, assetBundleName, major, minor, patch, sanitizedPluginName, sanitizedNamespace, skins));
+                pluginSourceFile.WriteLine(createSkinModSource(sanitizedGUID, sanitizedModName, assetBundleName, major, minor, patch, sanitizedPluginName, sanitizedNamespace, skins, configs));
             }
+            
             assemblyFilePath = Path.Combine(pluginPath, sanitizedAssemblyName + ".asmdef");
             using (StreamWriter assemblyFile = new StreamWriter(assemblyFilePath, false))
             {
@@ -266,12 +272,33 @@ namespace AntlerShed.EnemySkinKit
             );
         }
 
-        private string createTemplateSkinEntrySource(BaseSkin skin)
+        private string createDefaultSkinConfigSource(DefaultSkinConfigurationView defaultConfig)
         {
-            return $"EnemySkinRegistry.RegisterSkin(bundle.LoadAsset<{skin.GetType().Name}>(\"{AssetDatabase.GetAssetPath(skin)}\"));";
+            string configEntries = "";
+            for(int i = 0; i < defaultConfig.defaultEntries.Length-1; i++)
+            {
+                configEntries += createDefaultSkinConfigEntrySource(defaultConfig.defaultEntries[i]) + ", ";
+            }
+            if(defaultConfig.defaultEntries.Length > 0)
+            {
+                configEntries += createDefaultSkinConfigEntrySource(defaultConfig.defaultEntries[defaultConfig.defaultEntries.Length - 1]);
+            }
+            
+            return $"new DefaultSkinConfigData(new DefaultSkinConfigEntry[] {{ {configEntries} }}, {Math.Clamp( defaultConfig.defaultFrequency, 0.0f, 1.0f)}f, {Math.Clamp( defaultConfig.vanillaFallbackFrequency, 0.0f, 1.0f)}f)";
         }
 
-        private string createSkinModSource(string modGUID, string modName, string bundleName, uint major, uint minor, uint patch, string pluginClassName, string namespaceText, BaseSkin[] skins)
+        private string createDefaultSkinConfigEntrySource(DefaultMoonFrequencyView defaultConfig)
+        {
+
+            return $"new DefaultSkinConfigEntry(\"{defaultConfig.moonId}\", {defaultConfig.frequency}f)";
+        }
+
+        private string createTemplateSkinEntrySource(BaseSkin skin, DefaultSkinConfigurationView? defaultConfig)
+        {
+            return $"EnemySkinRegistry.RegisterSkin(bundle.LoadAsset<{skin.GetType().Name}>(\"{AssetDatabase.GetAssetPath(skin)}\"){(!defaultConfig.HasValue ? "" : $", {createDefaultSkinConfigSource(defaultConfig.Value)}")});";
+        }
+
+        private string createSkinModSource(string modGUID, string modName, string bundleName, uint major, uint minor, uint patch, string pluginClassName, string namespaceText, BaseSkin[] skins, DefaultSkinConfigurationView[] configs)
         {
             return
                 "//This is generated code and shouldn't be modified unless it's taken out of its original environment\n" +
@@ -301,7 +328,7 @@ namespace AntlerShed.EnemySkinKit
                 $"\t\t\t\t\t\"AssetBundles/{bundleName}\"\n" +
                 "\t\t\t\t)\n" +
                 "\t\t\t);\n" +
-                $"{skins.Select((skin) => "\t\t\t" + createTemplateSkinEntrySource(skin)).Aggregate("", (str, line) => str + line)}\n" +
+                $"{skins.Select((skin) => "\t\t\t" + createTemplateSkinEntrySource(skin, configs.Any((cfg) => cfg.skinId.Equals(skin.Id)) ? configs.First((cfg)=>cfg.skinId.Equals(skin.Id)) : null)).Aggregate("", (str, line) => str + line)}\n" +
                 "\t\t}\n" +
                 "\t}\n"+
                 "}";
@@ -338,7 +365,7 @@ namespace AntlerShed.EnemySkinKit
                 $"\t\"version_number\": \"{major}.{minor}.{patch}\",\n" +
                 "\t\"website_url\": \"\",\n" +
                 $"\t\"description\": \"{description}\",\n" +
-                "\t\"dependencies\": [\"AntlerShed-EnemySkinKit-0.2.8\"]\n" +
+                "\t\"dependencies\": [\"AntlerShed-EnemySkinKit-1.0.0\"]\n" +
                 "}";
         }
 

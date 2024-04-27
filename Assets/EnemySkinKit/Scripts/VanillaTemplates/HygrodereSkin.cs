@@ -40,8 +40,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new HygrodereSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 slimeMaterialAction, 
                 slimeMeshAction,

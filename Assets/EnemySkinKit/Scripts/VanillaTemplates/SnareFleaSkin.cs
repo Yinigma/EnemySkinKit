@@ -19,13 +19,25 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction shrieksAudioListAction;
+        private AudioAction clingToCeilingAudioAction;
+        [SerializeField]
+        private AudioAction crawlAudioAction;
         [SerializeField]
         private AudioAction fallShriekAudioAction;
         [SerializeField]
         private AudioAction hitGroundAudioAction;
         [SerializeField]
-        private AudioAction hitAudioAction;
+        private AudioListAction shrieksAudioListAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioAction hitBody2AudioAction;
+        [SerializeField]
+        private AudioAction clingToPlayerAudioAction;
+        [SerializeField]
+        private AudioAction clingToLocalPlayerAudioAction;
+        [SerializeField]
+        private AudioAction deathAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -38,15 +50,19 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new SnareFleaSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 bodyMaterialAction,
                 bodyMeshAction,
+                clingToCeilingAudioAction,
+                crawlAudioAction,
                 fallShriekAudioAction,
                 hitGroundAudioAction,
-                hitAudioAction,
-                shrieksAudioListAction
+                shrieksAudioListAction,
+                clingToPlayerAudioAction,
+                clingToLocalPlayerAudioAction,
+                hitBodyAudioAction,
+                hitBody2AudioAction,
+                deathAudioAction
             );
         }
     }

@@ -1,7 +1,5 @@
 using AntlerShed.EnemySkinKit.SkinAction;
-using AntlerShed.SkinRegistry;
 using System.Collections.Generic;
-using System.Net.Mail;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
@@ -30,8 +28,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public EarthLeviathanSkinner
         (
-            bool muteSoundEffects,
-            bool muteVoice,
             ArmatureAttachment[] attachments,
             SkinnedMeshAction bodyMeshAction, 
             MaterialAction bodyMaterialAction,
@@ -40,7 +36,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             AudioListAction roarAudioAction,
             AudioAction emergeAudioAction,
             AudioAction hitGroundAudioAction
-        ) : base(muteSoundEffects, muteVoice)
+        )
         {
             BodyMeshAction = bodyMeshAction;
             BodyMaterialAction = bodyMaterialAction;
@@ -54,7 +50,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override void Apply(GameObject enemy)
         {
-            base.Apply(enemy);
             activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             vanillaAmbientRumbleAudio = AmbientRumbleAudioAction.Apply(ref enemy.GetComponent<SandWormAI>().ambientRumbleSFX);
@@ -74,7 +69,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override void Remove(GameObject enemy)
         {
-            base.Remove(enemy);
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
             AmbientRumbleAudioAction.Remove(ref enemy.GetComponent<SandWormAI>().ambientRumbleSFX, vanillaAmbientRumbleAudio);

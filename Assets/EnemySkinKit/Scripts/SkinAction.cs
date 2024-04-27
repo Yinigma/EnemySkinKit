@@ -209,6 +209,20 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaMaterial;
         }
 
+        public Material ApplyRef(ref Material vanillaRef)
+        {
+            Material vanillaMaterial = vanillaRef;
+            switch (actionType)
+            {
+                case MaterialActionType.REPLACE:
+                    vanillaRef = replacementMaterial;
+                    break;
+                case MaterialActionType.RETAIN:
+                    break;
+            }
+            return vanillaMaterial;
+        }
+
         public void Remove(Renderer vanillaRenderer, int materialIndex, Material vanillaMaterial)
         {
             if (vanillaRenderer != null)
@@ -229,6 +243,18 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                 if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Renderer was null for Material Action. Skipping remove."); }
             }
         }
+
+        public void RemoveRef(ref Material dest, Material vanillaMaterial)
+        {
+            switch (actionType)
+            {
+                case MaterialActionType.REPLACE:
+                    dest = vanillaMaterial;
+                    break;
+                case MaterialActionType.RETAIN:
+                    break;
+            }
+        }
     }
 
     public enum AudioActionType
@@ -245,20 +271,20 @@ namespace AntlerShed.EnemySkinKit.SkinAction
 
         public AudioClip replacementClip;
 
+        public AudioClip Silence => AudioClip.Create("empty", 1, 1, 1000, false);
+
         public AudioClip Apply(ref AudioClip vanillaRef)
         {
             
-            AudioClip vanillaClip = null;
+            AudioClip vanillaClip = vanillaRef;
             if (vanillaRef != null)
             {
                 switch (actionType)
                 {
                     case AudioActionType.MUTE:
-                        vanillaClip = vanillaRef;
-                        vanillaRef = AudioClip.Create("empty", 1, 1, 1000, false);
+                        vanillaRef = Silence;
                         break;
                     case AudioActionType.REPLACE:
-                        vanillaClip = vanillaRef;
                         vanillaRef = replacementClip;
                         break;
                     case AudioActionType.RETAIN:
@@ -272,6 +298,21 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaClip;
         }
 
+        public AudioClip WorkingClip(AudioClip vanillaClip)
+        {
+            switch (actionType)
+            {
+                case AudioActionType.REPLACE:
+                    return replacementClip;
+                case AudioActionType.MUTE:
+                    return Silence;
+                case AudioActionType.RETAIN:
+                    goto default;
+                default:
+                    return vanillaClip;
+            }
+        }
+
         /// <summary>
         /// Used in cases where an audio source only has a single, static audio clip as its source.
         /// Rather than changing the pointer to point to a different audio clip, this will replace 
@@ -282,17 +323,22 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         /// <returns>The vanilla audio clip in the case that the actionType is set to REPLACE. Null otherwise. Whatever is returned must be stored and re-used in the corresponding Remove call</returns>
         public AudioClip ApplyToSource(AudioSource vanillaSource)
         {
-            AudioClip vanillaClip = null;
+            AudioClip vanillaClip = vanillaSource.clip;
             if (vanillaSource != null)
             {
                 switch (actionType)
                 {
                     case AudioActionType.MUTE:
-                        vanillaSource.mute = true;
+                        vanillaSource.Stop();
+                        vanillaSource.clip = Silence;
                         break;
                     case AudioActionType.REPLACE:
-                        vanillaClip = vanillaSource.clip;
                         vanillaSource.clip = replacementClip;
+                        if (vanillaSource.isPlaying) 
+                        {
+                            vanillaSource.Stop();
+                            vanillaSource.Play();
+                        }
                         break;
                     case AudioActionType.RETAIN:
                         break;
@@ -338,6 +384,11 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                         break;
                     case AudioActionType.REPLACE:
                         vanillaSource.clip = vanillaClip;
+                        if (vanillaSource.isPlaying)
+                        {
+                            vanillaSource.Stop();
+                            vanillaSource.Play();
+                        }
                         break;
                     case AudioActionType.RETAIN:
                         break;
@@ -365,34 +416,25 @@ namespace AntlerShed.EnemySkinKit.SkinAction
 
         public AudioClip[] replacementClips;
 
+        private AudioClip Silence => AudioClip.Create("empty", 1, 1, 1000, false);
+
         public AudioClip[] Apply(ref AudioClip[] vanillaSource)
         {
-            AudioClip[] vanillaClips = null;
+            AudioClip[] vanillaClips = new AudioClip[vanillaSource.Length];
+            Array.Copy(vanillaSource, vanillaClips, vanillaSource.Length);
             if (vanillaSource != null)
             {
                 switch (actionType)
                 {
                     case AudioListActionType.MUTE:
-                        vanillaClips = new AudioClip[vanillaSource.Length];
                         for (int i = 0; i < vanillaSource.Length; i++)
                         {
-                            vanillaClips[i] = vanillaSource[i];
-                            vanillaSource[i] = AudioClip.Create("empty", 1, 1, 1000, false);
+                            vanillaSource[i] = Silence;
                         }
                         break;
                     case AudioListActionType.REPLACE:
-                        vanillaClips = new AudioClip[vanillaSource.Length];
-                        Array.Copy(vanillaSource, vanillaClips, vanillaSource.Length);
                         vanillaSource = replacementClips;
                         break;
-                    /*case AudioListActionType.PARTIAL_REPLACE:
-                        vanillaClips = new AudioClip[replacementClips.Length];
-                        for (int i = 0; i < replacementClips.Length; i++)
-                        {
-                            vanillaClips[i] = vanillaSource[i];
-                            vanillaSource[i] = replacementClips[i];
-                        }
-                        break;*/
                     case AudioListActionType.RETAIN:
                         break;
                 }
@@ -402,6 +444,26 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                 if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip Array was null for Audio List Action. Skipping Apply."); }
             }
             return vanillaClips;
+        }
+
+        public AudioClip[] WorkingClips(AudioClip[] vanillaClips)
+        {
+            switch (actionType)
+            {
+                case AudioListActionType.MUTE:
+                    AudioClip[] silenceClips = new AudioClip[vanillaClips.Length];
+                    for (int i = 0; i < vanillaClips.Length; i++)
+                    {
+                        silenceClips[i] = Silence;
+                    }
+                    return silenceClips;
+                case AudioListActionType.REPLACE:
+                    return replacementClips;
+                case AudioListActionType.RETAIN:
+                    goto default;
+                default:
+                    return vanillaClips;
+            }
         }
 
         public void Remove(ref AudioClip[] vanillaSource, AudioClip[] vanillaClips)
@@ -416,9 +478,6 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                     case AudioListActionType.REPLACE:
                         vanillaSource = vanillaClips;
                         break;
-                    /*case AudioListActionType.PARTIAL_REPLACE:
-                        Array.Copy(vanillaClips, vanillaSource, replacementClips.Length);
-                        break;*/
                     case AudioListActionType.RETAIN:
                         break;
                 }

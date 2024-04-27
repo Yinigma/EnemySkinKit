@@ -35,6 +35,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction angerAudioAction;
         [SerializeField]
         private AudioAction neckSnapAudioAction;
+        [SerializeField]
+        private AudioAction foundAudioAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioAction stunAudioAction;
+        [SerializeField]
+        private AudioListAction leafRustleAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -47,8 +55,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new BrackenSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 leafMaterialAction,
                 bodyMaterialAction,
@@ -58,7 +64,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 leftEyeMeshAction,
                 rightEyeMeshAction,
                 angerAudioAction,
-                neckSnapAudioAction
+                neckSnapAudioAction,
+                foundAudioAction,
+                hitBodyAudioAction,
+                stunAudioAction,
+                leafRustleAudioListAction
             );
         }
     }

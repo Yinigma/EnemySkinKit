@@ -41,7 +41,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override Skinner CreateSkinner()
         {
-            return new EarthLeviathanSkinner(muteEffects, muteVoice, attachments, bodyMeshAction, bodyMaterialAction, groundRumbleAudioListAction, ambientRumbleAudioListAction, roarAudioListAction, emergeAudioAction, hitGroundAudioAction);
+            return new EarthLeviathanSkinner(attachments, bodyMeshAction, bodyMaterialAction, groundRumbleAudioListAction, ambientRumbleAudioListAction, roarAudioListAction, emergeAudioAction, hitGroundAudioAction);
         }
     }
 }

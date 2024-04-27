@@ -19,10 +19,10 @@ NavMeshProjectSettings:
     cost: 1
   - name: Climb
     cost: 1
-  - name:
+  - name: Overhead
     cost: 1
-  - name:
-    cost: 1
+  - name: Trap
+    cost: 3
   - name:
     cost: 1
   - name:

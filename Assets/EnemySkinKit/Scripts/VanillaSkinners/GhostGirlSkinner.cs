@@ -1,7 +1,6 @@
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
-using GameNetcodeStuff;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +19,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected Mesh vanillaLeftEyeMesh;
         protected Mesh vanillaRightEyeMesh;
 
-        protected AudioClip vanillaSkipWalkSound;
+        protected AudioClip[] vanillaSkipWalkSounds;
         protected AudioClip vanillaBreatheSound;
         protected AudioClip vanillaHeartbeatSound;
         protected AudioClip[] vanillaHauntingSounds;
@@ -34,7 +33,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected StaticMeshAction LeftEyeMeshAction { get; }
         protected StaticMeshAction RightEyeMeshAction { get; }
 
-        protected AudioAction SkipWalkSoundAction { get; }
+        protected AudioListAction SkipWalkSoundsAction { get; }
         protected AudioAction BreatheSoundAction { get; }
         protected AudioListAction HauntingSoundsAction { get; }
         protected AudioAction HeartbeatSoundAction { get; }
@@ -44,8 +43,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public GhostGirlSkinner
         (
-            bool muteSoundEffects,
-            bool muteVoice,
             ArmatureAttachment[] attachments,
             MaterialAction bodyMaterialAction, 
             MaterialAction leftEyeMaterialAction, 
@@ -55,9 +52,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             StaticMeshAction rightEyeMeshAction,
             AudioListAction hauntingSoundsAction,
             AudioAction breatheSoundAction,
-            AudioAction skipWalkSoundAction,
+            AudioListAction skipWalkSoundsAction,
             AudioAction heartbeatSoundAction
-        ) : base(muteSoundEffects, muteVoice)
+        )
         {
             BodyMaterialAction = bodyMaterialAction;
             LeftEyeMaterialAction = leftEyeMaterialAction;
@@ -65,7 +62,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             BodyMeshAction = bodyMeshAction;
             LeftEyeMeshAction = leftEyeMeshAction;
             RightEyeMeshAction = rightEyeMeshAction;
-            SkipWalkSoundAction = skipWalkSoundAction;
+            SkipWalkSoundsAction = skipWalkSoundsAction;
             BreatheSoundAction = breatheSoundAction;
             HauntingSoundsAction = hauntingSoundsAction;
             HeartbeatSoundAction = heartbeatSoundAction;
@@ -74,7 +71,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override void Apply(GameObject enemy)
         {
-            base.Apply(enemy);
+            DressGirlAI girl = enemy.GetComponent<DressGirlAI>();
+            PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             vanillaLeftEyeMaterial = LeftEyeMaterialAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
@@ -83,10 +81,13 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaLeftEyeMesh = LeftEyeMeshAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
             vanillaRightEyeMesh = RightEyeMeshAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            vanillaHauntingSounds = HauntingSoundsAction.Apply(ref enemy.GetComponent<DressGirlAI>().appearStaringSFX);
-            vanillaSkipWalkSound = SkipWalkSoundAction.Apply(ref enemy.GetComponent<DressGirlAI>().skipWalkSFX);
-            vanillaBreatheSound = BreatheSoundAction.Apply(ref enemy.GetComponent<DressGirlAI>().breathingSFX);
-            vanillaHeartbeatSound = HeartbeatSoundAction.ApplyToSource(enemy.GetComponent<DressGirlAI>().heartbeatMusic);
+            vanillaHauntingSounds = HauntingSoundsAction.Apply(ref girl.appearStaringSFX);
+            if(audioAnimEvents!=null)
+            {
+                vanillaSkipWalkSounds = SkipWalkSoundsAction.Apply(ref audioAnimEvents.randomClips);
+            }
+            vanillaBreatheSound = BreatheSoundAction.Apply(ref girl.breathingSFX);
+            vanillaHeartbeatSound = HeartbeatSoundAction.ApplyToSource(girl.heartbeatMusic);
 
             GameObject moddedGO = BodyMeshAction.Apply
             (
@@ -100,24 +101,27 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
             eventHandler = new GhostGirlDisappearEventHandler(moddedGO);
 
-            EnemySkinRegistry.RegisterEnemyEventHandler(enemy.GetComponent<DressGirlAI>(), eventHandler);
+            EnemySkinRegistry.RegisterEnemyEventHandler(girl, eventHandler);
         }
 
         public override void Remove(GameObject enemy)
         {
-            base.Remove(enemy);
+            DressGirlAI girl = enemy.GetComponent<DressGirlAI>();
+            PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
+            EnemySkinRegistry.RemoveEnemyEventHandler(girl, eventHandler);
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
             LeftEyeMaterialAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaLeftEyeMaterial);
             RightEyeMaterialAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaRightEyeMaterial);
-
             LeftEyeMeshAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLeftEyeMesh);
             RightEyeMeshAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaRightEyeMesh);
-
-            HauntingSoundsAction.Remove(ref enemy.GetComponent<DressGirlAI>().appearStaringSFX, vanillaHauntingSounds);
-            SkipWalkSoundAction.Remove(ref enemy.GetComponent<DressGirlAI>().skipWalkSFX, vanillaSkipWalkSound);
-            BreatheSoundAction.Remove(ref enemy.GetComponent<DressGirlAI>().breathingSFX, vanillaBreatheSound);
-            HeartbeatSoundAction.RemoveFromSource(enemy.GetComponent<DressGirlAI>().heartbeatMusic, vanillaHeartbeatSound);
+            HauntingSoundsAction.Remove(ref girl.appearStaringSFX, vanillaHauntingSounds);
+            if(audioAnimEvents!=null)
+            {
+                SkipWalkSoundsAction.Remove(ref audioAnimEvents.randomClips, vanillaSkipWalkSounds);
+            }
+            BreatheSoundAction.Remove(ref girl.breathingSFX, vanillaBreatheSound);
+            HeartbeatSoundAction.RemoveFromSource(girl.heartbeatMusic, vanillaHeartbeatSound);
 
             BodyMeshAction.Remove
             (
@@ -128,7 +132,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 enemy.transform.Find(ANCHOR_PATH)
             );
 
-            EnemySkinRegistry.RemoveEnemyEventHandler(enemy.GetComponent<DressGirlAI>(), eventHandler);
+            
         }
 
     }
@@ -142,30 +146,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             ModdedMeshGO = ghostGirl;
         }
-
-        public void OnHit(EnemyAI enemy, PlayerControllerB attackingPlayer) { }
-
-        public void OnStun(EnemyAI enemy, PlayerControllerB attackingPlayer) { }
-
-        public void OnKilled(EnemyAI enemy) { }
-
-        public void OnSpawn(EnemyAI enemy) { }
-
-        public void OnSpawnFinished(EnemyAI enemy) { }
-
-        public void OnTargetPlayer(EnemyAI enemy, PlayerControllerB target) { }
-
-        public void Update(EnemyAI enemy) { }
-
-        public void OnDestroy(EnemyAI enemy) { }
-
-        public void OnChoosePlayer(DressGirlAI ghostGirl, PlayerControllerB target) { }
-
-        public void OnStartChasing(DressGirlAI ghostGirl) { }
-
-        public void OnStopChasing(DressGirlAI ghostGirl) { }
-
-        public void OnKillPlayer(DressGirlAI ghostGirl, PlayerControllerB player) { }
 
         public void OnHide(DressGirlAI ghostGirl)
         {
@@ -186,7 +166,5 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 renderer.gameObject.layer = LayerMask.NameToLayer("Enemies");
             }
         }
-
-        public void OnStartToDisappear(DressGirlAI ghostGirl) { }
     }
 }

@@ -29,6 +29,10 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [Header("Audio")]
         [SerializeField]
         private AudioListAction springNoisesAudioListAction;
+        [SerializeField]
+        private AudioListAction footstepsAudioListAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -39,7 +43,18 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override Skinner CreateSkinner()
         {
-            return new CoilHeadSkinner(muteEffects, muteVoice, attachments, bodyMeshAction, headMeshAction, bodyMaterialAction, rustMaterialAction, headMaterialAction, springNoisesAudioListAction);
+            return new CoilHeadSkinner
+            (
+                attachments, 
+                bodyMeshAction, 
+                headMeshAction, 
+                bodyMaterialAction, 
+                rustMaterialAction, 
+                headMaterialAction, 
+                springNoisesAudioListAction,
+                footstepsAudioListAction,
+                hitBodyAudioAction
+            );
         }
     }
 }

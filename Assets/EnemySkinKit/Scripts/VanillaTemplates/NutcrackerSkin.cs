@@ -19,11 +19,27 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction torsoTurningAudioListAction;
+        private AudioAction torsoTurnAudioAction;
+        [SerializeField]
+        private AudioListAction torsoFinishTurningAudioListAction;
         [SerializeField]
         private AudioAction aimAudioAction;
         [SerializeField]
         private AudioAction kickAudioAction;
+        [SerializeField]
+        private AudioAction hitEyeAudioAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioAction headPopUpAudioAction;
+        [SerializeField]
+        private AudioAction reloadAudioAction;
+        [SerializeField]
+        private AudioAction angryDrumsAudioAction;
+        [SerializeField]
+        private AudioListAction footstepsAudioListAction;
+        [SerializeField]
+        private AudioListAction jointSqueaksAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -34,7 +50,23 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public override Skinner CreateSkinner()
         {
-            return new NutcrackerSkinner(muteEffects, muteVoice, attachments, bodyMaterialAction, bodyMeshAction, torsoTurningAudioListAction, aimAudioAction, kickAudioAction);
+            return new NutcrackerSkinner
+            (
+                attachments, 
+                bodyMaterialAction, 
+                bodyMeshAction, 
+                torsoTurnAudioAction,
+                torsoFinishTurningAudioListAction,
+                aimAudioAction, 
+                kickAudioAction,
+                headPopUpAudioAction,
+                hitBodyAudioAction,
+                hitEyeAudioAction,
+                reloadAudioAction,
+                angryDrumsAudioAction,
+                jointSqueaksAudioListAction,
+                footstepsAudioListAction
+            );
         }
     }
 }

@@ -24,8 +24,8 @@ MonoBehaviour:
   GenerateAssetsProject: 0
   FixLocalDiskPackages: 0
   ImageCachePath: Library/MarkdownImageCache
-  CachedImageCount: 14
-  CacheSize: 0.68
+  CachedImageCount: 22
+  CacheSize: 1.08
   MarkdownOpenMode: 1
   SelectedPipeline: {fileID: 0}
   SelectedManifest: {fileID: 11400000, guid: 898aaa7a439eac94e85e1e4d9cee5a1e, type: 2}

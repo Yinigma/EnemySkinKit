@@ -1,12 +1,12 @@
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
+using AntlerShed.SkinRegistry.Events;
 using System.Collections.Generic;
-using System.Net.Mail;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
-    public class JesterSkinner : BaseSkinner
+    public class JesterSkinner : BaseSkinner, JesterEventHandler
     {
         protected const string BODY_LOD0_PATH = "MeshContainer/JackInTheBoxBody";
         protected const string BODY_LOD1_PATH = "MeshContainer/JackInTheBoxBodyLowDetail";
@@ -23,6 +23,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LID_PATH = "MeshContainer/AnimContainer/metarig/BoxContainer/BoxBone/BoxLid";
 
         protected const string ANCHOR_PATH = "MeshContainer/AnimContainer/metarig/BoxContainer";
+
+        protected const string ANIM_EVENT_PATH = "MeshContainer/AnimContainer";
 
         protected Material vanillaBodyMaterial;
         protected Material vanillaSkullMaterial;
@@ -45,6 +47,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaPopUpAudio;
         protected AudioClip vanillaScreamAudio;
         protected AudioClip vanillaKillPlayerAudio;
+        protected AudioClip vanillaFootstepAudio;
+        protected AudioClip[] vanillaStompAudio;
+        protected AudioClip[] vanillaCrankAudio;
         protected List<GameObject> activeAttachments;
 
         protected MaterialAction SkullMaterialAction { get; }
@@ -65,12 +70,18 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioAction PopUpAudioAction { get; }
         protected AudioAction ScreamingAudioAction { get; }
         protected AudioAction KillPlayerAudioAction { get; }
+        protected AudioAction HitBodyAudioAction { get; }
+        protected AudioAction FootstepAudioAction { get; }
+        protected AudioListAction ChaseStompAudioListAction { get; }
+        protected AudioListAction CrankAudioListAction { get; }
         protected ArmatureAttachment[] Attachments { get; }
+
+        protected bool EffectsSilenced => HitBodyAudioAction.actionType != AudioActionType.RETAIN;
+
+        protected AudioSource modCreatureEffects;
 
         public JesterSkinner
         (
-            bool muteSoundEffects,
-            bool muteVoice,
             ArmatureAttachment[] attachments,
             MaterialAction skullMaterialAction, 
             MaterialAction jawMaterialAction, 
@@ -88,8 +99,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             AudioAction musicAudioAction,
             AudioAction popUpAudioAction,
             AudioAction screamingAudioAction,
-            AudioAction killPlayerAudioAction
-        ) : base(muteSoundEffects, muteVoice)
+            AudioAction killPlayerAudioAction,
+            AudioAction hitBodyAudioAction,
+            AudioAction footstepAudioAction,
+            AudioListAction crankAudioListAction,
+            AudioListAction stompAudioListAction
+        )
         {
             SkullMaterialAction = skullMaterialAction;
             JawMaterialAction = jawMaterialAction;
@@ -108,13 +123,27 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             PopUpAudioAction = popUpAudioAction;
             ScreamingAudioAction = screamingAudioAction;
             KillPlayerAudioAction = killPlayerAudioAction;
+            HitBodyAudioAction = hitBodyAudioAction;
+            FootstepAudioAction = footstepAudioAction;
+            CrankAudioListAction = crankAudioListAction;
+            ChaseStompAudioListAction = stompAudioListAction;
             Attachments = attachments;
         }
 
         //This enemy has so many goddamn parts
         public override void Apply(GameObject enemy)
         {
-            base.Apply(enemy);
+            JesterAI jester = enemy.GetComponent<JesterAI>();
+            PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
+            if (EffectsSilenced)
+            {
+                modCreatureEffects = CreateModdedAudioSource(jester.creatureSFX, "modEffects");
+                jester.creatureSFX.mute = true;
+                if (audioAnimEvents != null)
+                {
+                    audioAnimEvents.audioToPlay = modCreatureEffects;
+                }
+            }
             activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(BODY_LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
@@ -140,10 +169,17 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaCrankMesh = CrankMeshAction.Apply(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>());
             vanillaLidMesh = LidMeshAction.Apply(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            vanillaScreamAudio = ScreamingAudioAction.Apply(ref enemy.GetComponent<JesterAI>().screamingSFX);
-            vanillaPopUpAudio = PopUpAudioAction.Apply(ref enemy.GetComponent<JesterAI>().popUpSFX);
-            vanillaKillPlayerAudio = KillPlayerAudioAction.Apply(ref enemy.GetComponent<JesterAI>().killPlayerSFX);
-            vanillaMusic = MusicAudioAction.Apply(ref enemy.GetComponent<JesterAI>().popGoesTheWeaselTheme);
+            vanillaScreamAudio = ScreamingAudioAction.Apply(ref jester.screamingSFX);
+            vanillaPopUpAudio = PopUpAudioAction.Apply(ref jester.popUpSFX);
+            vanillaKillPlayerAudio = KillPlayerAudioAction.Apply(ref jester.killPlayerSFX);
+            vanillaMusic = MusicAudioAction.Apply(ref jester.popGoesTheWeaselTheme);
+
+            if(audioAnimEvents != null)
+            {
+                vanillaCrankAudio = CrankAudioListAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaStompAudio = ChaseStompAudioListAction.Apply(ref audioAnimEvents.randomClips2);
+                vanillaFootstepAudio = FootstepAudioAction.Apply(ref audioAnimEvents.audioClip);
+            }
 
             BodyMeshAction.Apply
             (
@@ -155,11 +191,24 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 },
                 enemy.transform.Find(ANCHOR_PATH)
             );
+            EnemySkinRegistry.RegisterEnemyEventHandler(jester, this);
         }
 
         public override void Remove(GameObject enemy)
         {
-            base.Remove(enemy);
+            JesterAI jester = enemy.GetComponent<JesterAI>();
+            PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
+            EnemySkinRegistry.RemoveEnemyEventHandler(jester, this);
+            if (EffectsSilenced)
+            {
+                DestroyModdedAudioSource(modCreatureEffects);
+                jester.creatureSFX.mute = false;
+                if (audioAnimEvents != null)
+                {
+                    audioAnimEvents.audioToPlay = jester.creatureSFX;
+                }
+            }
+
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
             BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
@@ -185,10 +234,17 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             CrankMeshAction.Remove(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaCrankMesh);
             LidMeshAction.Remove(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLidMesh);
 
-            ScreamingAudioAction.Remove(ref enemy.GetComponent<JesterAI>().screamingSFX, vanillaScreamAudio);
-            PopUpAudioAction.Remove(ref enemy.GetComponent<JesterAI>().popUpSFX, vanillaPopUpAudio);
-            KillPlayerAudioAction.Remove(ref enemy.GetComponent<JesterAI>().killPlayerSFX, vanillaKillPlayerAudio);
-            MusicAudioAction.Remove(ref enemy.GetComponent<JesterAI>().popGoesTheWeaselTheme, vanillaMusic);
+            ScreamingAudioAction.Remove(ref jester.screamingSFX, vanillaScreamAudio);
+            PopUpAudioAction.Remove(ref jester.popUpSFX, vanillaPopUpAudio);
+            KillPlayerAudioAction.Remove(ref jester.killPlayerSFX, vanillaKillPlayerAudio);
+            MusicAudioAction.Remove(ref jester.popGoesTheWeaselTheme, vanillaMusic);
+
+            if (audioAnimEvents != null)
+            {
+                CrankAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaCrankAudio);
+                FootstepAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaFootstepAudio);
+                ChaseStompAudioListAction.Remove(ref audioAnimEvents.randomClips2, vanillaStompAudio);
+            }
 
             BodyMeshAction.Remove
             (
@@ -200,6 +256,32 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 },
                 enemy.transform.Find(ANCHOR_PATH)
             );
+        }
+
+        public void OnKillPlayer(JesterAI instance, GameNetcodeStuff.PlayerControllerB playerControllerB)
+        {
+            if(EffectsSilenced)
+            {
+                modCreatureEffects.PlayOneShot(KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
+            }
+        }
+
+        public void OnEnterPoppedState(JesterAI instance)
+        {
+            if(EffectsSilenced)
+            {
+                modCreatureEffects.PlayOneShot(PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
+            }
+        }
+
+        public void OnHit(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer, bool playSoundEffect)
+        {
+            if(EffectsSilenced && playSoundEffect)
+            {
+                modCreatureEffects.PlayOneShot(HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+            }
         }
     }
 }

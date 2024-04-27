@@ -86,7 +86,7 @@ namespace AntlerShed.EnemySkinKit.ArmatureReflection
                 if(source!=null)
                 {
                     int destDex = additionalMappings[source];
-                    destInstance[destDex].localPosition = source.localPosition;
+                    destInstance[destDex].position = source.position;
                     destInstance[destDex].localRotation = source.localRotation;
                     destInstance[destDex].localScale = source.localScale;
                 }

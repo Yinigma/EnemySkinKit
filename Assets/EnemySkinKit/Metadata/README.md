@@ -158,23 +158,36 @@ Just don't be a dope like me and leave the scale at zero in your example image.
 - Icon - a 256 x 256 png file that will be your mod's thumbnail.
 - Version - Your mod's version, separated by major, minor, and patch. Check the tooltips or use good ol' google to find out when you should increment these numbers.
 - Skins - the skin scriptable objects to include in your mod. Just hit the plus button or set the amount of skins by entering a number in the skins size field. Drag and drop any skins you've created using the previous steps into this list.
+- Configs - Default frequency configurations for any included skins. These control the initial configuration of how frequently skins appear on each moon. Skin and moon ids must match character for character. The skin id will be the same as the one you specify in your skin scriptable object. The moon id will be the same as the one registered with the skin registry. For the vanilla moons the ids are:
 
-5.Click the "Create Mod" button. If a message pops up saying that a file failed to write, hit "cancel" on that dialog instead of "try again" or "force quit."
+ - 41 Experimentation
+ - 220 Assurance
+ - 56 Vow
+ - 21 Offense
+ - 61 March
+ - 20 Adamance
+ - 85 Rend
+ - 7 Dine
+ - 8 Titan
+ - 68 Artifice
+ - 5 Embrion
 
-6.If successful, your mod files and the generated code will be saved to a zip file located in a folder called "EnemySkinKit" in the unity project folder (the same level as the assets folder).
+6.Click the "Create Mod" button. If a message pops up saying that a file failed to write, hit "cancel" on that dialog instead of "try again" or "force quit."
+
+7.If successful, your mod files and the generated code will be saved to a zip file located in a folder called "EnemySkinKit" in the unity project folder (the same level as the assets folder).
 
 ![The location of the exports folder in the ](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/ExportsLocation.PNG?raw=true)
 
 ![The exported mod in the file explorer](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/ExportedMod.PNG?raw=true)
 
-7.Install your mod in whatever way that pleases you and verify that it works as intended.
+8.Install your mod in whatever way that pleases you and verify that it works as intended.
 You can pretty easily test your mod with the ThunderStore mod manager by using its "Import Local Mod" feature. Just search for it in the settings menu.
 
 ![The mod in the EnemySkinRegistry's config menu](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/SuccessfulAdd.PNG?raw=true)
 
 ![The mod as it appears in game](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/SkinnedCoilhead.PNG?raw=true)
 
-8.Once you've verified and tested your mod, you can go to Thunderstore and upload your zip file.
+9.Once you've verified and tested your mod, you can go to Thunderstore and upload your zip file.
 
 ## Additional Logic Method
 
@@ -190,7 +203,7 @@ You're also free to add child classes to the existing Skin and Skinner types to 
 If you'd prefer something leaner or want something more custom, consider looking at the developer section of the EnemySkinRegistry mod page.
 
 ### *So About Those Armature Maps...
-Lethal Company skinned meshes have proven difficult to work with, at least for me. Reskinning a mesh in the usual way is probably possible, but it seems no matter what I try, when I go to replace a skinned mesh in a skinned mesh component, it ends up a scrambled mess. Get in touch with me if you've got this figured out. Until then, my solution is "Armature Maps," which copy the animation from the vanilla mesh over to your modded mesh at runtime. These were a planned feature anyway, because they have the benefit of allowing you to adjust the proportions of your model. They're just more expensive computationally.
+Lethal Company skinned meshes have proven difficult to work with, at least for me. Reskinning a mesh in the usual way is probably possible, but it seems no matter what I try, when I go to replace a skinned mesh in a skinned mesh component, it ends up a scrambled mess. Get in touch with me if you've got this figured out. Until then, my solution is "Armature Maps," which copy the animation from the vanilla mesh over to your modded mesh at runtime. These were a planned feature anyway, because they have the benefit of allowing you to adjust the proportions of your model.
 To get an armature map set up, right click in the Project Window, and select Create > EnemySkinKit > Animation > Armature Mapping. 
 
 ![Location of the Armature Map creation option in the context menu](https://github.com/Yinigma/EnemySkinKit/blob/main/Images/CreateArmatureMap.png?raw=true)
@@ -215,20 +228,34 @@ Don't forget to unlock the inspector if you locked it.
 
 Also certain enemies have special cases where you can't name the bone you're mapping to whatever you like and instead have to ensure that it matches in the armature itself. This is because these bones affect deform bones, but aren't listed in the skinned mesh as one of the bone transforms. Here's a table with all of them.
 
-| Nutcracker     | Eyeless Dog    | Bunker Spider | Hoarder Bug | Forest Keeper |
-|----------------|----------------|---------------|-------------|---------------|
-| spinecontainer | Armature       | Armature      | Armature    | metarig       |
-|                | Neck1Container |               |             |               |
+| Nutcracker     | Eyeless Dog    | Bunker Spider | Hoarder Bug | Forest Keeper | Old Bird      | Butler       |
+|----------------|----------------|---------------|-------------|---------------|---------------|--------------|
+| spinecontainer | Armature       | Armature      | Armature    | metarig       |TorsoContainer | metarig      |
+|                | Neck1Container |               |             |               |GunArmContainer| NeckContainer|
 
-With the exception of Neck1Container and spinecontainer, all of these are the armature root, so all you'll need to worry about with them is giving your root, or a child of it, the same name. The other two you'll just want to have a root bone for the blind dog's neck and the nutcracker's torso respectively. 
+With the exception of Neck1Container and spinecontainer, all of these are the armature root, so all you'll need to worry about with them is giving your root, or a child of it, the same name. The other two you'll just want to have a root bone for the blind dog's neck and the nutcracker's torso respectively.
 
-That's about as hairy as it gets. For actually creating the Skinned Meshes, I'd recommend getting one of the FBX files that come packaged with this mod. The folder for that is in the same folder as the EnemyRigs folder. You can get a rigged model in the correct position and import it to blender or your poison of choice and work from there. Teaching how to create and rig a skeletal mesh is a little beyond the scope of this little ReadMe. But there are plenty of resources out there for you to get started if you're new. Good luck!
+That's about as hairy as it gets. For actually creating the Skinned Meshes, I'd recommend getting one of the FBX files that come packaged with this mod. The folder for that is in the same folder as the EnemyRigs folder. You can get a rigged model in the correct position and import it to blender or your poison of choice and work from there. Teaching how to create and rig a skeletal mesh is a little beyond the scope of this little ReadMe. But there are plenty of resources out there for you to get started if you're new.
+
+Also keep in mind that the armature reflector isn't magic. It can allow for altering the proportions of an enemy in most cases, but it's going to work better the closer you are to the original armature. For this reason, I reccommend using the included example models as a starting point (and for sanity checks) since they all use lightly modified versions of the vanilla armatures and have all been verified to move the way they're supposed to. If you want to use your own armature (the main reason to do so would be to avoid doing the weight painting yourself) you'll  need to make sure that the bone chains are oriented in the same way in the mod armature as they are in the example armature. Elsewise the rotations and translations will copy over to the wrong axes, so arms will twist instead of bend, for example. You can check this visually in blender by enabling bone axes in the armature viewport display.
+
+## Note on Sound Replacement
+
+Because this mod seeks to apply skins on a per-instance basis, I normally opt to swap out references to sounds when the enemy spawns (I recommend doing the same if you intend to extend a base skin). That runs into an issue with certain sounds that are stored in Lethal Company per enemy TYPE (in a Scriptable Object) and not per enemy INSTANCE (in a MonoBehaviour). My solution for these cases is to silence the vanilla AudioSource, add a modded one, then play the sound through that at the correct time. This unfortunately bleeds over to any other sound effects that use these sources, and the events that play these sounds are time-consuming for me to test. So if you're running into trouble with certain sounds not playing and the enemy you're skinning has a "stun" sound or a "hit body" sound attached to it, consider setting that to "retain" if it's not important that either of those sounds are changed from vanilla.
+
+Additionally, these clips will also cause the replacement of Audio sources that other clips play out of:
+
+- Baboon Hawk: intimidate, intimidateVoice, death, killPlayer, enterFight
+- Nutcracker: hitEye, hitBody, reload, headPopUp
+- Old Bird: Brainwashing clips, stomp clips
+- Butler: stab, coat rustle, inflate, pop
+ 
 
 ## Tips
 
-- Use a developer mod like [Hamunii's "Dev Tools"](https://thunderstore.io/c/lethal-company/p/Hamunii/DevTools/) to enable cheats and debug options while testing. 
+- Use a developer mod like [Hamunii's "Dev Tools"](https://thunderstore.io/c/lethal-company/p/Hamunii/DevTools/) to enable cheats and debug options while testing.
+- If you run into trouble getting the armature reflector working, get it working with one of the example models first to help root out what's going wrong with your model.
+- Use a tool like Asset Ripper or Asset Studio to rip game assets from you install of Lethal Company and get any vanilla resources you may want to examine or modify.
 
-## "To Do"s
-
-- Testing to ensure these skins are client-side only.
-- Currently, not all sound effects can be replaced. This is because some are stored in scriptable objects, but these skins work at an instance level. So full sound replacement will have to wait on the EnemySkinRegistry finishing all of the enemy dispatchers. Until then, most sounds can at least be muted via the "mute creature effects" and "mute creature voice" toggles on each enemy skin object.
+## Get Help and Give Feedback
+You can find me on the Lethal Company modding discord or you can open up an issue on one of my [github repositories](https://github.com/Yinigma) if you want to request a new feature, additional enemy events, or run into an issue that this readme doesn't address.

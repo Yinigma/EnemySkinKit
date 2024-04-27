@@ -18,6 +18,7 @@ MonoBehaviour:
   files:
   - {fileID: 2800000, guid: e5d7d61539c0a964a9237d3ada411c0e, type: 3}
   - {fileID: 4900000, guid: af2791466000e754ca04c18118bab6b6, type: 3}
+  - {fileID: 4900000, guid: d1c4a036c0e210346bd6905392af7fbe, type: 3}
   - {fileID: 102900000, guid: 2b389f3bf3f02584aa810f9a517cf70d, type: 3}
   - {fileID: 102900000, guid: fe35745b34ae6f74583c5f3635dfa056, type: 3}
   - {fileID: 4900000, guid: 7c579c66788359a4cb44f7a6a90d7636, type: 3}
@@ -88,7 +89,6 @@ MonoBehaviour:
   Author: Yinigma
   Name: EnemySkinKit
   Description: Toolkit for making enemy skins in the unity editor
-  Version: 0.2.8
+  Version: 1.0.1
   Dependencies:
-  - {fileID: 11400000, guid: ea9d9b9bbded233ce6ae6857edd3ae4d, type: 2}
   - {fileID: 11400000, guid: c4ce1456f051853125e4018bc252fa4d, type: 2}

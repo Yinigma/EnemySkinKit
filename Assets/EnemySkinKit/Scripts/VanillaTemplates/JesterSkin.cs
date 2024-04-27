@@ -50,6 +50,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioAction screamingAudioAction;
         [SerializeField]
         private AudioAction killPlayerAudioAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioAction footstepAudioAction;
+        [SerializeField]
+        private AudioListAction crankAudioListAction;
+        [SerializeField]
+        private AudioListAction stompAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -62,8 +70,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new JesterSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 skullMaterialAction,
                 jawMaterialAction,
@@ -81,7 +87,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 popGoesTheWeaselMusicAudioAction,
                 popUpAudioAction,
                 screamingAudioAction,
-                killPlayerAudioAction
+                killPlayerAudioAction,
+                hitBodyAudioAction,
+                footstepAudioAction,
+                crankAudioListAction,
+                stompAudioListAction
             );
         }
     }

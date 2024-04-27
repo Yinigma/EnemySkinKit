@@ -35,7 +35,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [SerializeField]
         private AudioAction hangPlayerAudioAction;
         [SerializeField]
-        private AudioAction hitAudioAction;
+        private AudioAction hitHissAudioAction;
+        [SerializeField]
+        private AudioAction hitBodyAudioAction;
+        [SerializeField]
+        private AudioAction stunAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -48,8 +52,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             return new BunkerSpiderSkinner
             (
-                muteEffects, 
-                muteVoice,
                 attachments,
                 bodyMaterialAction,
                 leftFangMaterialAction,
@@ -61,7 +63,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 attackAudioAction,
                 spoolPlayerAudioAction,
                 hangPlayerAudioAction,
-                hitAudioAction
+                hitHissAudioAction,
+                hitBodyAudioAction,
+                stunAudioAction
             );
         }
     }
