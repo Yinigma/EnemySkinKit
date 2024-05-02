@@ -77,7 +77,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaSpringAudio = SpringAudioAction.Apply(ref coilhead.springNoises);
             if(audioAnimEvents!=null)
             {
-                vanillaFootstepsAudio = SpringAudioAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaFootstepsAudio = FootstepsAudioListAction.Apply(ref audioAnimEvents.randomClips);
             }
             vanillaHeadMesh = HeadMeshAction.Apply(enemy.transform.Find(HEAD_PATH)?.gameObject.GetComponent<MeshFilter>());
             EnemySkinRegistry.RegisterEnemyEventHandler(coilhead, this);
@@ -100,7 +100,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             SpringAudioAction.Remove(ref coilhead.springNoises, vanillaSpringAudio);
             if (audioAnimEvents != null)
             {
-                SpringAudioAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudio);
+                FootstepsAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudio);
             }
             BodyMeshAction.Remove(new SkinnedMeshRenderer[] { enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, enemy.transform.Find(ANCHOR_PATH));
             HeadMeshAction.Remove(enemy.transform.Find(HEAD_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaHeadMesh);

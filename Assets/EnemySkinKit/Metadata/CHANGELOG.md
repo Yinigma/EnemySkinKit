@@ -1,5 +1,14 @@
 # Changelog
 
+### 1.0.3
+
+- Corrected some mismatched sounds.
+
+### 1.0.2
+
+- Fixed broken manifest.
+
+
 ### 1.0.1
 
 - Fixed code generation to include default skin configurations.

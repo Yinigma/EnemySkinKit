@@ -127,12 +127,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaDefaultMaterial = DefaultMaterialAction.ApplyRef(ref mech.defaultMat);
 
             vanillaShootGunAudio = ShootGunAudioListAction.Apply(ref mech.shootGunSFX);
-            vanillaExplosionAudio = ShootGunAudioListAction.Apply(ref mech.largeExplosionSFX);
+            vanillaExplosionAudio = ExplosionAudioListAction.Apply(ref mech.largeExplosionSFX);
 
             vanillaAlarmAudio = AlarmAudioAction.ApplyToSource(mech.LocalLRADAudio);
             vanillaActivateSpotlightAudio = SpotlightActivateAudioAction.ApplyToSource(mech.spotlightOnAudio);
 
-            vanillaThrustFarAudio = ThrusterStartAudioAction.ApplyToSource(mech.flyingDistantAudio);
+            vanillaThrustFarAudio = ThrusterFarAudioAction.ApplyToSource(mech.flyingDistantAudio);
             vanillaBlowtorchAudio = BlowtorchAudioAction.ApplyToSource(mech.blowtorchAudio);
             vanillaChargeAudio = ChargeAudioAction.ApplyToSource(mech.chargeForwardAudio);
             vanillaEngineAudio = EngineHumAudioAction.ApplyToSource(mech.engineSFX);
@@ -190,11 +190,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             DefaultMaterialAction.RemoveRef(ref mech.defaultMat, vanillaDefaultMaterial);
 
             ShootGunAudioListAction.Remove(ref mech.shootGunSFX, vanillaShootGunAudio);
-            ShootGunAudioListAction.Remove(ref mech.largeExplosionSFX, vanillaExplosionAudio);
+            ExplosionAudioListAction.Remove(ref mech.largeExplosionSFX, vanillaExplosionAudio);
 
             AlarmAudioAction.RemoveFromSource(mech.LocalLRADAudio, vanillaAlarmAudio);
             SpotlightActivateAudioAction.RemoveFromSource(mech.spotlightOnAudio, vanillaActivateSpotlightAudio);
-            ThrusterStartAudioAction.RemoveFromSource(mech.flyingDistantAudio, vanillaThrustFarAudio);
+            ThrusterFarAudioAction.RemoveFromSource(mech.flyingDistantAudio, vanillaThrustFarAudio);
             BlowtorchAudioAction.RemoveFromSource(mech.blowtorchAudio, vanillaBlowtorchAudio);
             ChargeAudioAction.RemoveFromSource(mech.chargeForwardAudio, vanillaChargeAudio);
             EngineHumAudioAction.RemoveFromSource(mech.engineSFX, vanillaEngineAudio);

@@ -89,6 +89,7 @@ MonoBehaviour:
   Author: Yinigma
   Name: EnemySkinKit
   Description: Toolkit for making enemy skins in the unity editor
-  Version: 1.0.1
+  Version: 1.0.3
   Dependencies:
   - {fileID: 11400000, guid: c4ce1456f051853125e4018bc252fa4d, type: 2}
+  - {fileID: 11400000, guid: ea9d9b9bbded233ce6ae6857edd3ae4d, type: 2}
