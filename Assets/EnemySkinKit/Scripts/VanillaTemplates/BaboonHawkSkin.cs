@@ -40,30 +40,38 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private AudioListAction footstepsAudioAction;
         [Space(10)]
 
+        [Header("Particles")]
+        [SerializeField]
+        private MaterialAction bloodMaterialAction;
+        [SerializeField]
+        private ParticleSystemAction bloodParticleAction;
+        [Space(10)]
+
         [Header("Armature Attachments")]
         [SerializeField]
         private ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public AudioListAction ScreamAudioListAction => screamAudioListAction;
+        public AudioListAction LaughAudioListAction => laughAudioListAction;
+        public AudioAction IntimidateAudioAction => intimidateAudioAction;
+        public AudioAction IntimidateVoiceAction => intimidateVoiceAction;
+        public AudioAction EnterFightAction => enterFightAction;
+        public AudioAction KillPlayerAudioAction => killPlayerAudioAction;
+        public AudioAction StabAudioAction => stabAudioAction;
+        public AudioAction DeathAudioAction => deathAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioListAction FootstepsAudioAction => footstepsAudioAction;
+        public MaterialAction BloodMaterialAction => bloodMaterialAction;
+        public ParticleSystemAction BloodParticleAction => bloodParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.BABOON_HAWK_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new BaboonHawkSkinner
-            (
-                attachments, 
-                bodyMaterialAction, 
-                bodyMeshAction, 
-                screamAudioListAction, 
-                laughAudioListAction,
-                intimidateAudioAction,
-                intimidateVoiceAction,
-                enterFightAction,
-                killPlayerAudioAction,
-                stabAudioAction,
-                deathAudioAction,
-                hitBodyAudioAction,
-                footstepsAudioAction
-            );
+            return new BaboonHawkSkinner(this);
         }
     }
 }

@@ -17,4 +17,13 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public abstract string EnemyId { get; }
         public abstract Skinner CreateSkinner();
     }
+
+    public abstract class BaseNestSkin : BaseSkin, NestSkin
+    {
+        public string SkinId => id;
+
+        public abstract Skinner CreateNestSkinner();
+    }
+
+
 }

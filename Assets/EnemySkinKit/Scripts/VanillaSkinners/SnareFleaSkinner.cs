@@ -11,8 +11,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LOD0_PATH = "CentipedeModel/LOD1";
         protected const string LOD1_PATH = "CentipedeModel/LOD2";
         protected const string ANCHOR_PATH = "CentipedeModel/AnimContainer/Armature";
+        protected const string SILK_ROAD = "CentipedeModel/AnimContainer/Armature/Head/Body/Body.001/Body.002/Body.003/SilkParticle";
 
-        protected Material vanillaBodyMaterial;
+        protected VanillaMaterial vanillaBodyMaterial;
         protected AudioClip vanillaClingToCeilingAudio;
         protected AudioClip vanillaHitGroundAudio;
         protected AudioClip vanillaHitAudio;
@@ -21,84 +22,53 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaCrawlAudio;
         protected AudioClip vanillaFallShriekAudio;
         protected AudioClip vanillaDeathAudio;
+        protected ParticleSystem vanillaSilkParticle;
         protected AudioClip[] vanillaShrieksAudio;
         protected List<GameObject> activeAttachments;
+        protected GameObject skinnedMeshReplacement;
+        protected VanillaMaterial vanillaSilkMaterial;
+        protected ParticleSystem replacementSilkParticle;
 
-        protected MaterialAction BodyMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected AudioAction ClingToCeilingAudioAction { get; }
-        protected AudioAction HitGroundAudioAction { get; }
-        protected AudioAction ClingToPlayerAudioAction { get; }
-        protected AudioAction ClingToLocalPlayerAudioAction { get; }
-        protected AudioAction HitBody2AudioAction { get; }
-        protected AudioAction HitBodyAudioAction { get; }
-        protected AudioListAction ShrieksAudioAction { get; }
-        protected AudioAction CrawlAudioAction { get; }
-        protected AudioAction FallShriekAudioAction { get; }
-        protected AudioAction DeathAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-
-        protected bool EffectsSilenced => HitBodyAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
 
         protected AudioSource modCreatureEffects;
 
-        public SnareFleaSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction bodyMaterialAction, 
-            SkinnedMeshAction bodyMeshAction,
-            AudioAction clingToCeilingAudioAction,
-            AudioAction crawlAudioAction,
-            AudioAction fallShriekAudioAction,
-            AudioAction hitGroundAudioAction,
-            AudioListAction shrieksAudioAction,
-            AudioAction clingToPlayerAudioAction,
-            AudioAction clingToLocalAudioAction,
-            AudioAction hitBodyAudioAction,
-            AudioAction hitBody2AudioAction,
-            AudioAction deathAudioAction
-        )
-        {
-            BodyMaterialAction = bodyMaterialAction;
-            BodyMeshAction = bodyMeshAction;
+        protected SnareFleaSkin SkinData { get; }
 
-            ClingToCeilingAudioAction = clingToCeilingAudioAction;
-            HitGroundAudioAction = hitGroundAudioAction;
-            ShrieksAudioAction = shrieksAudioAction;
-            CrawlAudioAction = crawlAudioAction;
-            FallShriekAudioAction = fallShriekAudioAction;
-            ClingToPlayerAudioAction = clingToPlayerAudioAction;
-            ClingToLocalPlayerAudioAction = clingToLocalAudioAction;
-            HitBody2AudioAction = hitBody2AudioAction;
-            HitBodyAudioAction = hitBodyAudioAction;
-            DeathAudioAction = deathAudioAction;
-            Attachments = attachments;
+        public SnareFleaSkinner(SnareFleaSkin skinData)
+        {
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
         {
             CentipedeAI flea = enemy.GetComponent<CentipedeAI>();
             
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
 
-            vanillaClingToCeilingAudio = ClingToCeilingAudioAction.Apply(ref flea.enemyBehaviourStates[1].SFXClip);
-            vanillaCrawlAudio = CrawlAudioAction.Apply(ref flea.enemyBehaviourStates[2].SFXClip);
-            vanillaFallShriekAudio = FallShriekAudioAction.Apply(ref flea.enemyBehaviourStates[2].VoiceClip);
-            vanillaHitGroundAudio = HitGroundAudioAction.Apply(ref flea.hitGroundSFX);
-            vanillaHitAudio = HitBody2AudioAction.Apply(ref flea.hitCentipede);
-            vanillaShrieksAudio = ShrieksAudioAction.Apply(ref flea.shriekClips);
-            vanillaClingAudio = ClingToPlayerAudioAction.Apply(ref flea.clingToPlayer3D);
-            vanillaClingLocalAudio = ClingToLocalPlayerAudioAction.ApplyToSource(flea.clingingToPlayer2DAudio);
-            vanillaDeathAudio = DeathAudioAction.Apply(ref flea.dieSFX);
+            vanillaClingToCeilingAudio = SkinData.ClingToCeilingAudioAction.Apply(ref flea.enemyBehaviourStates[1].SFXClip);
+            vanillaCrawlAudio = SkinData.CrawlAudioAction.Apply(ref flea.enemyBehaviourStates[2].SFXClip);
+            vanillaFallShriekAudio = SkinData.FallShriekAudioAction.Apply(ref flea.enemyBehaviourStates[2].VoiceClip);
+            vanillaHitGroundAudio = SkinData.HitGroundAudioAction.Apply(ref flea.hitGroundSFX);
+            vanillaHitAudio = SkinData.HitBody2AudioAction.Apply(ref flea.hitCentipede);
+            vanillaShrieksAudio = SkinData.ShrieksAudioListAction.Apply(ref flea.shriekClips);
+            vanillaClingAudio = SkinData.ClingToPlayerAudioAction.Apply(ref flea.clingToPlayer3D);
+            vanillaClingLocalAudio = SkinData.ClingToLocalPlayerAudioAction.ApplyToSource(flea.clingingToPlayer2DAudio);
+            vanillaDeathAudio = SkinData.DeathAudioAction.Apply(ref flea.dieSFX);
+
+            vanillaSilkParticle = flea.transform.Find(SILK_ROAD).GetComponent<ParticleSystem>();
+
+            vanillaSilkMaterial = SkinData.SilkMaterialAction.Apply(vanillaSilkParticle?.GetComponent<ParticleSystemRenderer>(), 0);
+            replacementSilkParticle = SkinData.SilkParticleAction.Apply(vanillaSilkParticle);
 
             if (EffectsSilenced)
             {
                 modCreatureEffects = CreateModdedAudioSource(flea.creatureSFX, "modEffects");
                 flea.creatureSFX.mute = true;
             }
-            BodyMeshAction.Apply
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -118,27 +88,34 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 DestroyModdedAudioSource(modCreatureEffects);
                 flea.creatureSFX.mute = false;
             }
+
+            if(vanillaSilkParticle != null)
+            {
+                SkinData.SilkParticleAction.Remove(vanillaSilkParticle, replacementSilkParticle);
+                SkinData.SilkMaterialAction.Remove(vanillaSilkParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaSilkMaterial);
+            }
+
             EnemySkinRegistry.RemoveEnemyEventHandler(flea, this);
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            ClingToCeilingAudioAction.Remove(ref flea.enemyBehaviourStates[1].SFXClip, vanillaClingToCeilingAudio);
-            CrawlAudioAction.Remove(ref flea.enemyBehaviourStates[2].SFXClip, vanillaCrawlAudio);
-            FallShriekAudioAction.Remove(ref flea.enemyBehaviourStates[2].VoiceClip, vanillaFallShriekAudio);
-            HitGroundAudioAction.Remove(ref flea.hitGroundSFX, vanillaHitGroundAudio);
-            HitBody2AudioAction.Remove(ref flea.hitCentipede, vanillaHitAudio);
-            ShrieksAudioAction.Remove(ref flea.shriekClips, vanillaShrieksAudio);
-            ClingToPlayerAudioAction.Remove(ref flea.clingToPlayer3D, vanillaClingAudio);
-            DeathAudioAction.Remove(ref flea.dieSFX, vanillaDeathAudio);
-            ClingToLocalPlayerAudioAction.RemoveFromSource(flea.clingingToPlayer2DAudio, vanillaClingLocalAudio);
-            BodyMeshAction.Remove
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.ClingToCeilingAudioAction.Remove(ref flea.enemyBehaviourStates[1].SFXClip, vanillaClingToCeilingAudio);
+            SkinData.CrawlAudioAction.Remove(ref flea.enemyBehaviourStates[2].SFXClip, vanillaCrawlAudio);
+            SkinData.FallShriekAudioAction.Remove(ref flea.enemyBehaviourStates[2].VoiceClip, vanillaFallShriekAudio);
+            SkinData.HitGroundAudioAction.Remove(ref flea.hitGroundSFX, vanillaHitGroundAudio);
+            SkinData.HitBody2AudioAction.Remove(ref flea.hitCentipede, vanillaHitAudio);
+            SkinData.ShrieksAudioListAction.Remove(ref flea.shriekClips, vanillaShrieksAudio);
+            SkinData.ClingToPlayerAudioAction.Remove(ref flea.clingToPlayer3D, vanillaClingAudio);
+            SkinData.DeathAudioAction.Remove(ref flea.dieSFX, vanillaDeathAudio);
+            SkinData.ClingToLocalPlayerAudioAction.RemoveFromSource(flea.clingingToPlayer2DAudio, vanillaClingLocalAudio);
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -148,7 +125,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             { 
                 if (!clingingToPlayer.IsLocalPlayer)
                 {
-                    modCreatureEffects.clip = ClingToPlayerAudioAction.WorkingClip(vanillaClingAudio);
+                    modCreatureEffects.clip = SkinData.ClingToPlayerAudioAction.WorkingClip(vanillaClingAudio);
                     modCreatureEffects.Play();
                 }
             }
@@ -166,7 +143,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(HitGroundAudioAction.WorkingClip(vanillaHitGroundAudio));
+                modCreatureEffects.PlayOneShot(SkinData.HitGroundAudioAction.WorkingClip(vanillaHitGroundAudio));
             }
         }
 
@@ -174,8 +151,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(CrawlAudioAction.WorkingClip(vanillaCrawlAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, CrawlAudioAction.WorkingClip(vanillaCrawlAudio));
+                modCreatureEffects.PlayOneShot(SkinData.CrawlAudioAction.WorkingClip(vanillaCrawlAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.CrawlAudioAction.WorkingClip(vanillaCrawlAudio));
             }
         }
 
@@ -183,7 +160,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                AudioClip[] shriekClips = ShrieksAudioAction.WorkingClips(vanillaShrieksAudio);
+                AudioClip[] shriekClips = SkinData.ShrieksAudioListAction.WorkingClips(vanillaShrieksAudio);
                 AudioClip shriekClip = shriekClips[Random.Range(0, shriekClips.Length)];
                 modCreatureEffects.PlayOneShot(shriekClip);
                 WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, shriekClip);
@@ -192,21 +169,43 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public void OnClingToCeiling(CentipedeAI instance)
         {
-            modCreatureEffects.clip = ClingToCeilingAudioAction.WorkingClip(vanillaClingToCeilingAudio);
-            modCreatureEffects.Play();
+            if (EffectsSilenced)
+            {
+                modCreatureEffects.clip = SkinData.ClingToCeilingAudioAction.WorkingClip(vanillaClingToCeilingAudio);
+                modCreatureEffects.Play();
+            }
         }
 
         public void OnHit(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer, bool playSoundEffect)
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(HitBody2AudioAction.WorkingClip(vanillaHitAudio));
+                modCreatureEffects.PlayOneShot(SkinData.HitBody2AudioAction.WorkingClip(vanillaHitAudio));
                 if (playSoundEffect)
                 {
-                    modCreatureEffects.PlayOneShot(HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                    WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                    modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                    WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
                 }
             }
+        }
+
+        public void OnEnemyUpdate()
+        {
+            if(vanillaSilkParticle!= null && replacementSilkParticle!= null)
+            {
+                if (vanillaSilkParticle.gameObject.activeSelf != replacementSilkParticle.isPlaying)
+                {
+                    if(vanillaSilkParticle.gameObject.activeSelf)
+                    {
+                        replacementSilkParticle.Play();
+                    }
+                    else
+                    {
+                        replacementSilkParticle.Stop();
+                    }
+                }
+            }
+            
         }
     }
 }

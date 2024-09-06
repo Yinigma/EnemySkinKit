@@ -9,46 +9,48 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction slimeMaterialAction;
+        protected MaterialAction slimeMaterialAction;
+        [SerializeField]
+        protected ColorAction slimeGradiantColorAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction slimeMeshAction;
+        protected SkinnedMeshAction slimeMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction agitatedAudioAction;
+        protected AudioAction agitatedAudioAction;
         [SerializeField]
-        private AudioAction jiggleAudioAction;
+        protected AudioAction jiggleAudioAction;
         [SerializeField]
-        private AudioAction hitAudioAction;
+        protected AudioAction hitAudioAction;
         [SerializeField]
-        private AudioAction killPlayerAudioAction;
+        protected AudioAction killPlayerAudioAction;
         [SerializeField]
-        private AudioAction idleAudioAction;
+        protected AudioAction idleAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction SlimeMaterialAction => slimeMaterialAction;
+        public ColorAction SlimeGradiantColorAction => slimeGradiantColorAction;
+        public SkinnedMeshAction SlimeMeshAction => slimeMeshAction;
+        public AudioAction AgitatedAudioAction => agitatedAudioAction;
+        public AudioAction JiggleAudioAction => jiggleAudioAction;
+        public AudioAction HitAudioAction => hitAudioAction;
+        public AudioAction KillPlayerAudioAction => killPlayerAudioAction;
+        public AudioAction IdleAudioAction => idleAudioAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.HYGRODERE_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new HygrodereSkinner
-            (
-                attachments,
-                slimeMaterialAction, 
-                slimeMeshAction,
-                agitatedAudioAction,
-                jiggleAudioAction,
-                hitAudioAction,
-                killPlayerAudioAction,
-                idleAudioAction
-            );
+            return new HygrodereSkinner(this);
         }
     }
 }

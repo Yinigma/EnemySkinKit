@@ -10,51 +10,50 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [Header("Materials")]
         //Materials
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction rustMaterialAction;
         [SerializeField]
-        private MaterialAction rustMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [SerializeField]
-        private MaterialAction headMaterialAction;
+        protected MaterialAction headMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         //Skinned Meshes
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         //Static Meshes
         [SerializeField]
-        private StaticMeshAction headMeshAction;
+        protected StaticMeshAction headMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction springNoisesAudioListAction;
+        protected AudioListAction springNoisesAudioListAction;
         [SerializeField]
-        private AudioListAction footstepsAudioListAction;
+        protected AudioListAction footstepsAudioListAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction RustMaterialAction => rustMaterialAction;
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public MaterialAction HeadMaterialAction => headMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction HeadMeshAction => headMeshAction;
+        public AudioListAction SpringNoisesAudioListAction => springNoisesAudioListAction;
+        public AudioListAction FootstepsAudioListAction => footstepsAudioListAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.COILHEAD_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new CoilHeadSkinner
-            (
-                attachments, 
-                bodyMeshAction, 
-                headMeshAction, 
-                bodyMaterialAction, 
-                rustMaterialAction, 
-                headMaterialAction, 
-                springNoisesAudioListAction,
-                footstepsAudioListAction,
-                hitBodyAudioAction
-            );
+            return new CoilHeadSkinner(this);
         }
     }
 }

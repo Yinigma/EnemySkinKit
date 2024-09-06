@@ -9,61 +9,69 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction clingToCeilingAudioAction;
+        protected AudioAction clingToCeilingAudioAction;
         [SerializeField]
-        private AudioAction crawlAudioAction;
+        protected AudioAction crawlAudioAction;
         [SerializeField]
-        private AudioAction fallShriekAudioAction;
+        protected AudioAction fallShriekAudioAction;
         [SerializeField]
-        private AudioAction hitGroundAudioAction;
+        protected AudioAction hitGroundAudioAction;
         [SerializeField]
-        private AudioListAction shrieksAudioListAction;
+        protected AudioListAction shrieksAudioListAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioAction hitBody2AudioAction;
+        protected AudioAction hitBody2AudioAction;
         [SerializeField]
-        private AudioAction clingToPlayerAudioAction;
+        protected AudioAction clingToPlayerAudioAction;
         [SerializeField]
-        private AudioAction clingToLocalPlayerAudioAction;
+        protected AudioAction clingToLocalPlayerAudioAction;
         [SerializeField]
-        private AudioAction deathAudioAction;
+        protected AudioAction deathAudioAction;
+        [Space(10)]
+
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction silkMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction silkParticleAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public AudioAction ClingToCeilingAudioAction => clingToCeilingAudioAction;
+        public AudioAction CrawlAudioAction => crawlAudioAction;
+        public AudioAction FallShriekAudioAction => fallShriekAudioAction;
+        public AudioAction HitGroundAudioAction => hitGroundAudioAction;
+        public AudioListAction ShrieksAudioListAction => shrieksAudioListAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioAction HitBody2AudioAction => hitBody2AudioAction;
+        public AudioAction ClingToPlayerAudioAction => clingToPlayerAudioAction;
+        public AudioAction ClingToLocalPlayerAudioAction => clingToLocalPlayerAudioAction;
+        public AudioAction DeathAudioAction => deathAudioAction;
+        public MaterialAction SilkMaterialAction => silkMaterialAction;
+        public ParticleSystemAction SilkParticleAction => silkParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.SNARE_FLEA_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new SnareFleaSkinner
-            (
-                attachments,
-                bodyMaterialAction,
-                bodyMeshAction,
-                clingToCeilingAudioAction,
-                crawlAudioAction,
-                fallShriekAudioAction,
-                hitGroundAudioAction,
-                shrieksAudioListAction,
-                clingToPlayerAudioAction,
-                clingToLocalPlayerAudioAction,
-                hitBodyAudioAction,
-                hitBody2AudioAction,
-                deathAudioAction
-            );
+            return new SnareFleaSkinner(this);
         }
     }
 }

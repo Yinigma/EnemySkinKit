@@ -10,85 +10,120 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [Header("Materials")]
         //Materials
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [SerializeField]
-        private MaterialAction broomMaterialAction;
+        protected MaterialAction broomMaterialAction;
         [SerializeField]
-        private MaterialAction teethMaterialAction;
+        protected MaterialAction teethMaterialAction;
         [SerializeField]
-        private MaterialAction hairMaterialAction;
+        protected MaterialAction hairMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [SerializeField]
-        private StaticMeshAction broomMeshAction;
+        protected StaticMeshAction broomMeshAction;
         [SerializeField]
-        private StaticMeshAction teethMeshAction;
+        protected StaticMeshAction teethMeshAction;
         [SerializeField]
-        private StaticMeshAction hairMeshAction;
+        protected StaticMeshAction hairMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction footstepsAudioAction;
+        protected AudioListAction footstepsAudioAction;
         [SerializeField]
-        private AudioListAction sweepsAudioAction;
+        protected AudioListAction sweepsAudioAction;
         [SerializeField]
-        private AudioAction popReverbAudioAction;
+        protected AudioAction popReverbAudioAction;
         [SerializeField]
-        private AudioAction murderMusicAudioAction;
+        protected AudioAction murderMusicAudioAction;
         [SerializeField]
-        private AudioAction defaultAmbienceAudioAction;
+        protected AudioAction defaultAmbienceAudioAction;
         [SerializeField]
-        private AudioAction buzzingAmbienceAudioAction;
+        protected AudioAction buzzingAmbienceAudioAction;
         [SerializeField]
-        private AudioAction stabPlayerAudioAction;
+        protected AudioAction stabPlayerAudioAction;
         [SerializeField]
-        private AudioAction coatRustleAudioAction;
+        protected AudioAction coatRustleAudioAction;
         [SerializeField]
-        private AudioAction brandishKnifeAudioAction;
+        protected AudioAction brandishKnifeAudioAction;
         [SerializeField]
-        private AudioAction popAudioAction;
+        protected AudioAction popAudioAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioAction inflateAudioAction;
+        protected AudioAction inflateAudioAction;
         [Space(10)]
+
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction popMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction popParticleAction;
+        [SerializeField]
+        protected MaterialAction stabBloodMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction stabBloodParticleAction;
+        [SerializeField]
+        protected MaterialAction bloodSpurtMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction bloodSpurtParticleAction;
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+        [Space(10)]
+
+        [Header("Hornets")]
+        [SerializeField]
+        protected StaticMeshAction hornetMeshAction;
+        [SerializeField]
+        protected TextureAction hornetTextureAction;
+        [SerializeField]
+        protected GameObject hornetReplacementPrefab;
+        [SerializeField]
+        protected AudioAction hornetBuzzAudioAction;
+
+        //Materials
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public MaterialAction BroomMaterialAction => broomMaterialAction;
+        public MaterialAction TeethMaterialAction => teethMaterialAction;
+        public MaterialAction HairMaterialAction => hairMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction BroomMeshAction => broomMeshAction;
+        public StaticMeshAction TeethMeshAction => teethMeshAction;
+        public StaticMeshAction HairMeshAction => hairMeshAction;
+        public AudioListAction FootstepsAudioAction => footstepsAudioAction;
+        public AudioListAction SweepsAudioAction => sweepsAudioAction;
+        public AudioAction PopReverbAudioAction => popReverbAudioAction;
+        public AudioAction MurderMusicAudioAction => murderMusicAudioAction;
+        public AudioAction DefaultAmbienceAudioAction => defaultAmbienceAudioAction;
+        public AudioAction BuzzingAmbienceAudioAction => buzzingAmbienceAudioAction;
+        public AudioAction StabPlayerAudioAction => stabPlayerAudioAction;
+        public AudioAction CoatRustleAudioAction => coatRustleAudioAction;
+        public AudioAction BrandishKnifeAudioAction => brandishKnifeAudioAction;
+        public AudioAction PopAudioAction => popAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioAction InflateAudioAction => inflateAudioAction;
+        public MaterialAction PopMaterialAction => popMaterialAction;
+        public ParticleSystemAction PopParticleAction => popParticleAction;
+        public MaterialAction StabBloodMaterialAction => stabBloodMaterialAction;
+        public ParticleSystemAction StabBloodParticleAction => stabBloodParticleAction;
+        public MaterialAction BloodSpurtMaterialAction => bloodSpurtMaterialAction;
+        public ParticleSystemAction BloodSpurtParticleAction => bloodSpurtParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
+        public StaticMeshAction HornetMeshAction => hornetMeshAction;
+        public TextureAction HornetTextureAction => hornetTextureAction;
+        public GameObject HornetReplacementPrefab => hornetReplacementPrefab;
+        public AudioAction HornetBuzzAudioAction => hornetBuzzAudioAction;
 
         public override string EnemyId => EnemySkinRegistry.BUTLER_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new ButlerSkinner
-            (
-                attachments,
-                bodyMaterialAction,
-                broomMaterialAction,
-                teethMaterialAction,
-                hairMaterialAction,
-                bodyMeshAction,
-                broomMeshAction,
-                teethMeshAction,
-                hairMeshAction,
-                footstepsAudioAction,
-                sweepsAudioAction,
-                popReverbAudioAction,
-                murderMusicAudioAction,
-                defaultAmbienceAudioAction,
-                buzzingAmbienceAudioAction,
-                stabPlayerAudioAction,
-                coatRustleAudioAction,
-                brandishKnifeAudioAction,
-                popAudioAction,
-                hitBodyAudioAction,
-                inflateAudioAction
-            );
+            return new ButlerSkinner(this);
         }
     }
 }

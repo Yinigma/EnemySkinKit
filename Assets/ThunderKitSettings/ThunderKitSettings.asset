@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9057f7f601990a4883b2cb295c4f43e, type: 3}
   m_Name: ThunderKitSettings
   m_EditorClassIdentifier: 
-  FirstLoad: 1
+  FirstLoad: 0
   ShowOnStartup: 1
   GameExecutable: Lethal Company.exe
   GamePath: C:\Program Files (x86)\Steam\steamapps\common\Lethal Company
@@ -20,16 +20,16 @@ MonoBehaviour:
   DateTimeFormat: HH:mm:ss:fff
   CreatedDateFormat: MMM/dd HH:mm:ss
   ShowLogWindow: 1
-  LogPackageSourceTimings: 0
+  LogPackageSourceTimings: 1
   GenerateAssetsProject: 0
   FixLocalDiskPackages: 0
   ImageCachePath: Library/MarkdownImageCache
-  CachedImageCount: 22
-  CacheSize: 1.08
+  CachedImageCount: 21
+  CacheSize: 1.11
   MarkdownOpenMode: 1
   SelectedPipeline: {fileID: 0}
-  SelectedManifest: {fileID: 11400000, guid: 898aaa7a439eac94e85e1e4d9cee5a1e, type: 2}
+  SelectedManifest: {fileID: 0}
   QuickAccessPipelines: []
   QuickAccessManifests: []
-  ImportConfiguration: {fileID: 11400000, guid: cf1cafb3c3372e24398bba9904defe26,
+  ImportConfiguration: {fileID: 11400000, guid: 81f02592544af6f42bf0183e3cf89c0b,
     type: 2}

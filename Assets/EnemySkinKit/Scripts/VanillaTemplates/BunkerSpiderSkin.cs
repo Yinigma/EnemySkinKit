@@ -9,64 +9,72 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [SerializeField]
-        private MaterialAction leftFangMaterialAction;
+        protected MaterialAction leftFangMaterialAction;
         [SerializeField]
-        private MaterialAction rightFangMaterialAction;
+        protected MaterialAction rightFangMaterialAction;
+        [SerializeField]
+        protected MaterialAction safetyTextMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [SerializeField]
-        private StaticMeshAction leftFangMeshAction;
+        protected StaticMeshAction leftFangMeshAction;
         [SerializeField]
-        private StaticMeshAction rightFangMeshAction;
+        protected StaticMeshAction rightFangMeshAction;
+        [SerializeField]
+        protected StaticMeshAction safetyTextMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction footstepsAction;
+        protected AudioListAction footstepsAction;
         [SerializeField]
-        private AudioAction attackAudioAction;
+        protected AudioAction attackAudioAction;
         [SerializeField]
-        private AudioAction spoolPlayerAudioAction;
+        protected AudioAction spoolPlayerAudioAction;
         [SerializeField]
-        private AudioAction hangPlayerAudioAction;
+        protected AudioAction hangPlayerAudioAction;
         [SerializeField]
-        private AudioAction hitHissAudioAction;
+        protected AudioAction hitHissAudioAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioAction stunAudioAction;
+        protected AudioAction stunAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public MaterialAction LeftFangMaterialAction => leftFangMaterialAction;
+        public MaterialAction RightFangMaterialAction => rightFangMaterialAction;
+        public MaterialAction SafetyTextMaterialAction => safetyTextMaterialAction;
+
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction LeftFangMeshAction => leftFangMeshAction;
+        public StaticMeshAction RightFangMeshAction => rightFangMeshAction;
+        public StaticMeshAction SafetyTextMeshAction => safetyTextMeshAction;
+
+        public AudioListAction FootstepsAction => footstepsAction;
+        public AudioAction AttackAudioAction => attackAudioAction;
+        public AudioAction SpoolPlayerAudioAction => spoolPlayerAudioAction;
+        public AudioAction HangPlayerAudioAction => hangPlayerAudioAction;
+        public AudioAction HitHissAudioAction => hitHissAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioAction StunAudioAction => stunAudioAction;
+
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.SPIDER_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new BunkerSpiderSkinner
-            (
-                attachments,
-                bodyMaterialAction,
-                leftFangMaterialAction,
-                rightFangMaterialAction,
-                bodyMeshAction,
-                leftFangMeshAction,
-                rightFangMeshAction,
-                footstepsAction,
-                attackAudioAction,
-                spoolPlayerAudioAction,
-                hangPlayerAudioAction,
-                hitHissAudioAction,
-                hitBodyAudioAction,
-                stunAudioAction
-            );
+            return new BunkerSpiderSkinner(this);
         }
     }
 }

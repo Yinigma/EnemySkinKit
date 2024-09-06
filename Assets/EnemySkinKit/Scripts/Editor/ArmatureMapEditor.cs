@@ -3,8 +3,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 using System;
+using UnityEditor.UIElements;
 
 namespace AntlerShed.EnemySkinKit.ArmatureReflection
 {

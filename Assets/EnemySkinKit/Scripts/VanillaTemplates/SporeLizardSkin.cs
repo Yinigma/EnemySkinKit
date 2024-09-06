@@ -9,58 +9,57 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction frightenedAudioListAction;
+        protected AudioListAction frightenedAudioListAction;
         [SerializeField]
-        private AudioAction stompAudioAction;
+        protected AudioAction stompAudioAction;
         [SerializeField]
-        private AudioAction angryAudioAction;
+        protected AudioAction angryAudioAction;
         [SerializeField]
-        private AudioAction nervousMumbleAudioAction;
+        protected AudioAction nervousMumbleAudioAction;
         [SerializeField]
-        private AudioAction puffAudioAction;
+        protected AudioAction puffAudioAction;
         [SerializeField]
-        private AudioAction rattleTailAudioAction;
+        protected AudioAction rattleTailAudioAction;
         [SerializeField]
-        private AudioAction biteAudioAction;
+        protected AudioAction biteAudioAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioListAction footstepsAudioListAction;
+        protected AudioListAction footstepsAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public AudioListAction FrightenedAudioListAction => frightenedAudioListAction;
+        public AudioAction StompAudioAction => stompAudioAction;
+        public AudioAction AngryAudioAction => angryAudioAction;
+        public AudioAction NervousMumbleAudioAction => nervousMumbleAudioAction;
+        public AudioAction PuffAudioAction => puffAudioAction;
+        public AudioAction RattleTailAudioAction => rattleTailAudioAction;
+        public AudioAction BiteAudioAction => biteAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioListAction FootstepsAudioListAction => footstepsAudioListAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.SPORE_LIZARD_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new SporeLizardSkinner
-            (
-                attachments,
-                bodyMaterialAction, 
-                bodyMeshAction,
-                frightenedAudioListAction,
-                stompAudioAction,
-                angryAudioAction,
-                puffAudioAction,
-                nervousMumbleAudioAction,
-                rattleTailAudioAction,
-                biteAudioAction,
-                hitBodyAudioAction,
-                footstepsAudioListAction
-            );
+            return new SporeLizardSkinner(this);
         }
     }
 }

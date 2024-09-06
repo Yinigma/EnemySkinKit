@@ -13,9 +13,21 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string ANCHOR_PATH = "MeshContainer/AnimContainer";
         protected const string THRUSTER_CLOSE_AUDIO_PATH = "MeshContainer/AnimContainer/metarig/LegLeft/LegLeft2/LeftLegFireContainer/ThrusterCloseAudio (2)";
         protected const string THRUSTER_BLAST_AUDIO_PATH = "ChargeForwardEffect/LargeExplosionEffect/InitialBlast";
+        protected const string SEARCH_LIGHT_MESH_PATH = "MeshContainer/AnimContainer/metarig/TorsoContainer/Torso/LightContainer/Sphere";
+        protected const string SPOT_LIGHT_PATH = "MeshContainer/AnimContainer/metarig/TorsoContainer/Torso/LightContainer/Spotlight";
+        protected const string POINT_LIGHT_PATH = "MeshContainer/AnimContainer/metarig/TorsoContainer/Torso/LightContainer/Pointlight";
+        protected const string THRUSTER_FLAME_LEFT_PATH = "MeshContainer/AnimContainer/metarig/LegLeft/LegLeft2/LeftLegFireContainer/ThrusterFlame";
+        protected const string THRUSTER_FLAME_RIGHT_PATH = "MeshContainer/AnimContainer/metarig/LegRight/LegRight2/RightLegFireContainer/ThrusterFlame";
 
-        protected Material vanillaDefaultMaterial;
-        protected Material vanillaSpotlightMaterial;
+        //particles
+        protected const string BLOWTORCH_RED_FLAMES_PATH = "MeshContainer/AnimContainer/metarig/TorsoContainer/Torso/LeftUpperArm/GunArmContainer/LeftLowerArm/FlamethrowerParticle/MainBlast (1)";
+        protected const string CHARGE_FLASH_PATH = "ChargeForwardParticle/BrightFlash";
+        protected const string CHARGE_SMOKE_PATH = "ChargeForwardParticle/Smoke (1)";
+        protected const string CHARGE_FLAMES_PATH = "ChargeForwardParticle/LingeringFire";
+        protected const string CHARGE_BLAST_PATH = "ChargeForwardParticle/MainBlast (1)";
+
+        protected VanillaMaterial vanillaDefaultMaterial;
+        protected VanillaMaterial vanillaBotSpotlightMaterial;
         protected List<GameObject> activeAttachments;
         protected AudioClip[] vanillaShootGunAudio;
         protected AudioClip[] vanillaExplosionAudio;
@@ -38,108 +50,128 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaChargeAudio;
         protected AudioClip[] vanillaStompAudio;
         protected AudioClip[] vanillaBrainwashAudio;
+        protected GameObject skinnedMeshReplacement;
 
-        protected MaterialAction DefaultMaterialAction { get; }
-        protected MaterialAction SpotlightActiveMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-        protected AudioListAction BrainwashingAudioListAction { get; }
-        protected AudioListAction StompAudioListAction { get; }
-        protected AudioListAction ShootGunAudioListAction { get; }
-        protected AudioListAction ExplosionAudioListAction { get; }
-        protected AudioAction SpotlightActivateAudioAction { get; }
-        protected AudioAction SpotlightDectivateAudioAction { get; }
-        protected AudioAction SpotlightFlickerAudioAction { get; }
-        protected AudioAction BlowtorchAudioAction { get; }
-        protected AudioAction AlarmAudioAction { get; }
-        protected AudioAction ThrusterFarAudioAction { get; }
-        protected AudioAction ThrusterCloseAudioAction { get; }
-        protected AudioAction ThrusterStartAudioAction { get; }
-        protected AudioAction EngineHumAudioAction { get; }
-        protected AudioAction ChargeAudioAction { get; }
-        protected AudioAction WakeAudioAction { get; }
+        private VanillaMaterial vanillaSpotlightMaterial;
+        private Mesh vanillaSearchlightMesh;
+        private VanillaMaterial vanillaFlameMaterialLeft;
+        private VanillaMaterial vanillaFlameMaterialRight;
+        private Color vanillaSpotlightColor;
+        private Color vanillaPointlightColor;
+        private VanillaMaterial vanillaChargeFlashMaterial;
+        private VanillaMaterial vanillaChargeBlastMaterial;
+        private VanillaMaterial vanillaChargeSmokeMaterial;
+        private VanillaMaterial vanillaChargeFlameMaterial;
+        private VanillaMaterial vanillaTorchFlamesMaterial;
+        private VanillaMaterial vanillaBlueTorchFlamesMaterial;
+        private VanillaMaterial vanillaRightStompMaterial;
+        private VanillaMaterial vanillaLeftStompMaterial;
+        private VanillaMaterial vanillaRightSmokeMaterial;
+        private VanillaMaterial vanillaLeftSmokeMaterial;
+        private VanillaMaterial vanillaChargeMaterial;
+        private VanillaMaterial vanillaLandShockwaveMaterial;
+        private VanillaMaterial vanillaMuzzleMaterial;
+        private ParticleSystem replacementChargeFlashParticle;
+        private ParticleSystem replacementChargeBlastParticle;
+        private ParticleSystem replacementChargeSmokeParticle;
+        private ParticleSystem replacementChargeFlameParticle;
+        private ParticleSystem replacementTorchFlamesParticle;
+        private ParticleSystem vanillaBlueTorchFlamesParticle;
+        private ParticleSystem vanillaRightStompParticle;
+        private ParticleSystem vanillaLeftStompParticle;
+        private ParticleSystem vanillaRightSmokeParticle;
+        private ParticleSystem vanillaLeftSmokeParticle;
+        private ParticleSystem vanillaChargeParticle;
+        private ParticleSystem vanillaLandShockwaveParticle;
+        private ParticleSystem vanillaMuzzleParticle;
 
-
-        protected bool EffectsSilenced => BrainwashingAudioListAction.actionType != AudioListActionType.RETAIN || StompAudioListAction.actionType != AudioListActionType.RETAIN;
+        protected bool EffectsSilenced => SkinData.BrainwashingAudioListAction.actionType != AudioListActionType.RETAIN || SkinData.StompAudioListAction.actionType != AudioListActionType.RETAIN;
 
         protected AudioSource modLRAD2;
         protected AudioSource modEffects;
 
-        public OldBirdSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction defaultMaterialAction,
-            MaterialAction spotlightActiveMaterialAction,
-            SkinnedMeshAction bodyMeshAction,
-            AudioListAction brainwashingAudioListAction,
-            AudioListAction stompAudioListAction,
-            AudioListAction shootGunAudioListAction,
-            AudioListAction explosionAudioListAction,
-            AudioAction spotlightActivateAudioAction,
-            AudioAction spotlightDectivateAudioAction,
-            AudioAction spotlightFlickerAudioAction,
-            AudioAction blowtorchAudioAction,
-            AudioAction alarmAudioAction,
-            AudioAction thrusterStartAudioAction,
-            AudioAction thrusterCloseAudioAction,
-            AudioAction thrusterFarAudioAction,
-            AudioAction engineHumAudioAction,
-            AudioAction chargeAudioAction,
-            AudioAction wakeAudioAction
-        )
+        protected OldBirdSkin SkinData { get; }
+        
+        public OldBirdSkinner(OldBirdSkin skinData)
         {
-            DefaultMaterialAction = defaultMaterialAction;
-            SpotlightActiveMaterialAction = spotlightActiveMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            BrainwashingAudioListAction = brainwashingAudioListAction;
-            StompAudioListAction = stompAudioListAction;
-            ShootGunAudioListAction = shootGunAudioListAction;
-            ExplosionAudioListAction = explosionAudioListAction;
-            SpotlightActivateAudioAction = spotlightActivateAudioAction;
-            SpotlightDectivateAudioAction = spotlightDectivateAudioAction;
-            SpotlightFlickerAudioAction = spotlightFlickerAudioAction;
-            BlowtorchAudioAction = blowtorchAudioAction;
-            AlarmAudioAction = alarmAudioAction;
-            ThrusterStartAudioAction = thrusterStartAudioAction;
-            ThrusterCloseAudioAction = thrusterCloseAudioAction;
-            ThrusterFarAudioAction = thrusterFarAudioAction;
-            EngineHumAudioAction = engineHumAudioAction;
-            ChargeAudioAction = chargeAudioAction;
-            Attachments = attachments;
-            WakeAudioAction = wakeAudioAction;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
         {
             RadMechAI mech = enemy.GetComponent<RadMechAI>();
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(MECH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(MECH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             AudioSource thrusterStartSource = enemy.transform.Find(THRUSTER_BLAST_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
             if (thrusterStartSource != null)
             {
-                vanillaThrustStartAudio = ThrusterStartAudioAction.ApplyToSource(thrusterStartSource);
+                vanillaThrustStartAudio = SkinData.ThrusterStartAudioAction.ApplyToSource(thrusterStartSource);
             }
             AudioSource thrusterCloseSource = enemy.transform.Find(THRUSTER_CLOSE_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
             if (thrusterCloseSource != null)
             {
-                vanillaThrustCloseAudio = ThrusterCloseAudioAction.ApplyToSource(thrusterCloseSource);
+                vanillaThrustCloseAudio = SkinData.ThrusterCloseAudioAction.ApplyToSource(thrusterCloseSource);
             }
-            vanillaSpotlightMaterial = SpotlightActiveMaterialAction.ApplyRef(ref mech.spotlightMat);
-            vanillaDefaultMaterial = DefaultMaterialAction.ApplyRef(ref mech.defaultMat);
 
-            vanillaShootGunAudio = ShootGunAudioListAction.Apply(ref mech.shootGunSFX);
-            vanillaExplosionAudio = ExplosionAudioListAction.Apply(ref mech.largeExplosionSFX);
+            vanillaSpotlightMaterial = SkinData.LightMaterialAction.Apply(mech.transform.Find(SEARCH_LIGHT_MESH_PATH)?.GetComponent<MeshRenderer>(), 0);
+            vanillaSearchlightMesh = SkinData.SearchLightMeshAction.Apply(mech.transform.Find(SEARCH_LIGHT_MESH_PATH)?.GetComponent<MeshFilter>());
 
-            vanillaAlarmAudio = AlarmAudioAction.ApplyToSource(mech.LocalLRADAudio);
-            vanillaActivateSpotlightAudio = SpotlightActivateAudioAction.ApplyToSource(mech.spotlightOnAudio);
+            vanillaFlameMaterialLeft = SkinData.ThrusterFireMaterialAction.Apply(mech.transform.Find(THRUSTER_FLAME_LEFT_PATH)?.GetComponent<SpriteRenderer>(), 0);
+            vanillaFlameMaterialRight = SkinData.ThrusterFireMaterialAction.Apply(mech.transform.Find(THRUSTER_FLAME_RIGHT_PATH)?.GetComponent<SpriteRenderer>(), 0);
 
-            vanillaThrustFarAudio = ThrusterFarAudioAction.ApplyToSource(mech.flyingDistantAudio);
-            vanillaBlowtorchAudio = BlowtorchAudioAction.ApplyToSource(mech.blowtorchAudio);
-            vanillaChargeAudio = ChargeAudioAction.ApplyToSource(mech.chargeForwardAudio);
-            vanillaEngineAudio = EngineHumAudioAction.ApplyToSource(mech.engineSFX);
-            vanillaWakeAudio = WakeAudioAction.ApplyToSource(mech.creatureSFX);
+            vanillaSpotlightColor = SkinData.LightColorAction.Apply(mech.transform.Find(SPOT_LIGHT_PATH)?.GetComponent<Light>());
+            vanillaPointlightColor = SkinData.LightColorAction.Apply(mech.transform.Find(POINT_LIGHT_PATH)?.GetComponent<Light>());
 
-            vanillaDeactivateSpotlightAudio = SpotlightDectivateAudioAction.Apply(ref mech.spotlightOff);
-            vanillaSpotlightFlickerAudio = SpotlightFlickerAudioAction.Apply(ref mech.spotlightFlicker);
+            vanillaBotSpotlightMaterial = SkinData.SpotlightActiveMaterialAction.ApplyRef(ref mech.spotlightMat);
+            vanillaDefaultMaterial = SkinData.DefaultMaterialAction.ApplyRef(ref mech.defaultMat);
+
+            vanillaShootGunAudio = SkinData.ShootGunAudioListAction.Apply(ref mech.shootGunSFX);
+            vanillaExplosionAudio = SkinData.ExplosionAudioListAction.Apply(ref mech.largeExplosionSFX);
+
+            vanillaAlarmAudio = SkinData.AlarmAudioAction.ApplyToSource(mech.LocalLRADAudio);
+            vanillaActivateSpotlightAudio = SkinData.SpotlightActivateAudioAction.ApplyToSource(mech.spotlightOnAudio);
+
+            vanillaThrustFarAudio = SkinData.ThrusterFarAudioAction.ApplyToSource(mech.flyingDistantAudio);
+            vanillaBlowtorchAudio = SkinData.BlowtorchAudioAction.ApplyToSource(mech.blowtorchAudio);
+            vanillaChargeAudio = SkinData.ChargeAudioAction.ApplyToSource(mech.chargeForwardAudio);
+            vanillaEngineAudio = SkinData.EngineHumAudioAction.ApplyToSource(mech.engineSFX);
+            vanillaWakeAudio = SkinData.WakeAudioAction.ApplyToSource(mech.creatureSFX);
+
+            vanillaDeactivateSpotlightAudio = SkinData.SpotlightDectivateAudioAction.Apply(ref mech.spotlightOff);
+            vanillaSpotlightFlickerAudio = SkinData.SpotlightFlickerAudioAction.Apply(ref mech.spotlightFlicker);
+
+            ParticleSystem vanillaChargeFlash = mech.transform.Find(CHARGE_FLASH_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaChargeBlast = mech.transform.Find(CHARGE_BLAST_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaChargeSmoke = mech.transform.Find(CHARGE_SMOKE_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaChargeFlames = mech.transform.Find(CHARGE_FLAMES_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaTorchRedFlames = mech.transform.Find(BLOWTORCH_RED_FLAMES_PATH)?.GetComponent<ParticleSystem>();
+
+            vanillaChargeFlashMaterial = SkinData.ChargeFlashMaterialAction.Apply(vanillaChargeFlash?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaChargeBlastMaterial = SkinData.ChargeBlastMaterialAction.Apply(vanillaChargeBlast?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaChargeSmokeMaterial = SkinData.ChargeSmokeMaterialAction.Apply(vanillaChargeSmoke?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaChargeFlameMaterial = SkinData.ChargeFireMaterialAction.Apply(vanillaChargeFlames?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaTorchFlamesMaterial = SkinData.RedFlameMaterialAction.Apply(vanillaTorchRedFlames?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaBlueTorchFlamesMaterial = SkinData.BlueFlameMaterialAction.Apply(mech.blowtorchParticle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaRightStompMaterial = SkinData.StompShockwaveMaterialAction.Apply(mech.rightFootParticle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaLeftStompMaterial = SkinData.StompShockwaveMaterialAction.Apply(mech.leftFootParticle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaRightSmokeMaterial = SkinData.SmokeTrailMaterialAction.Apply(mech.smokeRightLeg.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaLeftSmokeMaterial = SkinData.SmokeTrailMaterialAction.Apply(mech.smokeLeftLeg.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaChargeMaterial = SkinData.ChargeMaterialAction.Apply(mech.chargeParticle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaLandShockwaveMaterial = SkinData.LandShockwaveMaterialAction.Apply(mech.bothFeetParticle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaMuzzleMaterial = SkinData.MuzzleFlashMaterialAction.Apply(mech.gunArmParticle.GetComponent<ParticleSystemRenderer>(), 0);
+
+            replacementChargeFlashParticle = SkinData.ChargeFlashParticleAction.Apply(vanillaChargeFlash);
+            replacementChargeBlastParticle = SkinData.ChargeBlastParticleAction.Apply(vanillaChargeBlast);
+            replacementChargeSmokeParticle = SkinData.ChargeSmokeParticleAction.Apply(vanillaChargeSmoke);
+            replacementChargeFlameParticle = SkinData.ChargeFireParticleAction.Apply(vanillaChargeFlames);
+            replacementTorchFlamesParticle = SkinData.RedFlameParticleAction.Apply(vanillaTorchRedFlames);
+            vanillaBlueTorchFlamesParticle = SkinData.BlueFlameParticleAction.ApplyRef(ref mech.blowtorchParticle);
+            vanillaRightStompParticle = SkinData.StompShockwaveParticleAction.ApplyRef(ref mech.rightFootParticle);
+            vanillaLeftStompParticle = SkinData.StompShockwaveParticleAction.ApplyRef(ref mech.leftFootParticle);
+            vanillaRightSmokeParticle = SkinData.SmokeTrailParticleAction.ApplyRef(ref mech.smokeRightLeg);
+            vanillaLeftSmokeParticle = SkinData.SmokeTrailParticleAction.ApplyRef(ref mech.smokeLeftLeg);
+            vanillaChargeParticle = SkinData.ChargeParticleAction.ApplyRef(ref mech.chargeParticle);
+            vanillaLandShockwaveParticle = SkinData.LandShockwaveParticleAction.ApplyRef(ref mech.bothFeetParticle);
+            vanillaMuzzleParticle = SkinData.MuzzleFlashParticleAction.ApplyRef(ref mech.gunArmParticle);
 
             vanillaBrainwashAudio = new AudioClip[mech.enemyType.audioClips.Length-4];
             Array.Copy(mech.enemyType.audioClips, 4, vanillaBrainwashAudio, 0, mech.enemyType.audioClips.Length - 4);
@@ -154,7 +186,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 mech.creatureSFX.mute = true;
             }
 
-            BodyMeshAction.Apply
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -179,29 +211,73 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             AudioSource thrusterStartSource = enemy.transform.Find(THRUSTER_BLAST_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
             if (thrusterStartSource != null)
             {
-                ThrusterStartAudioAction.RemoveFromSource(thrusterStartSource, vanillaThrustStartAudio);
+                SkinData.ThrusterStartAudioAction.RemoveFromSource(thrusterStartSource, vanillaThrustStartAudio);
             }
             AudioSource thrusterCloseSource = enemy.transform.Find(THRUSTER_CLOSE_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
             if (thrusterCloseSource != null)
             {
-                ThrusterCloseAudioAction.RemoveFromSource(thrusterCloseSource, vanillaThrustCloseAudio);
+                SkinData.ThrusterCloseAudioAction.RemoveFromSource(thrusterCloseSource, vanillaThrustCloseAudio);
             }
-            SpotlightActiveMaterialAction.RemoveRef(ref mech.spotlightMat, vanillaSpotlightMaterial);
-            DefaultMaterialAction.RemoveRef(ref mech.defaultMat, vanillaDefaultMaterial);
 
-            ShootGunAudioListAction.Remove(ref mech.shootGunSFX, vanillaShootGunAudio);
-            ExplosionAudioListAction.Remove(ref mech.largeExplosionSFX, vanillaExplosionAudio);
+            SkinData.LightMaterialAction.Remove(mech.transform.Find(SEARCH_LIGHT_MESH_PATH)?.GetComponent<MeshRenderer>(), 0, vanillaSpotlightMaterial);
+            SkinData.SearchLightMeshAction.Remove(mech.transform.Find(SEARCH_LIGHT_MESH_PATH)?.GetComponent<MeshFilter>(), vanillaSearchlightMesh);
 
-            AlarmAudioAction.RemoveFromSource(mech.LocalLRADAudio, vanillaAlarmAudio);
-            SpotlightActivateAudioAction.RemoveFromSource(mech.spotlightOnAudio, vanillaActivateSpotlightAudio);
-            ThrusterFarAudioAction.RemoveFromSource(mech.flyingDistantAudio, vanillaThrustFarAudio);
-            BlowtorchAudioAction.RemoveFromSource(mech.blowtorchAudio, vanillaBlowtorchAudio);
-            ChargeAudioAction.RemoveFromSource(mech.chargeForwardAudio, vanillaChargeAudio);
-            EngineHumAudioAction.RemoveFromSource(mech.engineSFX, vanillaEngineAudio);
-            WakeAudioAction.RemoveFromSource(mech.creatureSFX, vanillaWakeAudio);
+            SkinData.ThrusterFireMaterialAction.Remove(mech.transform.Find(THRUSTER_FLAME_LEFT_PATH)?.GetComponent<SpriteRenderer>(), 0, vanillaFlameMaterialLeft);
+            SkinData.ThrusterFireMaterialAction.Remove(mech.transform.Find(THRUSTER_FLAME_RIGHT_PATH)?.GetComponent<SpriteRenderer>(), 0, vanillaFlameMaterialRight);
 
-            SpotlightDectivateAudioAction.Remove(ref mech.spotlightOff, vanillaDeactivateSpotlightAudio);
-            SpotlightFlickerAudioAction.Remove(ref mech.spotlightFlicker, vanillaSpotlightFlickerAudio);
+            SkinData.LightColorAction.Remove(mech.transform.Find(SPOT_LIGHT_PATH)?.GetComponent<Light>(), vanillaSpotlightColor);
+            SkinData.LightColorAction.Remove(mech.transform.Find(POINT_LIGHT_PATH)?.GetComponent<Light>(), vanillaPointlightColor);
+
+            SkinData.SpotlightActiveMaterialAction.RemoveRef(ref mech.spotlightMat, vanillaBotSpotlightMaterial);
+            SkinData.DefaultMaterialAction.RemoveRef(ref mech.defaultMat, vanillaDefaultMaterial);
+
+            SkinData.ShootGunAudioListAction.Remove(ref mech.shootGunSFX, vanillaShootGunAudio);
+            SkinData.ExplosionAudioListAction.Remove(ref mech.largeExplosionSFX, vanillaExplosionAudio);
+
+            SkinData.AlarmAudioAction.RemoveFromSource(mech.LocalLRADAudio, vanillaAlarmAudio);
+            SkinData.SpotlightActivateAudioAction.RemoveFromSource(mech.spotlightOnAudio, vanillaActivateSpotlightAudio);
+            SkinData.ThrusterFarAudioAction.RemoveFromSource(mech.flyingDistantAudio, vanillaThrustFarAudio);
+            SkinData.BlowtorchAudioAction.RemoveFromSource(mech.blowtorchAudio, vanillaBlowtorchAudio);
+            SkinData.ChargeAudioAction.RemoveFromSource(mech.chargeForwardAudio, vanillaChargeAudio);
+            SkinData.EngineHumAudioAction.RemoveFromSource(mech.engineSFX, vanillaEngineAudio);
+            SkinData.WakeAudioAction.RemoveFromSource(mech.creatureSFX, vanillaWakeAudio);
+
+            SkinData.SpotlightDectivateAudioAction.Remove(ref mech.spotlightOff, vanillaDeactivateSpotlightAudio);
+            SkinData.SpotlightFlickerAudioAction.Remove(ref mech.spotlightFlicker, vanillaSpotlightFlickerAudio);
+
+            ParticleSystem vanillaChargeFlash = mech.transform.Find(CHARGE_FLASH_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaChargeBlast = mech.transform.Find(CHARGE_BLAST_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaChargeSmoke = mech.transform.Find(CHARGE_SMOKE_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaChargeFlames = mech.transform.Find(CHARGE_FLAMES_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaTorchRedFlames = mech.transform.Find(BLOWTORCH_RED_FLAMES_PATH)?.GetComponent<ParticleSystem>();
+
+            SkinData.ChargeFlashParticleAction.Remove(vanillaChargeFlash, replacementChargeFlashParticle);
+            SkinData.ChargeBlastParticleAction.Remove(vanillaChargeBlast, replacementChargeBlastParticle);
+            SkinData.ChargeSmokeParticleAction.Remove(vanillaChargeSmoke, replacementChargeSmokeParticle);
+            SkinData.ChargeFireParticleAction.Remove(vanillaChargeFlames, replacementChargeFlameParticle);
+            SkinData.RedFlameParticleAction.Remove(vanillaTorchRedFlames, replacementTorchFlamesParticle);
+            SkinData.BlueFlameParticleAction.RemoveRef(ref mech.blowtorchParticle, vanillaBlueTorchFlamesParticle);
+            SkinData.StompShockwaveParticleAction.RemoveRef(ref mech.rightFootParticle, vanillaRightStompParticle);
+            SkinData.StompShockwaveParticleAction.RemoveRef(ref mech.leftFootParticle, vanillaLeftStompParticle);
+            SkinData.SmokeTrailParticleAction.RemoveRef(ref mech.smokeRightLeg, vanillaRightSmokeParticle);
+            SkinData.SmokeTrailParticleAction.RemoveRef(ref mech.smokeLeftLeg, vanillaLeftSmokeParticle);
+            SkinData.ChargeParticleAction.RemoveRef(ref mech.chargeParticle, vanillaChargeParticle);
+            SkinData.LandShockwaveParticleAction.RemoveRef(ref mech.bothFeetParticle, vanillaLandShockwaveParticle);
+            SkinData.MuzzleFlashParticleAction.RemoveRef(ref mech.gunArmParticle, vanillaMuzzleParticle);
+
+            SkinData.ChargeFlashMaterialAction.Remove(vanillaChargeFlash.GetComponent<ParticleSystemRenderer>(), 0, vanillaChargeFlashMaterial);
+            SkinData.ChargeBlastMaterialAction.Remove(vanillaChargeBlast.GetComponent<ParticleSystemRenderer>(), 0, vanillaChargeBlastMaterial);
+            SkinData.ChargeSmokeMaterialAction.Remove(vanillaChargeSmoke.GetComponent<ParticleSystemRenderer>(), 0, vanillaChargeSmokeMaterial);
+            SkinData.ChargeFireMaterialAction.Remove(vanillaChargeFlames.GetComponent<ParticleSystemRenderer>(), 0, vanillaChargeFlameMaterial);
+            SkinData.RedFlameMaterialAction.Remove(vanillaTorchRedFlames.GetComponent<ParticleSystemRenderer>(), 0, vanillaTorchFlamesMaterial);
+            SkinData.BlueFlameMaterialAction.Remove(mech.blowtorchParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaBlueTorchFlamesMaterial);
+            SkinData.StompShockwaveMaterialAction.Remove(mech.rightFootParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaRightStompMaterial);
+            SkinData.StompShockwaveMaterialAction.Remove(mech.leftFootParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaLeftStompMaterial);
+            SkinData.SmokeTrailMaterialAction.Remove(mech.smokeRightLeg.GetComponent<ParticleSystemRenderer>(), 0, vanillaRightSmokeMaterial);
+            SkinData.SmokeTrailMaterialAction.Remove(mech.smokeLeftLeg.GetComponent<ParticleSystemRenderer>(), 0, vanillaLeftSmokeMaterial);
+            SkinData.ChargeMaterialAction.Remove(mech.chargeParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaChargeMaterial);
+            SkinData.LandShockwaveMaterialAction.Remove(mech.bothFeetParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaLandShockwaveMaterial);
+            SkinData.MuzzleFlashMaterialAction.Remove(mech.gunArmParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaMuzzleMaterial);
 
             if (EffectsSilenced)
             {
@@ -211,13 +287,13 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 mech.LocalLRADAudio2.mute = false;
             }
 
-            BodyMeshAction.Remove
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(MECH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>()
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -225,7 +301,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                AudioClip[] stompClips = StompAudioListAction.WorkingClips(vanillaStompAudio);
+                AudioClip[] stompClips = SkinData.StompAudioListAction.WorkingClips(vanillaStompAudio);
                 AudioClip stompClip = stompClips[UnityEngine.Random.Range(0, stompClips.Length)];
                 modEffects.PlayOneShot(stompClip, UnityEngine.Random.Range(0.82f, 1f));
                 WalkieTalkie.TransmitOneShotAudio(modEffects, stompClip, 0.85f);
@@ -236,14 +312,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced)
             {
-                if (BrainwashingAudioListAction.actionType == AudioListActionType.RETAIN)
+                if (SkinData.BrainwashingAudioListAction.actionType == AudioListActionType.RETAIN)
                 {
                     modLRAD2.clip = oldBird.enemyType.audioClips[clipIndex + 4];
                     modLRAD2.Play();
                 }
-                else if (BrainwashingAudioListAction.actionType == AudioListActionType.REPLACE)
+                else if (SkinData.BrainwashingAudioListAction.actionType == AudioListActionType.REPLACE)
                 {
-                    AudioClip[] clips = BrainwashingAudioListAction.WorkingClips(vanillaBrainwashAudio);
+                    AudioClip[] clips = SkinData.BrainwashingAudioListAction.WorkingClips(vanillaBrainwashAudio);
                     modLRAD2.clip = clips[UnityEngine.Random.Range(0, clips.Length)];
                     modLRAD2.Play();
                 }
@@ -254,7 +330,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                AudioClip[] shootClips = ShootGunAudioListAction.WorkingClips(vanillaShootGunAudio);
+                AudioClip[] shootClips = SkinData.ShootGunAudioListAction.WorkingClips(vanillaShootGunAudio);
                 AudioClip shootClip = shootClips[UnityEngine.Random.Range(0, shootClips.Length)];
                 modEffects.PlayOneShot(shootClip, UnityEngine.Random.Range(0.82f, 1f));
                 WalkieTalkie.TransmitOneShotAudio(modEffects, shootClip, 0.85f);

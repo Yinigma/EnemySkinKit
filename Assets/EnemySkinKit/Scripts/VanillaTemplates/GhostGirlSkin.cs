@@ -9,55 +9,54 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [SerializeField]
-        private MaterialAction leftEyeMaterialAction;
+        protected MaterialAction leftEyeMaterialAction;
         [SerializeField]
-        private MaterialAction rightEyeMaterialAction;
+        protected MaterialAction rightEyeMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [SerializeField]
-        private StaticMeshAction leftEyeMeshAction;
+        protected StaticMeshAction leftEyeMeshAction;
         [SerializeField]
-        private StaticMeshAction rightEyeMeshAction;
+        protected StaticMeshAction rightEyeMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction hauntingCuesAudioListAction;
+        protected AudioListAction hauntingCuesAudioListAction;
         [SerializeField]
-        private AudioAction breatheAudioAction;
+        protected AudioAction breatheAudioAction;
         [SerializeField]
-        private AudioListAction skipAndWalkAudioListAction;
+        protected AudioListAction skipAndWalkAudioListAction;
         [SerializeField]
-        private AudioAction heartBeatAudioAction;
+        protected AudioAction heartBeatAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public MaterialAction LeftEyeMaterialAction => leftEyeMaterialAction;
+        public MaterialAction RightEyeMaterialAction => rightEyeMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction LeftEyeMeshAction => leftEyeMeshAction;
+        public StaticMeshAction RightEyeMeshAction => rightEyeMeshAction;
+        public AudioListAction HauntingCuesAudioListAction => hauntingCuesAudioListAction;
+        public AudioAction BreatheAudioAction => breatheAudioAction;
+        public AudioListAction SkipAndWalkAudioListAction => skipAndWalkAudioListAction;
+        public AudioAction HeartBeatAudioAction => heartBeatAudioAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.GHOST_GIRL_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new GhostGirlSkinner
-            (
-                attachments,
-                bodyMaterialAction, 
-                leftEyeMaterialAction, 
-                rightEyeMaterialAction, 
-                bodyMeshAction, 
-                leftEyeMeshAction, 
-                rightEyeMeshAction,
-                hauntingCuesAudioListAction,
-                breatheAudioAction,
-                skipAndWalkAudioListAction,
-                heartBeatAudioAction
-            );
+            return new GhostGirlSkinner(this);
         }
     }
 }

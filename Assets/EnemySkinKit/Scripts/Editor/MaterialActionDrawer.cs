@@ -12,29 +12,38 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             Foldout foldout = new Foldout();
             foldout.text = property.displayName;
             PropertyField actionField = new PropertyField(property.FindPropertyRelative("actionType"));
-            PropertyField replacementField = new PropertyField(property.FindPropertyRelative("replacementMaterial"));
+            PropertyField materialReplacementField = new PropertyField(property.FindPropertyRelative("replacementMaterial"));
+            PropertyField textureReplacementField = new PropertyField(property.FindPropertyRelative("replacementTexture"));
             foldout.contentContainer.Add(actionField);
-            foldout.contentContainer.Add(replacementField);
-            if (!property.FindPropertyRelative("actionType").enumNames[property.FindPropertyRelative("actionType").enumValueIndex].Equals("REPLACE"))
-            {
-                replacementField.style.display = DisplayStyle.None;
-                
-            }
+            foldout.contentContainer.Add(materialReplacementField);
+            foldout.contentContainer.Add(textureReplacementField);
+            UpdateAppearance(property, materialReplacementField, textureReplacementField);
             actionField.RegisterValueChangeCallback
             (
                 (ev) =>
                 {
-                    if (property.FindPropertyRelative("actionType").enumNames[property.FindPropertyRelative("actionType").enumValueIndex].Equals("REPLACE"))
-                    {
-                        replacementField.style.display = DisplayStyle.Flex;
-                    }
-                    else
-                    {
-                        replacementField.style.display = DisplayStyle.None;
-                    }
+                    UpdateAppearance(property, materialReplacementField, textureReplacementField);
                 }
             );
             return foldout;
+        }
+        private static void UpdateAppearance(SerializedProperty property, PropertyField materialReplacementField, PropertyField textureReplacementField)
+        {
+            if (property.FindPropertyRelative("actionType").enumNames[property.FindPropertyRelative("actionType").enumValueIndex].Equals("REPLACE"))
+            {
+                materialReplacementField.style.display = DisplayStyle.Flex;
+                textureReplacementField.style.display = DisplayStyle.None;
+            }
+            else if(property.FindPropertyRelative("actionType").enumNames[property.FindPropertyRelative("actionType").enumValueIndex].Equals("REPLACE_TEXTURE"))
+            {
+                textureReplacementField.style.display = DisplayStyle.Flex;
+                materialReplacementField.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                textureReplacementField.style.display = DisplayStyle.None;
+                materialReplacementField.style.display = DisplayStyle.None;
+            }
         }
     }
 }

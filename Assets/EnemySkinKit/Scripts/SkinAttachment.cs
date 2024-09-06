@@ -16,7 +16,7 @@ namespace AntlerShed.EnemySkinKit
 
         public static List<GameObject> ApplyAttachments(ArmatureAttachment[] attachments, SkinnedMeshRenderer renderer)
         {
-            if(renderer!=null)
+            if(renderer!=null && attachments != null)
             {
                 List<GameObject> activeAttachments = new List<GameObject>();
                 foreach (ArmatureAttachment attachment in attachments)
@@ -36,6 +36,10 @@ namespace AntlerShed.EnemySkinKit
                     }
                 }
                 return activeAttachments;
+            }
+            if(attachments==null)
+            {
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) EnemySkinKit.SkinKitLogger.LogWarning("Armature attachments array was null. This probably either means you're running dev build or uninstalled fixplugintypesserialization for some reason. If you're manually setting your armature attachments to null when extending an enemyskinner, consider passing in an empty array instead ans save yourself the log entry.");
             }
             return new List<GameObject>();
         }

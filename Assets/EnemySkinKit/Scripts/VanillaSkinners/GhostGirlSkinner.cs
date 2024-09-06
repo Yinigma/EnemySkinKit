@@ -13,9 +13,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string BODY_PATH = "DressGirlModel/basemesh";
         protected const string ANCHOR_PATH = "DressGirlModel/AnimContainer";
 
-        protected Material vanillaBodyMaterial;
-        protected Material vanillaLeftEyeMaterial;
-        protected Material vanillaRightEyeMaterial;
+        protected VanillaMaterial vanillaBodyMaterial;
+        protected VanillaMaterial vanillaLeftEyeMaterial;
+        protected VanillaMaterial vanillaRightEyeMaterial;
         protected Mesh vanillaLeftEyeMesh;
         protected Mesh vanillaRightEyeMesh;
 
@@ -24,72 +24,38 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaHeartbeatSound;
         protected AudioClip[] vanillaHauntingSounds;
         protected List<GameObject> activeAttachments;
-
-
-        protected MaterialAction BodyMaterialAction { get; }
-        protected MaterialAction LeftEyeMaterialAction { get; }
-        protected MaterialAction RightEyeMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected StaticMeshAction LeftEyeMeshAction { get; }
-        protected StaticMeshAction RightEyeMeshAction { get; }
-
-        protected AudioListAction SkipWalkSoundsAction { get; }
-        protected AudioAction BreatheSoundAction { get; }
-        protected AudioListAction HauntingSoundsAction { get; }
-        protected AudioAction HeartbeatSoundAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
+        protected GameObject skinnedMeshReplacement;
 
         private GhostGirlDisappearEventHandler eventHandler;
 
-        public GhostGirlSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction bodyMaterialAction, 
-            MaterialAction leftEyeMaterialAction, 
-            MaterialAction rightEyeMaterialAction, 
-            SkinnedMeshAction bodyMeshAction, 
-            StaticMeshAction leftEyeMeshAction, 
-            StaticMeshAction rightEyeMeshAction,
-            AudioListAction hauntingSoundsAction,
-            AudioAction breatheSoundAction,
-            AudioListAction skipWalkSoundsAction,
-            AudioAction heartbeatSoundAction
-        )
+        protected GhostGirlSkin SkinData { get; }
+
+        public GhostGirlSkinner(GhostGirlSkin skinData)
         {
-            BodyMaterialAction = bodyMaterialAction;
-            LeftEyeMaterialAction = leftEyeMaterialAction;
-            RightEyeMaterialAction = rightEyeMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            LeftEyeMeshAction = leftEyeMeshAction;
-            RightEyeMeshAction = rightEyeMeshAction;
-            SkipWalkSoundsAction = skipWalkSoundsAction;
-            BreatheSoundAction = breatheSoundAction;
-            HauntingSoundsAction = hauntingSoundsAction;
-            HeartbeatSoundAction = heartbeatSoundAction;
-            Attachments = attachments;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
         {
             DressGirlAI girl = enemy.GetComponent<DressGirlAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaLeftEyeMaterial = LeftEyeMaterialAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaRightEyeMaterial = RightEyeMaterialAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaLeftEyeMaterial = SkinData.LeftEyeMaterialAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaRightEyeMaterial = SkinData.RightEyeMaterialAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
 
-            vanillaLeftEyeMesh = LeftEyeMeshAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaRightEyeMesh = RightEyeMeshAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaLeftEyeMesh = SkinData.LeftEyeMeshAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaRightEyeMesh = SkinData.RightEyeMeshAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            vanillaHauntingSounds = HauntingSoundsAction.Apply(ref girl.appearStaringSFX);
+            vanillaHauntingSounds = SkinData.HauntingCuesAudioListAction.Apply(ref girl.appearStaringSFX);
             if(audioAnimEvents!=null)
             {
-                vanillaSkipWalkSounds = SkipWalkSoundsAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaSkipWalkSounds = SkinData.SkipAndWalkAudioListAction.Apply(ref audioAnimEvents.randomClips);
             }
-            vanillaBreatheSound = BreatheSoundAction.Apply(ref girl.breathingSFX);
-            vanillaHeartbeatSound = HeartbeatSoundAction.ApplyToSource(girl.heartbeatMusic);
+            vanillaBreatheSound = SkinData.BreatheAudioAction.Apply(ref girl.breathingSFX);
+            vanillaHeartbeatSound = SkinData.HeartBeatAudioAction.ApplyToSource(girl.heartbeatMusic);
 
-            GameObject moddedGO = BodyMeshAction.Apply
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -99,8 +65,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 new Dictionary<string, Transform>() { { "metarig", enemy.transform.Find($"{ANCHOR_PATH}/metarig") } }
             );
 
-            eventHandler = new GhostGirlDisappearEventHandler(moddedGO);
+            eventHandler = new GhostGirlDisappearEventHandler(skinnedMeshReplacement, activeAttachments);
 
+            if(skinnedMeshReplacement!=null)
+            {
+                foreach (Renderer renderer in skinnedMeshReplacement.GetComponentsInChildren<Renderer>())
+                {
+                    renderer.gameObject.layer = LayerMask.NameToLayer("EnemiesNotRendered");
+                }
+            }
             EnemySkinRegistry.RegisterEnemyEventHandler(girl, eventHandler);
         }
 
@@ -110,26 +83,26 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             EnemySkinRegistry.RemoveEnemyEventHandler(girl, eventHandler);
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            LeftEyeMaterialAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaLeftEyeMaterial);
-            RightEyeMaterialAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaRightEyeMaterial);
-            LeftEyeMeshAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLeftEyeMesh);
-            RightEyeMeshAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaRightEyeMesh);
-            HauntingSoundsAction.Remove(ref girl.appearStaringSFX, vanillaHauntingSounds);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.LeftEyeMaterialAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaLeftEyeMaterial);
+            SkinData.RightEyeMaterialAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaRightEyeMaterial);
+            SkinData.LeftEyeMeshAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLeftEyeMesh);
+            SkinData.RightEyeMeshAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaRightEyeMesh);
+            SkinData.HauntingCuesAudioListAction.Remove(ref girl.appearStaringSFX, vanillaHauntingSounds);
             if(audioAnimEvents!=null)
             {
-                SkipWalkSoundsAction.Remove(ref audioAnimEvents.randomClips, vanillaSkipWalkSounds);
+                SkinData.SkipAndWalkAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaSkipWalkSounds);
             }
-            BreatheSoundAction.Remove(ref girl.breathingSFX, vanillaBreatheSound);
-            HeartbeatSoundAction.RemoveFromSource(girl.heartbeatMusic, vanillaHeartbeatSound);
+            SkinData.BreatheAudioAction.Remove(ref girl.breathingSFX, vanillaBreatheSound);
+            SkinData.HeartBeatAudioAction.RemoveFromSource(girl.heartbeatMusic, vanillaHeartbeatSound);
 
-            BodyMeshAction.Remove
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
 
             
@@ -141,29 +114,57 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
 
         private GameObject ModdedMeshGO { get; }
+        private List<GameObject> ActiveAttachments { get; }
 
-        internal GhostGirlDisappearEventHandler(GameObject ghostGirl)
+        internal GhostGirlDisappearEventHandler(GameObject ghostGirl, List<GameObject> activeAttachments)
         {
             ModdedMeshGO = ghostGirl;
+            ActiveAttachments = activeAttachments;
         }
 
         public void OnHide(DressGirlAI ghostGirl)
         {
             if (EnemySkinKit.LogLevelSetting >= LogLevel.INFO) EnemySkinKit.SkinKitLogger.LogInfo("Got Ghost Girl Hide Event");
-            SkinnedMeshRenderer renderer = ModdedMeshGO?.GetComponentInChildren<SkinnedMeshRenderer>();
-            if (renderer != null)
+            if (ModdedMeshGO != null)
             {
-                renderer.gameObject.layer = LayerMask.NameToLayer("EnemiesNotRendered");
+                Renderer[] renderers = ModdedMeshGO.GetComponentsInChildren<Renderer>();
+
+                foreach (Renderer renderer in renderers)
+                {
+                    renderer.gameObject.layer = LayerMask.NameToLayer("EnemiesNotRendered");
+                }
+            }
+            foreach(GameObject attachment in ActiveAttachments)
+            {
+                Renderer[] renderers = attachment.GetComponentsInChildren<Renderer>();
+                foreach (Renderer renderer in renderers)
+                {
+                    renderer.gameObject.layer = LayerMask.NameToLayer("EnemiesNotRendered");
+                }
             }
         }
 
         public void OnShow(DressGirlAI ghostGirl)
         {
-            if (EnemySkinKit.LogLevelSetting >= LogLevel.INFO) EnemySkinKit.SkinKitLogger.LogInfo("Got Ghost Girl Show Event");
-            SkinnedMeshRenderer renderer = ModdedMeshGO?.GetComponentInChildren<SkinnedMeshRenderer>();
-            if(renderer != null)
+            if (ghostGirl.hauntingLocalPlayer)
             {
-                renderer.gameObject.layer = LayerMask.NameToLayer("Enemies");
+                if (EnemySkinKit.LogLevelSetting >= LogLevel.INFO) EnemySkinKit.SkinKitLogger.LogInfo("Got Ghost Girl Show Event");
+                if (ModdedMeshGO != null)
+                {
+                    Renderer[] renderers = ModdedMeshGO.GetComponentsInChildren<Renderer>();
+                    foreach (Renderer renderer in renderers)
+                    {
+                        renderer.gameObject.layer = LayerMask.NameToLayer("Enemies");
+                    }
+                }
+                foreach (GameObject attachment in ActiveAttachments)
+                {
+                    Renderer[] renderers = attachment.GetComponentsInChildren<Renderer>();
+                    foreach (Renderer renderer in renderers)
+                    {
+                        renderer.gameObject.layer = LayerMask.NameToLayer("Enemies");
+                    }
+                }
             }
         }
     }

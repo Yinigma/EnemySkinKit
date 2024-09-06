@@ -12,7 +12,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LOD1_PATH = "MeshContainer/LOD1";
         protected const string ANCHOR_PATH = "MeshContainer/AnimContainer/metarig";
         protected const string ANIM_EVENTS_PATH = "MeshContainer/AnimContainer";
-        protected Material vanillaBodyMaterial;
+        protected const string BLOOD_FOUNTAIN_PARTICLE = "MeshContainer/AnimContainer/metarig/spinecontainer/spine/spine.001/BloodSpurtParticle (1)/BloodSpurtParticle";
+        protected VanillaMaterial vanillaBodyMaterial;
         protected AudioClip[] vanillaTorsoTurnFinishAudio;
         protected AudioClip[] vanillaJointSqueakAudio;
         protected AudioClip[] vanillaFootstepsAudio;
@@ -21,61 +22,23 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaAngryAudio;
         protected AudioClip vanillaTorsoTurnAudio;
         protected List<GameObject> activeAttachments;
+        protected GameObject skinnedMeshReplacement;
 
-        protected MaterialAction BodyMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected AudioListAction TorsoFinishTurnAudioAction { get; }
-        protected AudioListAction JointSqueaksAudioAction { get; }
-        protected AudioListAction FootstepsAudioAction { get; }
-        protected AudioAction AimAudioAction { get; }
-        protected AudioAction TorsoTurnAudioAction { get; }
-        protected AudioAction KickAudioAction { get; }
-        protected AudioAction HeadPopUpAudioAction { get; }
-        protected AudioAction HitBodyAudioAction { get; }
-        protected AudioAction HitEyeAudioAction { get; }
-        protected AudioAction ReloadAudioAction { get; }
-        protected AudioAction AngryAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-
-        protected bool LongRangeSilenced => HeadPopUpAudioAction.actionType != AudioActionType.RETAIN;
-        protected bool EffectsSilenced => HitBodyAudioAction.actionType != AudioActionType.RETAIN || HitEyeAudioAction.actionType != AudioActionType.RETAIN || ReloadAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool LongRangeSilenced => SkinData.HeadPopUpAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN || SkinData.HitEyeAudioAction.actionType != AudioActionType.RETAIN || SkinData.ReloadAudioAction.actionType != AudioActionType.RETAIN;
 
         protected AudioSource modCreatureEffects;
         protected AudioSource modLongRange;
+        protected VanillaMaterial vanillaSpurtMat;
+        protected VanillaMaterial vanillaFountainMat;
+        protected ParticleSystem vanillaSpurtParticle;
+        protected ParticleSystem replacementFountainParticle;
 
-        public NutcrackerSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction bodyMaterialAction, 
-            SkinnedMeshAction bodyMeshAction,
-            AudioAction torsoTurnAudioAction,
-            AudioListAction torsoFinishTurnAudioAction,
-            AudioAction aimAudioAction,
-            AudioAction kickAudioAction,
-            AudioAction headPopUpAudioAction,
-            AudioAction hitBodyAudioAction,
-            AudioAction hitEyeAudioAction,
-            AudioAction reloadAudioAction,
-            AudioAction angryAudioAction,
-            AudioListAction jointSqueaksAudioAction,
-            AudioListAction footstepsAudioAction
-            
-        )
+        protected NutcrackerSkin SkinData { get; }
+
+        public NutcrackerSkinner( NutcrackerSkin skinData)
         {
-            BodyMaterialAction = bodyMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            TorsoTurnAudioAction = torsoTurnAudioAction;
-            TorsoFinishTurnAudioAction = torsoFinishTurnAudioAction;
-            AimAudioAction = aimAudioAction;
-            KickAudioAction = kickAudioAction;
-            HeadPopUpAudioAction = headPopUpAudioAction;
-            HitBodyAudioAction = hitBodyAudioAction;
-            HitEyeAudioAction = hitEyeAudioAction;
-            ReloadAudioAction = reloadAudioAction;
-            AngryAudioAction = angryAudioAction;
-            JointSqueaksAudioAction = jointSqueaksAudioAction;
-            FootstepsAudioAction = footstepsAudioAction;
-            Attachments = attachments;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
@@ -83,18 +46,18 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             NutcrackerEnemyAI nutcracker = enemy.GetComponent<NutcrackerEnemyAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENTS_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaTorsoTurnAudio = TorsoTurnAudioAction.ApplyToSource(nutcracker.torsoTurnAudio);
-            vanillaTorsoTurnFinishAudio = TorsoFinishTurnAudioAction.Apply(ref nutcracker.torsoFinishTurningClips);
-            vanillaAimAudio = AimAudioAction.Apply(ref nutcracker.aimSFX);
-            vanillaKickAudio = KickAudioAction.Apply(ref nutcracker.kickSFX);
-            vanillaAngryAudio = AngryAudioAction.ApplyToSource(nutcracker.creatureVoice);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaTorsoTurnAudio = SkinData.TorsoTurnAudioAction.ApplyToSource(nutcracker.torsoTurnAudio);
+            vanillaTorsoTurnFinishAudio = SkinData.TorsoFinishTurningAudioListAction.Apply(ref nutcracker.torsoFinishTurningClips);
+            vanillaAimAudio = SkinData.AimAudioAction.Apply(ref nutcracker.aimSFX);
+            vanillaKickAudio = SkinData.KickAudioAction.Apply(ref nutcracker.kickSFX);
+            vanillaAngryAudio = SkinData.AngryDrumsAudioAction.ApplyToSource(nutcracker.creatureVoice);
             if(audioAnimEvents!=null)
             {
-                vanillaJointSqueakAudio = JointSqueaksAudioAction.Apply(ref audioAnimEvents.randomClips);
-                vanillaFootstepsAudio = FootstepsAudioAction.Apply(ref audioAnimEvents.randomClips2);
+                vanillaJointSqueakAudio = SkinData.JointSqueaksAudioListAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaFootstepsAudio = SkinData.FootstepsAudioListAction.Apply(ref audioAnimEvents.randomClips2);
             }
             if (LongRangeSilenced)
             {
@@ -111,7 +74,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     audioAnimEvents.audioToPlayB = modCreatureEffects;
                 }
             }
-            BodyMeshAction.Apply
+
+            vanillaSpurtMat = SkinData.BloodSpurtMaterialAction.Apply(audioAnimEvents.particle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaFountainMat = SkinData.BloodFountainMaterialAction.Apply(nutcracker.transform.Find(BLOOD_FOUNTAIN_PARTICLE)?.GetComponent<ParticleSystemRenderer>(), 0);
+
+            vanillaSpurtParticle = SkinData.BloodSpurtParticleAction.ApplyRef(ref audioAnimEvents.particle);
+            replacementFountainParticle = SkinData.BloodFountainParticleAction.Apply(nutcracker.transform.Find(BLOOD_FOUNTAIN_PARTICLE)?.GetComponent<ParticleSystem>());
+
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -145,26 +115,33 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 }
             }
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            TorsoTurnAudioAction.RemoveFromSource(nutcracker.torsoTurnAudio, vanillaTorsoTurnAudio);
-            TorsoFinishTurnAudioAction.Remove(ref nutcracker.torsoFinishTurningClips, vanillaTorsoTurnFinishAudio);
-            AimAudioAction.Remove(ref nutcracker.aimSFX, vanillaAimAudio);
-            KickAudioAction.Remove(ref nutcracker.kickSFX, vanillaKickAudio);
-            AngryAudioAction.RemoveFromSource(nutcracker.creatureVoice, vanillaAngryAudio);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.TorsoTurnAudioAction.RemoveFromSource(nutcracker.torsoTurnAudio, vanillaTorsoTurnAudio);
+            SkinData.TorsoFinishTurningAudioListAction.Remove(ref nutcracker.torsoFinishTurningClips, vanillaTorsoTurnFinishAudio);
+            SkinData.AimAudioAction.Remove(ref nutcracker.aimSFX, vanillaAimAudio);
+            SkinData.KickAudioAction.Remove(ref nutcracker.kickSFX, vanillaKickAudio);
+            SkinData.AngryDrumsAudioAction.RemoveFromSource(nutcracker.creatureVoice, vanillaAngryAudio);
             if (audioAnimEvents != null)
             {
-                JointSqueaksAudioAction.Remove(ref audioAnimEvents.randomClips, vanillaJointSqueakAudio);
-                FootstepsAudioAction.Remove(ref audioAnimEvents.randomClips2, vanillaFootstepsAudio);
+                SkinData.JointSqueaksAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaJointSqueakAudio);
+                SkinData.FootstepsAudioListAction.Remove(ref audioAnimEvents.randomClips2, vanillaFootstepsAudio);
             }
-            BodyMeshAction.Remove
+
+            SkinData.BloodSpurtParticleAction.RemoveRef(ref audioAnimEvents.particle, vanillaSpurtParticle);
+            SkinData.BloodFountainParticleAction.Remove(nutcracker.transform.Find(BLOOD_FOUNTAIN_PARTICLE)?.GetComponent<ParticleSystem>(), replacementFountainParticle);
+
+            SkinData.BloodSpurtMaterialAction.Remove(audioAnimEvents.particle.GetComponent<ParticleSystemRenderer>(), 0, vanillaSpurtMat);
+            SkinData.BloodFountainMaterialAction.Remove(nutcracker.transform.Find(BLOOD_FOUNTAIN_PARTICLE)?.GetComponent<ParticleSystemRenderer>(), 0, vanillaFountainMat);
+
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -172,7 +149,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (LongRangeSilenced)
             {
-                modCreatureEffects.PlayOneShot(HitEyeAudioAction.WorkingClip(nutcracker.enemyType.audioClips[2]));
+                modLongRange.PlayOneShot(SkinData.HitEyeAudioAction.WorkingClip(nutcracker.enemyType.audioClips[2]));
             }
         }
 
@@ -180,7 +157,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(LongRangeSilenced)
             {
-                modCreatureEffects.PlayOneShot(HitEyeAudioAction.WorkingClip(nutcracker.enemyType.audioClips[3]));
+                modLongRange.PlayOneShot(SkinData.HitEyeAudioAction.WorkingClip(nutcracker.enemyType.audioClips[3]));
             }
         }
 
@@ -190,11 +167,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             {
                 if (enemy.currentBehaviourStateIndex == 2)
                 {
-                    modCreatureEffects.PlayOneShot(HitEyeAudioAction.WorkingClip(enemy.enemyType.audioClips[0]));
+                    modCreatureEffects.PlayOneShot(SkinData.HitEyeAudioAction.WorkingClip(enemy.enemyType.audioClips[0]));
                 }
                 else
                 {
-                    modCreatureEffects.PlayOneShot(HitEyeAudioAction.WorkingClip(enemy.enemyType.audioClips[1]));
+                    modCreatureEffects.PlayOneShot(SkinData.HitEyeAudioAction.WorkingClip(enemy.enemyType.audioClips[1]));
                 }
             }
         }
@@ -204,7 +181,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             if (EffectsSilenced)
             {
                 modCreatureEffects.Stop();
-                modCreatureEffects.PlayOneShot(KickAudioAction.WorkingClip(vanillaKickAudio));
+                modCreatureEffects.PlayOneShot(SkinData.KickAudioAction.WorkingClip(vanillaKickAudio));
             }
         }
 

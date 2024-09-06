@@ -2,7 +2,9 @@ using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
@@ -15,16 +17,22 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string BROOM_PATH = "MeshContainer/metarig/spine/Broom";
         protected const string HAIR_PATH = "MeshContainer/metarig/spine/spine.001/NeckContainer/spine.004/face/Hair";
         protected const string TEETH_PATH = "MeshContainer/metarig/spine/spine.001/NeckContainer/spine.004/face/Teeth";
+        protected const string MESH_PROPERTY = "BugMesh";
+        protected const string TEXTURE_PROPERTY = "BugTexture";
 
-        protected Material vanillaBodyMaterial;
-        protected Material vanillaBroomMaterial;
-        protected Material vanillaTeethMaterial;
-        protected Material vanillaHairMaterial;
+        protected VanillaMaterial vanillaBodyMaterial;
+        protected VanillaMaterial vanillaBroomMaterial;
+        protected VanillaMaterial vanillaTeethMaterial;
+        protected VanillaMaterial vanillaHairMaterial;
         protected List<GameObject> activeAttachments;
         protected Mesh vanillaBroomMesh;
         protected Mesh vanillaTeethMesh;
         protected Mesh vanillaHairMesh;
-
+        protected VanillaMaterial vanillaBloodSpurtMat;
+        protected VanillaMaterial vanillaBloodMat;
+        protected VanillaMaterial vanillaPopMat;
+        protected ParticleSystem vanillaBloodParticle;
+        protected ParticleSystem vanillaPopParticle;
         protected AudioClip vanillaAmbience;
         protected AudioClip vanillaBuzzingAmbience;
         //protected AudioSource sweepingAudio;
@@ -33,109 +41,63 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaPopReverb;
         protected AudioClip vanillaMurderMusic;
         protected AudioClip vanillaPopAudio;
+        protected GameObject skinnedMeshReplacement;
 
-        protected MaterialAction BodyMaterialAction { get; }
-        
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-        protected MaterialAction BroomMaterialAction { get; }
-        protected MaterialAction HairMaterialAction { get; }
-        protected MaterialAction TeethMaterialAction { get; }
-        protected StaticMeshAction BroomMeshAction { get; }
-        protected StaticMeshAction HairMeshAction { get; }
-        protected StaticMeshAction TeethMeshAction { get; }
-        protected AudioListAction FootstepsAudioAction { get; }
-        protected AudioListAction SweepsAudioAction { get; }
-        protected AudioAction PopReverbAudioAction { get; }
-        protected AudioAction MurderMusicAudioAction { get; }
-        protected AudioAction DefaultAmbienceAudioAction { get; }
-        protected AudioAction BuzzingAmbienceAudioAction { get; }
-        protected AudioAction StabPlayerAudioAction { get; }
-        protected AudioAction CoatRustleAudioAction { get; }
-        protected AudioAction BrandishKnifeAudioAction { get; }
-        protected AudioAction PopAudioAction { get; }
-        protected AudioAction HitBodyAudioAction { get; }
-        protected AudioAction InflateAudioAction { get; }
+        //Hornet crap
+        protected ButlerBeesEnemyAI hornets;
+        protected GameObject hornetReplacementInstance;
+        protected Mesh vanillaHornetMesh;
+        protected Texture vanillaHornetTexture;
+        protected AudioClip vanillaHornetBuzzAudio;
 
-        protected bool PopSilenced => InflateAudioAction.actionType != AudioActionType.RETAIN;
-        protected bool EffectsSilenced => HitBodyAudioAction.actionType != AudioActionType.RETAIN ||
-            BrandishKnifeAudioAction.actionType != AudioActionType.RETAIN ||
-            CoatRustleAudioAction.actionType != AudioActionType.RETAIN ||
-            StabPlayerAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool PopSilenced => SkinData.InflateAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN ||
+            SkinData.BrandishKnifeAudioAction.actionType != AudioActionType.RETAIN ||
+            SkinData.CoatRustleAudioAction.actionType != AudioActionType.RETAIN ||
+            SkinData.StabPlayerAudioAction.actionType != AudioActionType.RETAIN;
 
         protected AudioSource modCreatureEffects;
         protected AudioSource modPopNear;
+        protected ParticleSystem vanillaBloodSpurtParticle;
 
-        public ButlerSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction bodyMaterialAction,
-            MaterialAction broomMaterialAction,
-            MaterialAction teethMaterialAction,
-            MaterialAction hairMaterialAction,
-            SkinnedMeshAction bodyMeshAction,
-            StaticMeshAction broomMeshAction,
-            StaticMeshAction teethMeshAction,
-            StaticMeshAction hairMeshAction,
-            AudioListAction footstepsAudioAction,
-            AudioListAction sweepsAudioAction,
-            AudioAction popReverbAudioAction,
-            AudioAction murderMusicAudioAction,
-            AudioAction defaultAmbienceAudioAction,
-            AudioAction buzzingAmbienceAudioAction,
-            AudioAction stabPlayerAudioAction,
-            AudioAction coatRustleAudioAction,
-            AudioAction brandishKnifeAudioAction,
-            AudioAction popAudioAction,
-            AudioAction hitBodyAudioAction,
-            AudioAction inflateAudioAction
-        )
+        protected ButlerSkin SkinData { get; }
+
+        public ButlerSkinner(ButlerSkin skinData)
         {
-            BodyMaterialAction = bodyMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            Attachments = attachments;
-            BroomMeshAction = broomMeshAction;
-            TeethMeshAction = teethMeshAction;
-            HairMeshAction = hairMeshAction;
-            BroomMaterialAction = broomMaterialAction;
-            TeethMaterialAction = teethMaterialAction;
-            HairMaterialAction = hairMaterialAction;
-            FootstepsAudioAction = footstepsAudioAction;
-            SweepsAudioAction = sweepsAudioAction;
-            PopReverbAudioAction = popReverbAudioAction;
-            MurderMusicAudioAction = murderMusicAudioAction;
-            DefaultAmbienceAudioAction = defaultAmbienceAudioAction;
-            BuzzingAmbienceAudioAction = buzzingAmbienceAudioAction;
-            StabPlayerAudioAction = stabPlayerAudioAction;
-            CoatRustleAudioAction = coatRustleAudioAction;
-            BrandishKnifeAudioAction = brandishKnifeAudioAction;
-            PopAudioAction = popAudioAction;
-            HitBodyAudioAction = hitBodyAudioAction;
-            InflateAudioAction = inflateAudioAction;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
         {
             ButlerEnemyAI butler = enemy.GetComponent<ButlerEnemyAI>();
 
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaBroomMaterial = BroomMaterialAction.Apply(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<Renderer>(), 0);
-            vanillaTeethMaterial = TeethMaterialAction.Apply(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<Renderer>(), 0);
-            vanillaHairMaterial = HairMaterialAction.Apply(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<Renderer>(), 0);
-            vanillaBroomMesh = BroomMeshAction.Apply(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<MeshFilter>());
-            vanillaTeethMesh = TeethMeshAction.Apply(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<MeshFilter>());
-            vanillaHairMesh = HairMeshAction.Apply(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<MeshFilter>());
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaBroomMaterial = SkinData.BroomMaterialAction.Apply(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<Renderer>(), 0);
+            vanillaTeethMaterial = SkinData.TeethMaterialAction.Apply(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<Renderer>(), 0);
+            vanillaHairMaterial = SkinData.HairMaterialAction.Apply(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<Renderer>(), 0);
+            vanillaBroomMesh = SkinData.BroomMeshAction.Apply(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<MeshFilter>());
+            vanillaTeethMesh = SkinData.TeethMeshAction.Apply(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<MeshFilter>());
+            vanillaHairMesh = SkinData.HairMeshAction.Apply(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<MeshFilter>());
 
-            vanillaAmbience = DefaultAmbienceAudioAction.ApplyToSource(butler.ambience1);
-            vanillaBuzzingAmbience = BuzzingAmbienceAudioAction.ApplyToSource(butler.buzzingAmbience);
-            vanillaFootsteps = FootstepsAudioAction.Apply(ref butler.footsteps);
-            vanillaBroomSweeps = SweepsAudioAction.Apply(ref butler.broomSweepSFX);
-            vanillaPopReverb = PopReverbAudioAction.ApplyToSource(butler.popAudioFar);
-            vanillaMurderMusic = MurderMusicAudioAction.ApplyToSource(butler.ambience2);
-            vanillaPopAudio = PopAudioAction.ApplyToSource(butler.popAudio);
+            vanillaBloodSpurtMat = SkinData.BloodSpurtMaterialAction.Apply(butler.stabBloodParticle.subEmitters.GetSubEmitterSystem(0).GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaBloodMat = SkinData.StabBloodMaterialAction.Apply(butler.stabBloodParticle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaPopMat = SkinData.PopMaterialAction.Apply(butler.popParticle.GetComponent<ParticleSystemRenderer>(), 0);
+
+            vanillaBloodSpurtParticle = SkinData.BloodSpurtParticleAction.ApplySubEmitter(butler.stabBloodParticle, 0);
+            vanillaBloodParticle = SkinData.StabBloodParticleAction.ApplyRef(ref butler.stabBloodParticle);
+            vanillaPopParticle = SkinData.PopParticleAction.ApplyRef(ref butler.popParticle);
+
+
+            vanillaAmbience = SkinData.DefaultAmbienceAudioAction.ApplyToSource(butler.ambience1);
+            vanillaBuzzingAmbience = SkinData.BuzzingAmbienceAudioAction.ApplyToSource(butler.buzzingAmbience);
+            vanillaFootsteps = SkinData.FootstepsAudioAction.Apply(ref butler.footsteps);
+            vanillaBroomSweeps = SkinData.SweepsAudioAction.Apply(ref butler.broomSweepSFX);
+            vanillaPopReverb = SkinData.PopReverbAudioAction.ApplyToSource(butler.popAudioFar);
+            vanillaMurderMusic = SkinData.MurderMusicAudioAction.ApplyToSource(butler.ambience2);
+            vanillaPopAudio = SkinData.PopAudioAction.ApplyToSource(butler.popAudio);
 
             if (PopSilenced)
             {
@@ -148,7 +110,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 butler.creatureSFX.mute = true;
             }
 
-            BodyMeshAction.Apply
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -163,12 +125,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     { "NeckContainer", enemy.transform.Find($"{ANCHOR_PATH}/metarig/spine/spine.001/NeckContainer") } 
                 }
             );
+            ApplySkinToHornets();
             EnemySkinRegistry.RegisterEnemyEventHandler(butler, this);
         }
 
         public override void Remove(GameObject enemy)
         {
             ButlerEnemyAI butler = enemy.GetComponent<ButlerEnemyAI>();
+            RemoveSkinFromHornets();
             EnemySkinRegistry.RemoveEnemyEventHandler(butler, this);
             if (PopSilenced)
             {
@@ -182,24 +146,32 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             }
 
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BroomMaterialAction.Remove(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBroomMaterial);
-            TeethMaterialAction.Remove(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaTeethMaterial);
-            HairMaterialAction.Remove(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaHairMaterial);
-            BroomMeshAction.Remove(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaBroomMesh);
-            TeethMeshAction.Remove(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaTeethMesh);
-            HairMeshAction.Remove(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaHairMesh);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BroomMaterialAction.Remove(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBroomMaterial);
+            SkinData.TeethMaterialAction.Remove(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaTeethMaterial);
+            SkinData.HairMaterialAction.Remove(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaHairMaterial);
+            SkinData.BroomMeshAction.Remove(enemy.transform.Find(BROOM_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaBroomMesh);
+            SkinData.TeethMeshAction.Remove(enemy.transform.Find(TEETH_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaTeethMesh);
+            SkinData.HairMeshAction.Remove(enemy.transform.Find(HAIR_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaHairMesh);
 
-            DefaultAmbienceAudioAction.RemoveFromSource(butler.ambience1, vanillaAmbience);
-            BuzzingAmbienceAudioAction.RemoveFromSource(butler.buzzingAmbience, vanillaBuzzingAmbience);
-            FootstepsAudioAction.Remove(ref butler.footsteps, vanillaFootsteps);
-            SweepsAudioAction.Remove(ref butler.broomSweepSFX, vanillaBroomSweeps);
-            PopAudioAction.RemoveFromSource(butler.popAudioFar, vanillaPopReverb);
-            MurderMusicAudioAction.RemoveFromSource(butler.ambience2, vanillaMurderMusic);
+            SkinData.StabBloodParticleAction.RemoveRef(ref butler.stabBloodParticle, vanillaBloodParticle);
+            SkinData.PopParticleAction.RemoveRef(ref butler.popParticle, vanillaPopParticle);
+            SkinData.BloodSpurtParticleAction.RemoveSubEmitter(butler.stabBloodParticle, 0, vanillaBloodSpurtParticle);
 
-            BodyMeshAction.Remove
+            SkinData.StabBloodMaterialAction.Remove(butler.stabBloodParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaBloodMat);
+            SkinData.PopMaterialAction.Remove(butler.popParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaPopMat);
+            SkinData.BloodSpurtMaterialAction.Remove(butler.stabBloodParticle.subEmitters.GetSubEmitterSystem(0).GetComponent<ParticleSystemRenderer>(), 0, vanillaBloodSpurtMat);
+
+            SkinData.DefaultAmbienceAudioAction.RemoveFromSource(butler.ambience1, vanillaAmbience);
+            SkinData.BuzzingAmbienceAudioAction.RemoveFromSource(butler.buzzingAmbience, vanillaBuzzingAmbience);
+            SkinData.FootstepsAudioAction.Remove(ref butler.footsteps, vanillaFootsteps);
+            SkinData.SweepsAudioAction.Remove(ref butler.broomSweepSFX, vanillaBroomSweeps);
+            SkinData.PopAudioAction.RemoveFromSource(butler.popAudioFar, vanillaPopReverb);
+            SkinData.MurderMusicAudioAction.RemoveFromSource(butler.ambience2, vanillaMurderMusic);
+
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -207,7 +179,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>()
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -215,7 +187,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced)
             {
-                AudioClip[] stepClips = FootstepsAudioAction.WorkingClips(vanillaFootsteps);
+                AudioClip[] stepClips = SkinData.FootstepsAudioAction.WorkingClips(vanillaFootsteps);
                 AudioClip stepClip = stepClips[UnityEngine.Random.Range(0, stepClips.Length)];
                 modCreatureEffects.PlayOneShot(stepClip);
                 WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, stepClip);
@@ -227,7 +199,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced)
             {
-                AudioClip[] sweepClips = SweepsAudioAction.WorkingClips(vanillaBroomSweeps);
+                AudioClip[] sweepClips = SkinData.SweepsAudioAction.WorkingClips(vanillaBroomSweeps);
                 AudioClip sweepClip = sweepClips[UnityEngine.Random.Range(0, sweepClips.Length)];
                 modCreatureEffects.PlayOneShot(sweepClip);
                 WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, sweepClip);
@@ -239,8 +211,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
+                modCreatureEffects.PlayOneShot(SkinData.CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
             }
         }
 
@@ -248,8 +220,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
+                modCreatureEffects.PlayOneShot(SkinData.CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.CoatRustleAudioAction.WorkingClip(instance.enemyType.audioClips[1]));
             }
         }
 
@@ -257,8 +229,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(BrandishKnifeAudioAction.WorkingClip(instance.enemyType.audioClips[2]));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, BrandishKnifeAudioAction.WorkingClip(instance.enemyType.audioClips[2]));
+                modCreatureEffects.PlayOneShot(SkinData.BrandishKnifeAudioAction.WorkingClip(instance.enemyType.audioClips[2]));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.BrandishKnifeAudioAction.WorkingClip(instance.enemyType.audioClips[2]));
             }
         }
 
@@ -270,11 +242,17 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             }
         }
 
+        public void OnSpawnHornets(ButlerEnemyAI instance, ButlerBeesEnemyAI hornets)
+        {
+            this.hornets = hornets;
+            ApplySkinToHornets();
+        }
+
         public void OnInflate(ButlerEnemyAI instance)
         {
             if(PopSilenced)
             {
-                modPopNear.PlayOneShot(InflateAudioAction.WorkingClip(instance.enemyType.audioClips[3]));
+                modPopNear.PlayOneShot(SkinData.InflateAudioAction.WorkingClip(instance.enemyType.audioClips[3]));
             }
         }
 
@@ -282,7 +260,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(StabPlayerAudioAction.WorkingClip(instance.enemyType.audioClips[0]));
+                modCreatureEffects.PlayOneShot(SkinData.StabPlayerAudioAction.WorkingClip(instance.enemyType.audioClips[0]));
             }
         }
 
@@ -290,8 +268,47 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced && playSoundEffect)
             {
-                modCreatureEffects.PlayOneShot(HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+            }
+        }
+
+        private void ApplySkinToHornets()
+        {
+            if(hornets != null)
+            {
+                VisualEffect hornetEffect = hornets.transform.Find("BugSwarmParticle").GetComponent<VisualEffect>();
+                if (SkinData.HornetReplacementPrefab != null)
+                {
+                    hornetReplacementInstance = GameObject.Instantiate(SkinData.HornetReplacementPrefab, hornets.transform);
+                    hornetReplacementInstance.transform.localPosition = Vector3.zero;
+                    hornetEffect.enabled = false;
+                }
+                else
+                {
+                    vanillaHornetTexture = SkinData.HornetTextureAction.ApplyToVisualEffect(hornetEffect, TEXTURE_PROPERTY);
+                    vanillaHornetMesh = SkinData.HornetMeshAction.ApplyToVisualEffect(hornetEffect, MESH_PROPERTY);
+                }
+                vanillaHornetBuzzAudio = SkinData.HornetBuzzAudioAction.ApplyToSource(hornets.buzzing);
+            }
+        }
+
+        private void RemoveSkinFromHornets()
+        {
+            if (hornets != null)
+            {
+                VisualEffect hornetEffect = hornets.transform.Find("BugSwarmParticle").GetComponent<VisualEffect>();
+                if (hornetReplacementInstance != null)
+                {
+                    GameObject.Destroy(hornetReplacementInstance);
+                    hornetEffect.enabled = true;
+                }
+                else
+                {
+                    SkinData.HornetTextureAction.RemoveFromVisualEffect(hornetEffect, TEXTURE_PROPERTY, vanillaHornetTexture);
+                    SkinData.HornetMeshAction.RemoveFromVisualEffect(hornetEffect, vanillaHornetMesh, MESH_PROPERTY);
+                }
+                SkinData.HornetBuzzAudioAction.RemoveFromSource(hornets.buzzing, vanillaHornetBuzzAudio);
             }
         }
     }

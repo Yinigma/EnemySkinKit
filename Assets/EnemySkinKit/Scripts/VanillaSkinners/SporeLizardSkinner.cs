@@ -11,10 +11,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string BODY_PATH = "PufferModel/BezierCurve";
         protected const string ANCHOR_PATH = "PufferModel/AnimContainer/Armature";
         protected const string ANIM_EVENT_PATH = "PufferModel/AnimContainer";
-        protected Material vanillaBodyMaterial;
-
-        protected MaterialAction BodyMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
+        protected VanillaMaterial vanillaBodyMaterial;
 
         protected AudioClip[] vanillaFrightenedAudio;
         protected AudioClip[] vanillaFootstepsAudio;
@@ -25,68 +22,34 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaRattleAudio;
         protected AudioClip vanillaBiteAudio;
         protected List<GameObject> activeAttachments;
+        protected GameObject skinnedMeshReplacement;
 
-        protected AudioListAction FrightenedAudioAction { get; }
-        protected AudioAction StompAudioAction { get; }
-        protected AudioAction AngryAudioAction { get; }
-        protected AudioAction PuffAudioAction { get; }
-        protected AudioAction NervousAudioAction { get; }
-        protected AudioAction RattleAudioAction { get; }
-        protected AudioAction BiteAudioAction { get; }
-        protected AudioAction HitBodyAudioAction { get; }
-        protected AudioListAction FootstepsAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-
-        protected bool EffectsSilenced => HitBodyAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
         protected AudioSource modCreatureEffects;
-        public SporeLizardSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction bodyMaterialAction, 
-            SkinnedMeshAction bodyMeshAction,
-            AudioListAction frightenedAudioAction,
-            AudioAction stompAudioAction,
-            AudioAction angryAudioAction,
-            AudioAction puffAudioAction,
-            AudioAction nervousAudioAction,
-            AudioAction rattleAudioAction,
-            AudioAction biteAudioAction,
-            AudioAction hitBodyAudioAction,
-            AudioListAction footstepsAudioAction
-        )
+        protected SporeLizardSkin SkinData { get; }
+
+        public SporeLizardSkinner(SporeLizardSkin skinData)
         {
-            BodyMaterialAction = bodyMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            FrightenedAudioAction = frightenedAudioAction;
-            StompAudioAction = stompAudioAction;
-            AngryAudioAction = angryAudioAction;
-            PuffAudioAction = puffAudioAction;
-            NervousAudioAction = nervousAudioAction;
-            RattleAudioAction = rattleAudioAction;
-            BiteAudioAction = biteAudioAction;
-            HitBodyAudioAction = hitBodyAudioAction;
-            FootstepsAudioAction = footstepsAudioAction;
-            Attachments = attachments;
+            SkinData = skinData;
         }
 
-        
         public override void Apply(GameObject enemy)
         {
             PufferAI lizard = enemy.GetComponent<PufferAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaFrightenedAudio = FrightenedAudioAction.Apply(ref lizard.frightenSFX);
-            vanillaStompAudio = StompAudioAction.Apply(ref lizard.stomp);
-            vanillaAngryAudio = AngryAudioAction.Apply(ref lizard.angry);
-            vanillaPuffAudio = PuffAudioAction.Apply(ref lizard.puff);
-            vanillaNervousAudio = NervousAudioAction.Apply(ref lizard.nervousMumbling);
-            vanillaRattleAudio = RattleAudioAction.Apply(ref lizard.rattleTail);
-            vanillaBiteAudio = BiteAudioAction.Apply(ref lizard.bitePlayerSFX);
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaFrightenedAudio = SkinData.FrightenedAudioListAction.Apply(ref lizard.frightenSFX);
+            vanillaStompAudio = SkinData.StompAudioAction.Apply(ref lizard.stomp);
+            vanillaAngryAudio = SkinData.AngryAudioAction.Apply(ref lizard.angry);
+            vanillaPuffAudio = SkinData.PuffAudioAction.Apply(ref lizard.puff);
+            vanillaNervousAudio = SkinData.NervousMumbleAudioAction.Apply(ref lizard.nervousMumbling);
+            vanillaRattleAudio = SkinData.RattleTailAudioAction.Apply(ref lizard.rattleTail);
+            vanillaBiteAudio = SkinData.BiteAudioAction.Apply(ref lizard.bitePlayerSFX);
             if(audioAnimEvents!=null)
             {
-                vanillaFootstepsAudio = FootstepsAudioAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaFootstepsAudio = SkinData.FootstepsAudioListAction.Apply(ref audioAnimEvents.randomClips);
             }
             if (EffectsSilenced)
             {
@@ -97,7 +60,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     audioAnimEvents.audioToPlay = modCreatureEffects;
                 }
             }
-            BodyMeshAction.Apply
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -123,25 +86,25 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 }
             }
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            FrightenedAudioAction.Remove(ref lizard.frightenSFX, vanillaFrightenedAudio);
-            StompAudioAction.Remove(ref lizard.stomp, vanillaStompAudio);
-            AngryAudioAction.Remove(ref lizard.angry, vanillaAngryAudio);
-            PuffAudioAction.Remove(ref lizard.puff, vanillaPuffAudio);
-            NervousAudioAction.Remove(ref lizard.nervousMumbling, vanillaNervousAudio);
-            RattleAudioAction.Remove(ref lizard.rattleTail, vanillaRattleAudio);
-            BiteAudioAction.Remove(ref lizard.bitePlayerSFX, vanillaBiteAudio);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.FrightenedAudioListAction.Remove(ref lizard.frightenSFX, vanillaFrightenedAudio);
+            SkinData.StompAudioAction.Remove(ref lizard.stomp, vanillaStompAudio);
+            SkinData.AngryAudioAction.Remove(ref lizard.angry, vanillaAngryAudio);
+            SkinData.PuffAudioAction.Remove(ref lizard.puff, vanillaPuffAudio);
+            SkinData.NervousMumbleAudioAction.Remove(ref lizard.nervousMumbling, vanillaNervousAudio);
+            SkinData.RattleTailAudioAction.Remove(ref lizard.rattleTail, vanillaRattleAudio);
+            SkinData.BiteAudioAction.Remove(ref lizard.bitePlayerSFX, vanillaBiteAudio);
             if (audioAnimEvents != null)
             {
-                FootstepsAudioAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudio);
+                SkinData.FootstepsAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudio);
             }
-            BodyMeshAction.Remove
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -149,7 +112,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, AngryAudioAction.WorkingClip(vanillaAngryAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.AngryAudioAction.WorkingClip(vanillaAngryAudio));
             }
         }
 
@@ -157,8 +120,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(StompAudioAction.WorkingClip(vanillaStompAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, StompAudioAction.WorkingClip(vanillaStompAudio));
+                modCreatureEffects.PlayOneShot(SkinData.StompAudioAction.WorkingClip(vanillaStompAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.StompAudioAction.WorkingClip(vanillaStompAudio));
             }
         }
 
@@ -166,17 +129,17 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(PuffAudioAction.WorkingClip(vanillaPuffAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, PuffAudioAction.WorkingClip(vanillaPuffAudio));
+                modCreatureEffects.PlayOneShot(SkinData.PuffAudioAction.WorkingClip(vanillaPuffAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.PuffAudioAction.WorkingClip(vanillaPuffAudio));
             }
         }
 
         public void OnAlarmed(PufferAI pufferAI)
         {
-            if (EffectsSilenced)
+            if(EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(RattleAudioAction.WorkingClip(vanillaRattleAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, RattleAudioAction.WorkingClip(vanillaRattleAudio));
+                modCreatureEffects.PlayOneShot(SkinData.RattleTailAudioAction.WorkingClip(vanillaRattleAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.RattleTailAudioAction.WorkingClip(vanillaRattleAudio));
             }
         }
 
@@ -184,8 +147,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced && playSoundEffect)
             {
-                modCreatureEffects.PlayOneShot(HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
             }
         }
     }

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f9af1c6015733a42be940cc462aa7ed, type: 3}
   m_Name: Log 1
   m_EditorClassIdentifier: 
-  pipeline: {fileID: 11400000, guid: 540379a749326bf4d85d741d1a3fe8b0, type: 2}
+  pipeline: {fileID: 11400000, guid: 75aa58e78ef11a144b5abc5e2d39b4c8, type: 2}
   creationDate:
-    ticks: 638440848487419542
+    ticks: 638461571321865451
   entries:
   - logLevel: 2
     internalTime:
-      ticks: 638440848522487838
-    message: '[EnemySkinsPackage(1 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      ticks: 638461571374650469
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
       StageAssemblies terminated'
     context:
     - "Stacktrace\r\nStageAssemblies terminated\r\n\r\n  at ThunderKit.Core.Pipelines.Jobs.StageAssemblies.Build
@@ -37,145 +37,471 @@ MonoBehaviour:
       \r\n\r\n  at ThunderKit.Core.Pipelines.Pipeline.Execute () [0x003ae] in [.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs:225](exceptionsource://.\\Library\\PackageCache\\com.passivepicasso.thunderkit@c63a5c279e\\Editor\\Core\\Pipelines\\Pipeline.cs#225) "
   - logLevel: 2
     internalTime:
-      ticks: 638440848522203049
-    message: '[EnemySkinsPackage(1 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
-      Build Failed: ``` ThunderKit/Libraries/NymphBracken.dll ``` with 18 errors.'
+      ticks: 638461571374225830
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Build Failed: ``` ThunderKit/Libraries/EnemySkinRegistry.dll ``` with 64 errors.'
     context:
-    - 'Assets\EnemySkins\Scripts\EnemySkins.cs (18:26)
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (10:6)
 
-      [Assets\EnemySkins\Scripts\EnemySkins.cs(18,26):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(10,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#10)'
+    - 'Assets\EnemySkinRegistry\Scripts\EnemySkinRegistry.cs (49:26)
+
+      [Assets\EnemySkinRegistry\Scripts\EnemySkinRegistry.cs(49,26):
       error CS0433: The type ''Harmony'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\EnemySkins.cs#18)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (7:2)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\EnemySkinRegistry.cs#49)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\HoarderBugPatch.cs (5:6)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(7,2):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\HoarderBugPatch.cs(5,6):
       error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#7)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (15:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\HoarderBugPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\HygroderePatch.cs (5:6)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(15,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\HygroderePatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\HygroderePatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\JesterPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\JesterPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\JesterPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\NutcrackerPatch.cs (6:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\NutcrackerPatch.cs(6,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\NutcrackerPatch.cs#6)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\SnareFleaPatch.cs (6:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\SnareFleaPatch.cs(6,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\SnareFleaPatch.cs#6)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\SporeLizardPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\SporeLizardPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\SporeLizardPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (20:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(20,10):
       error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#15)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (16:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#20)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (21:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(16,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(21,10):
       error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#16)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (31:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#21)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\ThumperPatch.cs (6:6)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(31,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\ThumperPatch.cs(6,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\ThumperPatch.cs#6)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (28:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(28,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#28)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (29:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(29,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#29)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs (6:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs(6,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs#6)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (47:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(47,10):
       error CS0433: The type ''HarmonyPrefix'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#31)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (32:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#47)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (48:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(32,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(48,10):
       error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#32)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (51:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#48)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (59:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(51,6):
-      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
-      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#51)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (52:6)
-
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(52,6):
-      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
-      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#52)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (65:6)
-
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(65,6):
-      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
-      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#65)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (66:6)
-
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(66,6):
-      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
-      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#66)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (78:6)
-
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(78,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(59,10):
       error CS0433: The type ''HarmonyPrefix'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#78)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (79:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#59)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (60:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(79,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(60,10):
       error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#79)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (113:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#60)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (68:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(113,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(68,10):
       error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#113)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (114:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#68)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (69:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(114,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(69,10):
       error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#114)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (126:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#69)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (76:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(126,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(76,10):
       error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#126)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (127:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#76)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (77:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(127,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(77,10):
       error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#127)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (139:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#77)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (98:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(139,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(98,10):
       error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#139)'
-    - 'Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs (140:6)
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#98)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (99:10)
 
-      [Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs(140,6):
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(99,10):
       error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
       Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
-      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinKit\Assets\EnemySkins\Scripts\Patches\BrackenPatch.cs#140)'
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#99)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (111:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(111,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#111)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (112:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(112,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#112)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs (9:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs(9,10):
+      error CS0433: The type ''HarmonyPrefix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs#9)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs (10:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs(10,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs#10)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (136:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(136,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#136)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (137:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(137,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#137)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (144:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(144,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#144)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (145:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(145,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#145)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (152:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(152,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#152)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs (153:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs(153,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BaboonHawkPatch.cs#153)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs (8:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs(8,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs#8)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs (16:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs(16,10):
+      error CS0433: The type ''HarmonyPrefix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs#16)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs (17:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs(17,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\RoundManagerPatch.cs#17)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs (15:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs(15,10):
+      error CS0433: The type ''HarmonyPrefix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs#15)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs (16:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs(16,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs#16)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs (26:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs(26,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs#26)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs (27:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs(27,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs#27)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs (34:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs(34,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs#34)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs (35:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs(35,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BrackenPatch.cs#35)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BunkerSpiderPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BunkerSpiderPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\BunkerSpiderPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\CoilheadPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\CoilheadPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\CoilheadPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EarthLeviathanPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EarthLeviathanPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EarthLeviathanPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (10:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(10,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#10)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\ForestKeeperPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\ForestKeeperPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\ForestKeeperPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\GhostGirlPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\GhostGirlPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\GhostGirlPatch.cs#5)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (19:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(19,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#19)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (20:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(20,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#20)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (43:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(43,10):
+      error CS0433: The type ''HarmonyPrefix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#43)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (44:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(44,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#44)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (72:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(72,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#72)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (73:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(73,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#73)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (85:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(85,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#85)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (86:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(86,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#86)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (94:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(94,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#94)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (95:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(95,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#95)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (109:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(109,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#109)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (110:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(110,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#110)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (118:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(118,10):
+      error CS0433: The type ''HarmonyPostfix'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#118)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs (119:10)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs(119,10):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EnemyPatch.cs#119)'
+    - 'Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EyelessDogPatch.cs (5:6)
+
+      [Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EyelessDogPatch.cs(5,6):
+      error CS0433: The type ''HarmonyPatch'' exists in both ''0Harmony, Version=2.9.0.0,
+      Culture=neutral, PublicKeyToken=null'' and ''0Harmony20, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=null''](exceptionsource://C:\Users\fobja\Documents\Games\EnemySkinRegistry\Assets\EnemySkinRegistry\Scripts\Patches\Enemies\EyelessDogPatch.cs#5)'
   - logLevel: 0
     internalTime:
-      ticks: 638440848505647628
-    message: '[EnemySkinsPackage(1 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
-      Building : ThunderKit/Libraries/NymphBracken.dll'
+      ticks: 638461571354462170
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Building : ThunderKit/Libraries/EnemySkinRegistry.dll'
+    context: []
+  - logLevel: 1
+    internalTime:
+      ticks: 638461571350425595
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[LethalConfig](assetlink://Packages%2fainavt-lethalconfig%2fLethalConfig.asset)
+      No AssemblyDefinitions found, skipping'
+    context: []
+  - logLevel: 1
+    internalTime:
+      ticks: 638461571349556389
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[BepInExPack](assetlink://Packages%2fbepinex-bepinexpack%2fBepInExPack.asset)
+      No AssemblyDefinitions found, skipping'
     context: []
   - logLevel: 3
     internalTime:
-      ticks: 638440848494273312
-    message: '[EnemySkinsPackage(1 - StageAssemblies)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)
-      Execute Job'
-    context: []
-  - logLevel: 3
-    internalTime:
-      ticks: 638440848494253331
-    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      ticks: 638461571348662249
+    message: '[EnemySkinsPackage(2 - StageAssemblies)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
       Execute Job'
     context: []
   - logLevel: 0
     internalTime:
-      ticks: 638440848494213372
-    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      ticks: 638461571342712629
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      Creating 1 AssetBundles'
+    context:
+    - 'assets
+
+      
+
+'
+  - logLevel: 3
+    internalTime:
+      ticks: 638461571337521687
+    message: '[EnemySkinsPackage(1 - StageAssetBundles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461571337511695
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      staged ``` Assets/EnemySkinRegistry/package.json ``` in ``` ThunderKit/Staging/EnemySkinRegistry/package.json
+      ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461571337491709
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      staged ``` Assets/EnemySkinRegistry/Metadata/README.md ``` in ``` ThunderKit/Staging/EnemySkinRegistry/README.md
+      ```'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461571337241966
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[EnemySkinRegistry](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinRegistry.asset)
+      staged ``` Assets/EnemySkinRegistry/Metadata/icon.png ``` in ``` ThunderKit/Staging/EnemySkinRegistry/icon.png
+      ```'
+    context: []
+  - logLevel: 3
+    internalTime:
+      ticks: 638461571332556029
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[BepInExPack](assetlink://Packages%2fbepinex-bepinexpack%2fBepInExPack.asset)
+      Execute Job'
+    context: []
+  - logLevel: 0
+    internalTime:
+      ticks: 638461571332196400
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[BepInExPack](assetlink://Packages%2fbepinex-bepinexpack%2fBepInExPack.asset)
       Clearing PipelineJob error states'
     context: []
   - logLevel: 3
     internalTime:
-      ticks: 638440848488683376
-    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkins%2fEnemySkinsPackage.asset)[EnemySkins](assetlink://Assets%2fEnemySkins%2fEnemySkins.asset)
+      ticks: 638461571323124435
+    message: '[EnemySkinsPackage(0 - StageManifestFiles)](assetlink://Assets%2fEnemySkinRegistry%2fEnemySkinsPackage.asset)[BepInExPack](assetlink://Packages%2fbepinex-bepinexpack%2fBepInExPack.asset)
       Execute Pipeline'
     context: []

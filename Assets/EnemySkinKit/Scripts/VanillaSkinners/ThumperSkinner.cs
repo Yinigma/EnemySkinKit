@@ -2,7 +2,6 @@ using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
@@ -12,10 +11,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string BODY_PATH = "CrawlerModel/Cube.002";
         protected const string ANCHOR_PATH = "CrawlerModel/AnimContainer/metarig";
         protected const string ANIM_EVENT_PATH = "CrawlerModel/AnimContainer";
-        protected Material vanillaBodyMaterial;
-
-        protected MaterialAction BodyMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
+        protected VanillaMaterial vanillaBodyMaterial;
 
         protected AudioClip vanillaShortRoarAudio;
         protected AudioClip[] vanillaHitWallAudio;
@@ -25,46 +21,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip[] vanillaLongRoarAudio;
         protected AudioClip[] vanillaStompAudio;
         protected List<GameObject> activeAttachments;
+        protected GameObject skinnedMeshReplacement;
 
-        protected bool VoiceSilenced => StunAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool VoiceSilenced => SkinData.StunAudioAction.actionType != AudioActionType.RETAIN;
         protected AudioSource modCreatureVoice;
 
-        protected AudioAction ShortRoarAudioAction { get; }
-        protected AudioListAction HitWallAudioAction { get; }
-        protected AudioListAction StompAudioAction { get; }
-        protected AudioAction BiteAudioAction { get; }
-        protected AudioAction EatPlayerAudioAction { get; }
-        protected AudioListAction HitAudioAction { get; }
-        protected AudioAction StunAudioAction { get; }
-        protected AudioListAction LongRoarAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
+        protected ThumperSkin SkinData { get; }
 
-        public ThumperSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction bodyMaterialAction, 
-            SkinnedMeshAction bodyMeshAction,
-            AudioAction shortRoarAudioAction,
-            AudioListAction hitWallAudioAction,
-            AudioAction bitePlayerAudioAction,
-            AudioAction eatPlayerAudioAction,
-            AudioListAction hitAudioAction,
-            AudioListAction longRoarAudioAction,
-            AudioAction stunAudioAction,
-            AudioListAction stompAudioListAction
-        )
+        public ThumperSkinner(ThumperSkin skinData)
         {
-            BodyMaterialAction = bodyMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            ShortRoarAudioAction = shortRoarAudioAction;
-            HitWallAudioAction = hitWallAudioAction;
-            BiteAudioAction = bitePlayerAudioAction;
-            EatPlayerAudioAction = eatPlayerAudioAction;
-            HitAudioAction = hitAudioAction;
-            LongRoarAudioAction = longRoarAudioAction;
-            StompAudioAction = stompAudioListAction;
-            StunAudioAction = stunAudioAction;
-            Attachments = attachments;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
@@ -72,24 +38,24 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             CrawlerAI thumper = enemy.GetComponent<CrawlerAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaShortRoarAudio = ShortRoarAudioAction.Apply(ref thumper.shortRoar);
-            vanillaHitWallAudio = HitWallAudioAction.Apply(ref thumper.hitWallSFX);
-            vanillaBitePlayerAudio = BiteAudioAction.Apply(ref thumper.bitePlayerSFX);
-            vanillaEatPlayerAudio = EatPlayerAudioAction.Apply(ref thumper.eatPlayerSFX);
-            vanillaHitAudio = HitAudioAction.Apply(ref thumper.hitCrawlerSFX);
-            vanillaLongRoarAudio = LongRoarAudioAction.Apply(ref thumper.longRoarSFX);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaShortRoarAudio = SkinData.ShortRoarAudioAction.Apply(ref thumper.shortRoar);
+            vanillaHitWallAudio = SkinData.WallHitsAudioListAction.Apply(ref thumper.hitWallSFX);
+            vanillaBitePlayerAudio = SkinData.BiteAudioAction.Apply(ref thumper.bitePlayerSFX);
+            vanillaEatPlayerAudio = SkinData.EatPlayerAudioAction.Apply(ref thumper.eatPlayerSFX);
+            vanillaHitAudio = SkinData.HitsAudioAction.Apply(ref thumper.hitCrawlerSFX);
+            vanillaLongRoarAudio = SkinData.LongRoarsAudioListAction.Apply(ref thumper.longRoarSFX);
             if(audioAnimEvents!=null)
             {
-                vanillaStompAudio = StompAudioAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaStompAudio = SkinData.StompAudioListAction.Apply(ref audioAnimEvents.randomClips);
             }
             if (VoiceSilenced)
             {
                 modCreatureVoice = CreateModdedAudioSource(thumper.creatureVoice, "modVoice");
                 thumper.creatureVoice.mute = true;
             }
-            BodyMeshAction.Apply
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -111,24 +77,24 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 thumper.creatureVoice.mute = false;
             }
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            ShortRoarAudioAction.Remove(ref thumper.shortRoar, vanillaShortRoarAudio);
-            HitWallAudioAction.Remove(ref thumper.hitWallSFX, vanillaHitWallAudio);
-            BiteAudioAction.Remove(ref thumper.bitePlayerSFX, vanillaBitePlayerAudio);
-            EatPlayerAudioAction.Remove(ref thumper.eatPlayerSFX, vanillaEatPlayerAudio);
-            HitAudioAction.Remove(ref thumper.hitCrawlerSFX, vanillaHitAudio);
-            LongRoarAudioAction.Remove(ref thumper.longRoarSFX, vanillaLongRoarAudio);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.ShortRoarAudioAction.Remove(ref thumper.shortRoar, vanillaShortRoarAudio);
+            SkinData.WallHitsAudioListAction.Remove(ref thumper.hitWallSFX, vanillaHitWallAudio);
+            SkinData.BiteAudioAction.Remove(ref thumper.bitePlayerSFX, vanillaBitePlayerAudio);
+            SkinData.EatPlayerAudioAction.Remove(ref thumper.eatPlayerSFX, vanillaEatPlayerAudio);
+            SkinData.HitsAudioAction.Remove(ref thumper.hitCrawlerSFX, vanillaHitAudio);
+            SkinData.LongRoarsAudioListAction.Remove(ref thumper.longRoarSFX, vanillaLongRoarAudio);
             if (audioAnimEvents != null)
             {
-                StompAudioAction.Remove(ref audioAnimEvents.randomClips, vanillaStompAudio);
+                SkinData.StompAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaStompAudio);
             }
-            BodyMeshAction.Remove
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -136,7 +102,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                AudioClip[] longRoarClips = LongRoarAudioAction.WorkingClips(vanillaLongRoarAudio);
+                AudioClip[] longRoarClips = SkinData.LongRoarsAudioListAction.WorkingClips(vanillaLongRoarAudio);
                 int num = Random.Range(0, longRoarClips.Length);
                 modCreatureVoice.PlayOneShot(longRoarClips[num]);
                 WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, longRoarClips[num]);
@@ -147,7 +113,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(BiteAudioAction.WorkingClip(vanillaBitePlayerAudio));
+                modCreatureVoice.PlayOneShot(SkinData.BiteAudioAction.WorkingClip(vanillaBitePlayerAudio));
             }
         }
 
@@ -156,7 +122,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             if (VoiceSilenced)
             {
                 modCreatureVoice.pitch = Random.Range(0.85f, 1.1f);
-                modCreatureVoice.PlayOneShot(EatPlayerAudioAction.WorkingClip(vanillaEatPlayerAudio));
+                modCreatureVoice.PlayOneShot(SkinData.EatPlayerAudioAction.WorkingClip(vanillaEatPlayerAudio));
             }
 
         }
@@ -165,7 +131,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                AudioClip[] hitClips = HitAudioAction.WorkingClips(vanillaHitAudio);
+                AudioClip[] hitClips = SkinData.HitsAudioAction.WorkingClips(vanillaHitAudio);
                 AudioClip hitSound = hitClips[Random.Range(0, hitClips.Length)];
                 modCreatureVoice.PlayOneShot(hitSound);
                 WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, hitSound);
@@ -177,7 +143,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
+                modCreatureVoice.PlayOneShot(SkinData.StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
             }
         }
     }

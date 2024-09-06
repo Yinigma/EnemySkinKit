@@ -11,9 +11,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LOD0_PATH = "FGiantModelContainer/BodyLOD0";
         protected const string LOD1_PATH = "FGiantModelContainer/BodyLOD1";
         protected const string LOD2_PATH = "FGiantModelContainer/BodyLOD2";
+        protected const string SMOKE_PATH = "FireParticlesContainer/Smoke (1)";
+        protected const string FIRE_PATH = "FireParticlesContainer/LingeringFire";
+        protected const string FLASH_PATH = "FireParticlesContainer/BrightFlash";
         protected const string ANCHOR_PATH = "FGiantModelContainer/AnimContainer";
 
-        protected Material vanillaBodyMaterial;
+        protected VanillaMaterial vanillaBodyMaterial;
         protected AudioClip vanillaRoarAudio;
         protected AudioClip vanillaEatPlayerAudio;
         protected AudioClip vanillaFallAudio;
@@ -22,51 +25,25 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip[] vanillaStompAudio;
         protected AudioClip[] vanillaRumbleAudio;
         protected List<GameObject> activeAttachments;
+        protected VanillaMaterial vanillaBloodMaterial;
+        protected VanillaMaterial vanillaSmokeMaterial;
+        protected VanillaMaterial vanillaFireMaterial;
+        protected VanillaMaterial vanillaFlashMaterial;
+        protected ParticleSystem vanillaBloodParticle;
+        protected ParticleSystem replacementSmokeParticle;
+        protected ParticleSystem replacementFireParticle;
+        protected ParticleSystem replacementFlashParticle;
+        protected GameObject skinnedMeshReplacement;
 
-        protected MaterialAction BodyMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected AudioAction FarWideAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-        protected AudioAction StunAudioAction { get; }
-        protected AudioAction RoarAudioAction { get; }
-        protected AudioAction EatPlayerAudioAction { get; }
-        protected AudioAction FallAudioAction { get; }
-        protected AudioAction DeathCryAudioAction { get; }
-        protected AudioAction BurnAudioAction { get; }
-        protected AudioListAction StompAudioListAction { get; }
-        protected AudioListAction RumbleAudioListAction { get; }
-
-        protected bool VoiceSilenced => StunAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool VoiceSilenced => SkinData.StunAudioAction.actionType != AudioActionType.RETAIN;
 
         protected AudioSource modCreatureVoice;
 
-        public ForestKeeperSkinner
-        (
-            ArmatureAttachment[] attachments, 
-            MaterialAction bodyMaterialAction, 
-            SkinnedMeshAction bodyMeshAction,
-            AudioAction stunAudioAction,
-            AudioAction roarAudioAction,
-            AudioAction eatPlayerAudioAction,
-            AudioAction fallAudioAction,
-            AudioAction deathCryAudioAction,
-            AudioListAction stompAudioListAction,
-            AudioListAction rumbleAudioListAction,
-            AudioAction burnAudioAction
-        )
+        protected ForestKeeperSkin SkinData { get; }
+
+        public ForestKeeperSkinner(ForestKeeperSkin skinData)
         {
-            
-            BodyMaterialAction = bodyMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            StunAudioAction = stunAudioAction;
-            RoarAudioAction = roarAudioAction;
-            EatPlayerAudioAction = eatPlayerAudioAction;
-            FallAudioAction = fallAudioAction;
-            DeathCryAudioAction = deathCryAudioAction;
-            StompAudioListAction = stompAudioListAction;
-            RumbleAudioListAction = rumbleAudioListAction;
-            BurnAudioAction = burnAudioAction;
-            Attachments = attachments;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
@@ -74,26 +51,41 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             ForestGiantAI giant = enemy.GetComponent<ForestGiantAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaDeathCryAudio = DeathCryAudioAction.Apply(ref giant.dieSFX);
-            vanillaFallAudio = FallAudioAction.Apply(ref giant.giantFall);
-            vanillaBurnAudio = BurnAudioAction.ApplyToSource(giant.giantBurningAudio);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaDeathCryAudio = SkinData.DeathCryAudioAction.Apply(ref giant.dieSFX);
+            vanillaFallAudio = SkinData.FallAudioAction.Apply(ref giant.giantFall);
+            vanillaBurnAudio = SkinData.BurnAudioAction.ApplyToSource(giant.giantBurningAudio);
             if(audioAnimEvents!=null)
             {
-                vanillaStompAudio = StompAudioListAction.Apply(ref audioAnimEvents.randomClips);
-                vanillaRumbleAudio = RumbleAudioListAction.Apply(ref audioAnimEvents.randomClips2);
-                vanillaRoarAudio = RoarAudioAction.Apply(ref audioAnimEvents.audioClip);
-                vanillaEatPlayerAudio = EatPlayerAudioAction.Apply(ref audioAnimEvents.audioClip2);
+                vanillaStompAudio = SkinData.StompAudioListAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaRumbleAudio = SkinData.RumbleAudioListAction.Apply(ref audioAnimEvents.randomClips2);
+                vanillaRoarAudio = SkinData.RoarAudioAction.Apply(ref audioAnimEvents.audioClip);
+                vanillaEatPlayerAudio = SkinData.EatPlayerAudioAction.Apply(ref audioAnimEvents.audioClip2);
             }
             if (VoiceSilenced)
             {
                 modCreatureVoice = CreateModdedAudioSource(giant.creatureVoice, "modVoice");
                 giant.creatureVoice.mute = true;
             }
-            BodyMeshAction.Apply
+
+            ParticleSystem vanillaSmoke = giant.transform.Find(SMOKE_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaFire = giant.transform.Find(FIRE_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaFlash = giant.transform.Find(FLASH_PATH)?.GetComponent<ParticleSystem>();
+
+            vanillaBloodMaterial = SkinData.BloodMaterialAction.Apply(audioAnimEvents.particle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaSmokeMaterial = SkinData.SmokeMaterialAction.Apply(vanillaSmoke?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaFireMaterial = SkinData.FireMaterialAction.Apply(vanillaFire?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaFlashMaterial = SkinData.FlashMaterialAction.Apply(vanillaFlash?.GetComponent<ParticleSystemRenderer>(), 0);
+
+            vanillaBloodParticle = SkinData.BloodParticleAction.ApplyRef(ref audioAnimEvents.particle);
+            replacementSmokeParticle = SkinData.SmokeParticleAction.Apply(vanillaSmoke);
+            replacementFireParticle = SkinData.FireParticleAction.Apply(vanillaFire);
+            replacementFlashParticle = SkinData.FlashParticleAction.Apply(vanillaFlash);
+
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -107,6 +99,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             EnemySkinRegistry.RegisterEnemyEventHandler(giant, this);
         }
 
+        
+
         public override void Remove(GameObject enemy)
         {
             ForestGiantAI giant = enemy.GetComponent<ForestGiantAI>();
@@ -118,20 +112,35 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             }
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            DeathCryAudioAction.Remove(ref giant.giantCry, vanillaDeathCryAudio);
-            FallAudioAction.Remove(ref giant.giantFall, vanillaFallAudio);
-            BurnAudioAction.RemoveFromSource(giant.giantBurningAudio, vanillaBurnAudio);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.DeathCryAudioAction.Remove(ref giant.giantCry, vanillaDeathCryAudio);
+            SkinData.FallAudioAction.Remove(ref giant.giantFall, vanillaFallAudio);
+            SkinData.BurnAudioAction.RemoveFromSource(giant.giantBurningAudio, vanillaBurnAudio);
             if (audioAnimEvents != null)
             {
-                StompAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaStompAudio);
-                RumbleAudioListAction.Remove(ref audioAnimEvents.randomClips2, vanillaRumbleAudio);
-                RoarAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaRoarAudio);
-                EatPlayerAudioAction.Remove(ref audioAnimEvents.audioClip2, vanillaEatPlayerAudio);
+                SkinData.StompAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaStompAudio);
+                SkinData.RumbleAudioListAction.Remove(ref audioAnimEvents.randomClips2, vanillaRumbleAudio);
+                SkinData.RoarAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaRoarAudio);
+                SkinData.EatPlayerAudioAction.Remove(ref audioAnimEvents.audioClip2, vanillaEatPlayerAudio);
             }
-            BodyMeshAction.Remove
+
+            ParticleSystem vanillaSmoke = giant.transform.Find(SMOKE_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaFire = giant.transform.Find(FIRE_PATH)?.GetComponent<ParticleSystem>();
+            ParticleSystem vanillaFlash = giant.transform.Find(FLASH_PATH)?.GetComponent<ParticleSystem>();
+
+            SkinData.BloodParticleAction.RemoveRef(ref audioAnimEvents.particle, vanillaBloodParticle);
+            SkinData.SmokeParticleAction.Remove(vanillaSmoke, replacementSmokeParticle);
+            SkinData.FireParticleAction.Remove(vanillaFire, replacementFireParticle);
+            SkinData.FlashParticleAction.Remove(vanillaFlash, replacementFlashParticle);
+
+            SkinData.BloodMaterialAction.Remove(audioAnimEvents.particle.GetComponent<ParticleSystemRenderer>(), 0, vanillaBloodMaterial);
+            SkinData.SmokeMaterialAction.Remove(vanillaSmoke?.GetComponent<ParticleSystemRenderer>(), 0, vanillaSmokeMaterial);
+            SkinData.FireMaterialAction.Remove(vanillaFire?.GetComponent<ParticleSystemRenderer>(), 0, vanillaFireMaterial);
+            SkinData.FlashMaterialAction.Remove(vanillaFlash?.GetComponent<ParticleSystemRenderer>(), 0, vanillaFlashMaterial);
+
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -139,7 +148,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -147,7 +156,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(DeathCryAudioAction.WorkingClip(vanillaDeathCryAudio));
+                modCreatureVoice.PlayOneShot(SkinData.DeathCryAudioAction.WorkingClip(vanillaDeathCryAudio));
             }
         }
 
@@ -155,7 +164,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
+                modCreatureVoice.PlayOneShot(SkinData.StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
             }
         }
     }

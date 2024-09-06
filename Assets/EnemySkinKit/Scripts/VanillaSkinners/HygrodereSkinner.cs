@@ -1,4 +1,5 @@
 using AntlerShed.EnemySkinKit.SkinAction;
+using AntlerShed.SkinRegistry;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,58 +9,38 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         protected const string SLIME_PATH = "Icosphere";
         protected const string ANCHOR_PATH = "Armature";
+        protected const string COLOR_PROPERTY = "_Gradient_Color";
 
-        protected Material vanillaSlimeMaterial; //mmm... vanilla slime...
+        protected VanillaMaterial vanillaSlimeMaterial; //mmm... vanilla slime...
 
         protected AudioClip vanillaAgitatedAudio;
         protected AudioClip vanillaJiggleAudio;
         protected AudioClip vanillaHitSlimeAudio;
         protected AudioClip vanillaKillPlayerAudio;
         protected AudioClip vanillaIdleAudio;
+        protected Color vanillaGradientColor;
         protected List<GameObject> activeAttachments;
+        protected GameObject skinnedMeshReplacement;
 
-        protected AudioAction AgitatedAudioAction { get; }
-        protected AudioAction JiggleAudioAction { get; }
-        protected AudioAction HitSlimeAudioAction { get; }
-        protected AudioAction KillPlayerAudioAction { get; }
-        protected AudioAction IdleAudioAction { get; }
-        protected MaterialAction SlimeMaterialAction { get; }
-        protected SkinnedMeshAction SlimeMeshAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
+        protected HygrodereSkin SkinData { get; }
 
-        public HygrodereSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction slimeMaterialAction, 
-            SkinnedMeshAction slimeMeshAction,
-            AudioAction agitatedAudioAction,
-            AudioAction jiggleAudioAction,
-            AudioAction hitSlimeAudioAction,
-            AudioAction killPlayerAudioAction,
-            AudioAction idleAudioAction
-        )
+        public HygrodereSkinner(HygrodereSkin skinData)
         {
-            SlimeMaterialAction = slimeMaterialAction;
-            SlimeMeshAction = slimeMeshAction;
-            AgitatedAudioAction = agitatedAudioAction;
-            JiggleAudioAction = jiggleAudioAction;
-            HitSlimeAudioAction = hitSlimeAudioAction;
-            KillPlayerAudioAction = killPlayerAudioAction;
-            IdleAudioAction = idleAudioAction;
-            Attachments = attachments;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
         {
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(SLIME_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaSlimeMaterial = SlimeMaterialAction.Apply(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaAgitatedAudio = AgitatedAudioAction.Apply(ref enemy.GetComponent<BlobAI>().agitatedSFX);
-            vanillaJiggleAudio = JiggleAudioAction.Apply(ref enemy.GetComponent<BlobAI>().jiggleSFX);
-            vanillaHitSlimeAudio = HitSlimeAudioAction.Apply(ref enemy.GetComponent<BlobAI>().hitSlimeSFX);
-            vanillaKillPlayerAudio = KillPlayerAudioAction.Apply(ref enemy.GetComponent<BlobAI>().killPlayerSFX);
-            vanillaIdleAudio = IdleAudioAction.Apply(ref enemy.GetComponent<BlobAI>().idleSFX);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(SLIME_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaGradientColor = SkinData.SlimeGradiantColorAction.Apply(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>().material, COLOR_PROPERTY);
+            vanillaSlimeMaterial = SkinData.SlimeMaterialAction.Apply(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaAgitatedAudio = SkinData.AgitatedAudioAction.Apply(ref enemy.GetComponent<BlobAI>().agitatedSFX);
+            vanillaJiggleAudio = SkinData.JiggleAudioAction.Apply(ref enemy.GetComponent<BlobAI>().jiggleSFX);
+            vanillaHitSlimeAudio = SkinData.HitAudioAction.Apply(ref enemy.GetComponent<BlobAI>().hitSlimeSFX);
+            vanillaKillPlayerAudio = SkinData.KillPlayerAudioAction.Apply(ref enemy.GetComponent<BlobAI>().killPlayerSFX);
+            vanillaIdleAudio = SkinData.IdleAudioAction.Apply(ref enemy.GetComponent<BlobAI>().idleSFX);
 
-            SlimeMeshAction.Apply
+            skinnedMeshReplacement = SkinData.SlimeMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -72,19 +53,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public override void Remove(GameObject enemy)
         {
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            SlimeMaterialAction.Remove(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSlimeMaterial);
-            AgitatedAudioAction.Remove(ref enemy.GetComponent<BlobAI>().agitatedSFX, vanillaAgitatedAudio);
-            JiggleAudioAction.Remove(ref enemy.GetComponent<BlobAI>().jiggleSFX, vanillaJiggleAudio);
-            HitSlimeAudioAction.Remove(ref enemy.GetComponent<BlobAI>().hitSlimeSFX, vanillaHitSlimeAudio);
-            KillPlayerAudioAction.Remove(ref enemy.GetComponent<BlobAI>().killPlayerSFX, vanillaKillPlayerAudio);
-            IdleAudioAction.Remove(ref enemy.GetComponent<BlobAI>().idleSFX, vanillaIdleAudio);
-            SlimeMeshAction.Remove
+            SkinData.SlimeMaterialAction.Remove(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSlimeMaterial);
+            SkinData.SlimeGradiantColorAction.Remove(enemy.transform.Find(SLIME_PATH)?.gameObject.GetComponent<Renderer>().material, COLOR_PROPERTY, vanillaGradientColor);
+            SkinData.AgitatedAudioAction.Remove(ref enemy.GetComponent<BlobAI>().agitatedSFX, vanillaAgitatedAudio);
+            SkinData.JiggleAudioAction.Remove(ref enemy.GetComponent<BlobAI>().jiggleSFX, vanillaJiggleAudio);
+            SkinData.HitAudioAction.Remove(ref enemy.GetComponent<BlobAI>().hitSlimeSFX, vanillaHitSlimeAudio);
+            SkinData.KillPlayerAudioAction.Remove(ref enemy.GetComponent<BlobAI>().killPlayerSFX, vanillaKillPlayerAudio);
+            SkinData.IdleAudioAction.Remove(ref enemy.GetComponent<BlobAI>().idleSFX, vanillaIdleAudio);
+            SkinData.SlimeMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(SLIME_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
     }

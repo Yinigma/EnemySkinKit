@@ -9,56 +9,55 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction longRoarsAudioListAction;
+        protected AudioListAction longRoarsAudioListAction;
         [SerializeField]
-        private AudioListAction hitsAudioAction;
+        protected AudioListAction hitsAudioAction;
         [SerializeField]
-        private AudioListAction wallHitsAudioListAction;
+        protected AudioListAction wallHitsAudioListAction;
         [SerializeField]
-        private AudioAction shortRoarAudioAction;
+        protected AudioAction shortRoarAudioAction;
         [SerializeField]
-        private AudioAction eatPlayerAudioAction;
+        protected AudioAction eatPlayerAudioAction;
         [SerializeField]
-        private AudioAction biteAudioAction;
+        protected AudioAction biteAudioAction;
         [SerializeField]
-        private AudioAction stunAudioAction;
+        protected AudioAction stunAudioAction;
         [SerializeField]
-        private AudioListAction stompAudioListAction;
+        protected AudioListAction stompAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public AudioListAction LongRoarsAudioListAction => longRoarsAudioListAction;
+        public AudioListAction HitsAudioAction => hitsAudioAction;
+        public AudioListAction WallHitsAudioListAction => wallHitsAudioListAction;
+        public AudioAction ShortRoarAudioAction => shortRoarAudioAction;
+        public AudioAction EatPlayerAudioAction => eatPlayerAudioAction;
+        public AudioAction BiteAudioAction => biteAudioAction;
+        public AudioAction StunAudioAction => stunAudioAction;
+        public AudioListAction StompAudioListAction => stompAudioListAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
 
         public override string EnemyId => EnemySkinRegistry.THUMPER_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new ThumperSkinner
-            (
-                attachments,
-                bodyMaterialAction, 
-                bodyMeshAction,
-                shortRoarAudioAction,
-                wallHitsAudioListAction,
-                biteAudioAction,
-                eatPlayerAudioAction,
-                hitsAudioAction,
-                longRoarsAudioListAction,
-                stunAudioAction,
-                stompAudioListAction
-            );
+            return new ThumperSkinner( this );
         }
     }
 }

@@ -5,84 +5,187 @@ using AntlerShed.SkinRegistry;
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
     [CreateAssetMenu(fileName = "OldBirdSkin", menuName = "EnemySkinKit/Skins/OldBirdSkin", order = 17)]
-    public class OldBirdSkin : BaseSkin
+    public class OldBirdSkin : BaseNestSkin
     {
         [Header("Materials")]
         //Materials
         [SerializeField]
-        private MaterialAction defaultMaterialAction;
+        protected MaterialAction defaultMaterialAction;
         [SerializeField]
-        private MaterialAction spotlightActiveMaterialAction;
+        protected MaterialAction spotlightActiveMaterialAction;
+        [SerializeField]
+        protected MaterialAction lightMaterialAction;
+        [Space(10)]
+
+        [Header("Spotlight Color")]
+        [SerializeField]
+        protected ColorAction lightColorAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
+        [SerializeField]
+        protected StaticMeshAction searchLightMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction brainwashingAudioListAction;
+        protected AudioListAction brainwashingAudioListAction;
         [SerializeField]
-        private AudioListAction stompAudioListAction;
+        protected AudioListAction stompAudioListAction;
         [SerializeField]
-        private AudioListAction shootGunAudioListAction;
+        protected AudioListAction shootGunAudioListAction;
         [SerializeField]
-        private AudioListAction explosionAudioListAction;
+        protected AudioListAction explosionAudioListAction;
         [SerializeField]
-        private AudioAction spotlightActivateAudioAction;
+        protected AudioAction spotlightActivateAudioAction;
         [SerializeField]
-        private AudioAction spotlightDectivateAudioAction;
+        protected AudioAction spotlightDectivateAudioAction;
         [SerializeField]
-        private AudioAction spotlightFlickerAudioAction;
+        protected AudioAction spotlightFlickerAudioAction;
         [SerializeField]
-        private AudioAction blowtorchAudioAction;
+        protected AudioAction blowtorchAudioAction;
         [SerializeField]
-        private AudioAction alarmAudioAction;
+        protected AudioAction alarmAudioAction;
         [SerializeField]
-        private AudioAction thrusterStartAudioAction;
+        protected AudioAction thrusterStartAudioAction;
         [SerializeField]
-        private AudioAction thrusterCloseAudioAction;
+        protected AudioAction thrusterCloseAudioAction;
         [SerializeField]
-        private AudioAction thrusterFarAudioAction;
+        protected AudioAction thrusterFarAudioAction;
         [SerializeField]
-        private AudioAction engineHumAudioAction;
+        protected AudioAction engineHumAudioAction;
         [SerializeField]
-        private AudioAction chargeAudioAction;
+        protected AudioAction chargeAudioAction;
         [SerializeField]
-        private AudioAction wakeAudioAction;
+        protected AudioAction wakeAudioAction;
         [Space(10)]
+
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction thrusterFireMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction stompShockwaveParticleAction;
+        [SerializeField]
+        protected MaterialAction stompShockwaveMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction smokeTrailParticleAction;
+        [SerializeField]
+        protected MaterialAction smokeTrailMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction landShockwaveParticleAction;
+        [SerializeField]
+        protected MaterialAction landShockwaveMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction chargeParticleAction;
+        [SerializeField]
+        protected MaterialAction chargeMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction chargeBlastParticleAction;
+        [SerializeField]
+        protected MaterialAction chargeBlastMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction chargeFireParticleAction;
+        [SerializeField]
+        protected MaterialAction chargeFireMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction chargeSmokeParticleAction;
+        [SerializeField]
+        protected MaterialAction chargeSmokeMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction chargeFlashParticleAction;
+        [SerializeField]
+        protected MaterialAction chargeFlashMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction blueFlameParticleAction;
+        [SerializeField]
+        protected MaterialAction blueFlameMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction redFlameParticleAction;
+        [SerializeField]
+        protected MaterialAction redFlameMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction muzzleFlashParticleAction;
+        [SerializeField]
+        protected MaterialAction muzzleFlashMaterialAction;
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+        [Space(10)]
+
+        [Header("Custom Nest")]
+        [SerializeField]
+        [Tooltip("Set this flag to use the fields below on the Old Bird's \"nest\" prefab. If not set, it will use the same values as the active old bird.")]
+        protected bool useCustomNestActions;
+        [SerializeField]
+        protected SkinnedMeshAction nestBodyMeshAction;
+        [SerializeField]
+        protected MaterialAction nestBodyMaterialAction;
+        [SerializeField]
+        protected ArmatureAttachment[] nestAttachments;
+
+        //Materials
+        public MaterialAction DefaultMaterialAction => defaultMaterialAction;
+        public MaterialAction SpotlightActiveMaterialAction => spotlightActiveMaterialAction;
+        public MaterialAction LightMaterialAction => lightMaterialAction;
+        public ColorAction LightColorAction => lightColorAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction SearchLightMeshAction => searchLightMeshAction;
+        public AudioListAction BrainwashingAudioListAction => brainwashingAudioListAction;
+        public AudioListAction StompAudioListAction => stompAudioListAction;
+        public AudioListAction ShootGunAudioListAction => shootGunAudioListAction;
+        public AudioListAction ExplosionAudioListAction => explosionAudioListAction;
+        public AudioAction SpotlightActivateAudioAction => spotlightActivateAudioAction;
+        public AudioAction SpotlightDectivateAudioAction => spotlightDectivateAudioAction;
+        public AudioAction SpotlightFlickerAudioAction => spotlightFlickerAudioAction;
+        public AudioAction BlowtorchAudioAction => blowtorchAudioAction;
+        public AudioAction AlarmAudioAction => alarmAudioAction;
+        public AudioAction ThrusterStartAudioAction => thrusterStartAudioAction;
+        public AudioAction ThrusterCloseAudioAction => thrusterCloseAudioAction;
+        public AudioAction ThrusterFarAudioAction => thrusterFarAudioAction;
+        public AudioAction EngineHumAudioAction => engineHumAudioAction;
+        public AudioAction ChargeAudioAction => chargeAudioAction;
+        public AudioAction WakeAudioAction => wakeAudioAction;
+        public MaterialAction ThrusterFireMaterialAction => thrusterFireMaterialAction;
+        public ParticleSystemAction StompShockwaveParticleAction => stompShockwaveParticleAction;
+        public MaterialAction StompShockwaveMaterialAction => stompShockwaveMaterialAction;
+        public ParticleSystemAction SmokeTrailParticleAction => smokeTrailParticleAction;
+        public MaterialAction SmokeTrailMaterialAction => smokeTrailMaterialAction;
+        public ParticleSystemAction LandShockwaveParticleAction => landShockwaveParticleAction;
+        public MaterialAction LandShockwaveMaterialAction => landShockwaveMaterialAction;
+        public ParticleSystemAction ChargeParticleAction => chargeParticleAction;
+        public MaterialAction ChargeMaterialAction => chargeMaterialAction;
+        public ParticleSystemAction ChargeBlastParticleAction => chargeBlastParticleAction;
+        public MaterialAction ChargeBlastMaterialAction => chargeBlastMaterialAction;
+        public ParticleSystemAction ChargeFireParticleAction => chargeFireParticleAction;
+        public MaterialAction ChargeFireMaterialAction => chargeFireMaterialAction;
+        public ParticleSystemAction ChargeSmokeParticleAction => chargeSmokeParticleAction;
+        public MaterialAction ChargeSmokeMaterialAction => chargeSmokeMaterialAction;
+        public ParticleSystemAction ChargeFlashParticleAction => chargeFlashParticleAction;
+        public MaterialAction ChargeFlashMaterialAction => chargeFlashMaterialAction;
+        public ParticleSystemAction BlueFlameParticleAction => blueFlameParticleAction;
+        public MaterialAction BlueFlameMaterialAction => blueFlameMaterialAction;
+        public ParticleSystemAction RedFlameParticleAction => redFlameParticleAction;
+        public MaterialAction RedFlameMaterialAction => redFlameMaterialAction;
+        public ParticleSystemAction MuzzleFlashParticleAction => muzzleFlashParticleAction;
+        public MaterialAction MuzzleFlashMaterialAction => muzzleFlashMaterialAction;
+        public ArmatureAttachment[] Attachments => attachments;
+        public SkinnedMeshAction NestBodyMeshAction => useCustomNestActions ? nestBodyMeshAction : bodyMeshAction;
+        public MaterialAction NestBodyMaterialAction => useCustomNestActions ? nestBodyMaterialAction : nestBodyMaterialAction;
+        public ArmatureAttachment[] NestAttachments => useCustomNestActions ? nestAttachments : attachments;
 
         public override string EnemyId => EnemySkinRegistry.OLD_BIRD_ID;
 
+        public override Skinner CreateNestSkinner()
+        {
+            return new OldBirdNestSkinner(this);
+        }
+
         public override Skinner CreateSkinner()
         {
-            return new OldBirdSkinner
-            (
-                attachments,
-                defaultMaterialAction,
-                spotlightActiveMaterialAction,
-                bodyMeshAction,
-                brainwashingAudioListAction,
-                stompAudioListAction,
-                shootGunAudioListAction,
-                explosionAudioListAction,
-                spotlightActivateAudioAction,
-                spotlightDectivateAudioAction,
-                spotlightFlickerAudioAction,
-                blowtorchAudioAction,
-                alarmAudioAction,
-                thrusterStartAudioAction,
-                thrusterCloseAudioAction,
-                thrusterFarAudioAction,
-                engineHumAudioAction,
-                chargeAudioAction,
-                wakeAudioAction
-            );
+            return new OldBirdSkinner(this);
         }
     }
 }

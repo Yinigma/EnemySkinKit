@@ -14,8 +14,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LOD2_PATH = "BaboonBirdModel/BodyLOD2";
         protected const string ANCHOR_PATH = "BaboonBirdModel/AnimContainer/metarig";
         protected const string ANIM_EFFECTS_PATH = "BaboonBirdModel/AnimContainer";
+        protected const string SECONDARY_BLOOD_PARTICLE_PATH = "BaboonBirdModel/AnimContainer/metarig/spine/spine.001/spine.003/spine.004/HeadBoneContainer/spine.005/BloodSpurtParticle (1)/BloodParticle";
 
-        protected Material vanillaBodyMaterial;
+        protected VanillaMaterial vanillaBodyMaterial;
         protected AudioClip[] vanillaScreamAudio;
         protected AudioClip[] vanillaLaughAudio;
         protected AudioClip vanillaIntimidateAudio;
@@ -24,24 +25,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip vanillaKillPlayerAudio;
         protected AudioClip vanillaStabAudio;
         protected AudioClip vanillaDeathAudio;
+        protected VanillaMaterial vanillaBloodMat;
+        private VanillaMaterial vanillaSecondaryBloodMat;
+        private VanillaMaterial vanillaBloodStabMat;
         protected AudioClip vanillaHitBodyAudio;
         protected AudioClip[] vanillaFootstepsAudio;
         protected List<GameObject> activeAttachments;
+        protected ParticleSystem vanillaBloodParticle;
+        protected GameObject skinnedMeshReplacement;
 
-        protected MaterialAction BodyMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-
-        protected AudioListAction ScreamAudioAction { get; }
-        protected AudioListAction LaughAudioAction { get; }
-        protected AudioAction IntimidateAction { get; }
-        protected AudioAction IntimidateVoiceAction { get; }
-        protected AudioAction EnterFightAction { get; }
-        protected AudioAction KillPlayerAudioAction { get; }
-        protected AudioAction StabAudioAction { get; }
-        protected AudioAction DeathAudioAction { get; }
-        protected AudioAction HitBodyAudioAction { get; }
-        protected AudioListAction FootstepsAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
+        protected BaboonHawkSkin SkinData { get; }
 
         protected AudioSource modCreatureEffects;
         protected AudioSource modCreatureVoice;
@@ -49,39 +42,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public BaboonHawkSkinner
         (
-            ArmatureAttachment[] attachments,
-            MaterialAction bodyMaterialAction, 
-            SkinnedMeshAction bodyMeshAction,
-            AudioListAction screamAction,
-            AudioListAction laughAction,
-            AudioAction intimidateAudioAction,
-            AudioAction intimidateVoiceAction,
-            AudioAction enterFightAction,
-            AudioAction killPlayerAudioAction,
-            AudioAction stabAudioAction,
-            AudioAction deathAudioAction,
-            AudioAction hitBodyAudioAction,
-            AudioListAction footstepsAudioAction
+            BaboonHawkSkin skinData
         )
         {
-            BodyMaterialAction = bodyMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            ScreamAudioAction = screamAction;
-            LaughAudioAction = laughAction;
-            Attachments = attachments;
-            IntimidateAction = intimidateAudioAction;
-            IntimidateVoiceAction = intimidateVoiceAction;
-            EnterFightAction = enterFightAction;
-            KillPlayerAudioAction = killPlayerAudioAction;
-            StabAudioAction = stabAudioAction;
-            DeathAudioAction = deathAudioAction;
-            HitBodyAudioAction = hitBodyAudioAction;
-            FootstepsAudioAction = footstepsAudioAction;
+            SkinData = skinData;
         }
 
-        protected bool VoiceSilenced => IntimidateVoiceAction.actionType != AudioActionType.RETAIN || KillPlayerAudioAction.actionType != AudioActionType.RETAIN;
-        protected bool EffectsSilenced => StabAudioAction.actionType != AudioActionType.RETAIN || HitBodyAudioAction.actionType != AudioActionType.RETAIN;
-        protected bool AggressionSilenced => EnterFightAction.actionType != AudioActionType.RETAIN || IntimidateAction.actionType != AudioActionType.RETAIN;
+        protected bool VoiceSilenced => SkinData.IntimidateVoiceAction.actionType != AudioActionType.RETAIN || SkinData.KillPlayerAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool EffectsSilenced => SkinData.StabAudioAction.actionType != AudioActionType.RETAIN || SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool AggressionSilenced => SkinData.EnterFightAction.actionType != AudioActionType.RETAIN || SkinData.IntimidateAudioAction.actionType != AudioActionType.RETAIN;
 
         public override void Apply(GameObject enemy)
         {
@@ -106,15 +75,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 modAggressionAudio = CreateModdedAudioSource(bbhawk.aggressionAudio, "modAggressionAudio");
                 bbhawk.aggressionAudio.mute = true;
             }
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaScreamAudio = ScreamAudioAction.Apply(ref bbhawk.cawScreamSFX);
-            vanillaLaughAudio = LaughAudioAction.Apply(ref bbhawk.cawLaughSFX);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaScreamAudio = SkinData.ScreamAudioListAction.Apply(ref bbhawk.cawScreamSFX);
+            vanillaLaughAudio = SkinData.LaughAudioListAction.Apply(ref bbhawk.cawLaughSFX);
             if(animAudioEvents!=null)
             {
-                vanillaFootstepsAudio = FootstepsAudioAction.Apply(ref animAudioEvents.randomClips);
+                vanillaFootstepsAudio = SkinData.FootstepsAudioAction.Apply(ref animAudioEvents.randomClips);
             }
 
             vanillaIntimidateVoice = bbhawk.enemyType.audioClips[1];
@@ -123,7 +92,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaKillPlayerAudio = bbhawk.enemyType.audioClips[4];
             vanillaDeathAudio = bbhawk.enemyType.audioClips[5];
 
-            BodyMeshAction.Apply
+            ParticleSystem secBloodParticle = bbhawk.transform.Find(SECONDARY_BLOOD_PARTICLE_PATH).GetComponent<ParticleSystem>();
+
+            vanillaBloodMat = SkinData.BloodMaterialAction.Apply(animAudioEvents.particle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaSecondaryBloodMat = SkinData.BloodMaterialAction.Apply(secBloodParticle?.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaBloodStabMat = SkinData.BloodMaterialAction.Apply(animAudioEvents.particle.subEmitters.GetSubEmitterSystem(0).GetComponent<Renderer>(), 0);
+
+            vanillaBloodParticle = SkinData.BloodParticleAction.ApplyRef(ref animAudioEvents.particle);
+
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -161,16 +138,29 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 bbhawk.aggressionAudio.mute = false;
             }
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            ScreamAudioAction.Remove(ref enemy.GetComponent<BaboonBirdAI>().cawScreamSFX, vanillaScreamAudio);
-            LaughAudioAction.Remove(ref enemy.GetComponent<BaboonBirdAI>().cawLaughSFX, vanillaLaughAudio);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.ScreamAudioListAction.Remove(ref enemy.GetComponent<BaboonBirdAI>().cawScreamSFX, vanillaScreamAudio);
+            SkinData.LaughAudioListAction.Remove(ref enemy.GetComponent<BaboonBirdAI>().cawLaughSFX, vanillaLaughAudio);
+
+            SkinData.BloodParticleAction.RemoveRef(ref animAudioEvents.particle, vanillaBloodParticle);
+
+            ParticleSystem secBloodParticle = bbhawk.transform.Find(SECONDARY_BLOOD_PARTICLE_PATH).GetComponent<ParticleSystem>();
+
+            SkinData.BloodMaterialAction.Remove(animAudioEvents.particle.GetComponent<ParticleSystemRenderer>(), 0, vanillaBloodMat);
+            SkinData.BloodMaterialAction.Remove(secBloodParticle?.GetComponent<ParticleSystemRenderer>(), 0, vanillaSecondaryBloodMat);
+            SkinData.BloodMaterialAction.Remove(animAudioEvents.particle.subEmitters.GetSubEmitterSystem(0).GetComponent<Renderer>(), 0, vanillaBloodStabMat);
+
+            vanillaBloodParticle = SkinData.BloodParticleAction.ApplyRef(ref animAudioEvents.particle);
+
+            SkinData.BloodMaterialAction.Remove(animAudioEvents.particle.subEmitters.GetSubEmitterSystem(0).GetComponent<Renderer>(), 0, vanillaBloodStabMat);
+
             if (animAudioEvents != null)
             {
-                FootstepsAudioAction.Remove(ref animAudioEvents.randomClips, vanillaFootstepsAudio);
+                SkinData.FootstepsAudioAction.Remove(ref animAudioEvents.randomClips, vanillaFootstepsAudio);
             }
-            BodyMeshAction.Remove
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -178,7 +168,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD2_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -186,7 +176,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (AggressionSilenced)
             {
-                modAggressionAudio.clip = EnterFightAction.WorkingClip(vanillaEnterFightAudio);
+                modAggressionAudio.clip = SkinData.EnterFightAction.WorkingClip(vanillaEnterFightAudio);
                 modAggressionAudio.Play();
             }
         }
@@ -195,22 +185,22 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                RoundManager.PlayRandomClip(modCreatureVoice, ScreamAudioAction.WorkingClips(vanillaScreamAudio), randomize: true, 1f, 1105);
-                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, IntimidateVoiceAction.WorkingClip(vanillaIntimidateVoice));
+                RoundManager.PlayRandomClip(modCreatureVoice, SkinData.ScreamAudioListAction.WorkingClips(vanillaScreamAudio), randomize: true, 1f, 1105);
+                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, SkinData.IntimidateVoiceAction.WorkingClip(vanillaIntimidateVoice));
             }
             if(AggressionSilenced)
             {
-                modAggressionAudio.clip = IntimidateAction.WorkingClip(vanillaIntimidateAudio);
+                modAggressionAudio.clip = SkinData.IntimidateAudioAction.WorkingClip(vanillaIntimidateAudio);
                 modAggressionAudio.Play();
             }
         }
 
-        public void OnAttackPlayer(BaboonBirdAI baboonHawk, GameNetcodeStuff.PlayerControllerB player)
+        public void OnAttackPlayer(BaboonBirdAI baboonHawk, PlayerControllerB player)
         {
             if(EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(StabAudioAction.WorkingClip(vanillaStabAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, StabAudioAction.WorkingClip(vanillaStabAudio));
+                modCreatureEffects.PlayOneShot(SkinData.StabAudioAction.WorkingClip(vanillaStabAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, SkinData.StabAudioAction.WorkingClip(vanillaStabAudio));
             }
         }
 
@@ -218,17 +208,17 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(StabAudioAction.WorkingClip(vanillaStabAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, StabAudioAction.WorkingClip(vanillaStabAudio));
+                modCreatureEffects.PlayOneShot(SkinData.StabAudioAction.WorkingClip(vanillaStabAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, SkinData.StabAudioAction.WorkingClip(vanillaStabAudio));
             }
         }
 
-        public void OnKillPlayer(BaboonBirdAI baboonHawk, GameNetcodeStuff.PlayerControllerB player)
+        public void OnKillPlayer(BaboonBirdAI baboonHawk, PlayerControllerB player)
         {
             if (VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
+                modCreatureVoice.PlayOneShot(SkinData.KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, SkinData.KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
             }
         }
 
@@ -244,7 +234,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(DeathAudioAction.WorkingClip(vanillaDeathAudio));
+                modCreatureVoice.PlayOneShot(SkinData.DeathAudioAction.WorkingClip(vanillaDeathAudio));
             }
         }
 
@@ -252,8 +242,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced && playSoundEffect)
             {
-                modCreatureEffects.PlayOneShot(HitBodyAudioAction.WorkingClip(vanillaHitBodyAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, HitBodyAudioAction.WorkingClip(vanillaHitBodyAudio));
+                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(vanillaHitBodyAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(vanillaHitBodyAudio));
             }
         }
     }

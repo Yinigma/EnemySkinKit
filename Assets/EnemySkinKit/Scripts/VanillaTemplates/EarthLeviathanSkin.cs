@@ -10,38 +10,79 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [Header("Materials")]
         //Materials
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         //Skinned Meshes
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction groundRumbleAudioListAction;
+        protected AudioListAction groundRumbleAudioListAction;
         [SerializeField]
-        private AudioListAction ambientRumbleAudioListAction;
+        protected AudioListAction ambientRumbleAudioListAction;
         [SerializeField]
-        private AudioListAction roarAudioListAction;
+        protected AudioListAction roarAudioListAction;
         [SerializeField]
-        private AudioAction hitGroundAudioAction;
+        protected AudioAction hitGroundAudioAction;
         [SerializeField]
-        private AudioAction emergeAudioAction;
+        protected AudioAction emergeAudioAction;
+        [Space(10)]
+        
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction preEmergeParticleMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction preEmergeParticleAction;
+        [SerializeField]
+        protected MaterialAction emergeParticleMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction emergeParticleAction;
+        [SerializeField]
+        protected MaterialAction emergeShockwaveParticleMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction emergeShockwaveParticleAction;
+        [SerializeField]
+        protected MaterialAction submergeParticleMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction submergeParticleAction;
+        [SerializeField]
+        protected MaterialAction submergeShockwaveParticleMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction submergeShockwaveParticleAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
 
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public AudioListAction GroundRumbleAudioListAction => groundRumbleAudioListAction;
+        public AudioListAction AmbientRumbleAudioListAction => ambientRumbleAudioListAction;
+        public AudioListAction RoarAudioListAction => roarAudioListAction;
+        public AudioAction HitGroundAudioAction => hitGroundAudioAction;
+        public AudioAction EmergeAudioAction => emergeAudioAction;
+        public MaterialAction PreEmergeParticleMaterialAction => preEmergeParticleMaterialAction;
+        public ParticleSystemAction PreEmergeParticleAction => preEmergeParticleAction;
+        public MaterialAction EmergeParticleMaterialAction => emergeParticleMaterialAction;
+        public ParticleSystemAction EmergeParticleAction => emergeParticleAction;
+        public MaterialAction EmergeShockwaveParticleMaterialAction => emergeShockwaveParticleMaterialAction;
+        public ParticleSystemAction EmergeShockwaveParticleAction => emergeShockwaveParticleAction;
+        public MaterialAction SubmergeParticleMaterialAction => submergeParticleMaterialAction;
+        public ParticleSystemAction SubmergeParticleAction => submergeParticleAction;
+        public MaterialAction SubmergeShockwaveParticleMaterialAction => submergeShockwaveParticleMaterialAction;
+        public ParticleSystemAction SubmergeShockwaveParticleAction => submergeShockwaveParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.EARTH_LEVIATHAN_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new EarthLeviathanSkinner(attachments, bodyMeshAction, bodyMaterialAction, groundRumbleAudioListAction, ambientRumbleAudioListAction, roarAudioListAction, emergeAudioAction, hitGroundAudioAction);
+            return new EarthLeviathanSkinner(this);
         }
     }
 }

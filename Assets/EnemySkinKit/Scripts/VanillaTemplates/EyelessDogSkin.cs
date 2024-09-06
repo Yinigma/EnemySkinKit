@@ -10,69 +10,83 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [Header("Materials")]
         //Materials
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [SerializeField]
-        private MaterialAction topTeethMaterialAction;
+        protected MaterialAction topTeethMaterialAction;
         [SerializeField]
-        private MaterialAction bottomTeethMaterialAction;
+        protected MaterialAction bottomTeethMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         //Skinned Meshes
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         //Static Meshes
         [SerializeField]
-        private StaticMeshAction topTeethMeshAction;
+        protected StaticMeshAction topTeethMeshAction;
         [SerializeField]
-        private StaticMeshAction bottomTeethMeshAction;
+        protected StaticMeshAction bottomTeethMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction screamAudioAction;
+        protected AudioAction screamAudioAction;
         [SerializeField]
-        private AudioAction killPlayerAudioAction;
+        protected AudioAction killPlayerAudioAction;
         [SerializeField]
-        private AudioAction breathingAudioAction;
+        protected AudioAction breathingAudioAction;
         [SerializeField]
-        private AudioAction stunAudioAction;
+        protected AudioAction stunAudioAction;
         [SerializeField]
-        private AudioAction growlAudioAction;
+        protected AudioAction growlAudioAction;
         [SerializeField]
-        private AudioAction chasingAudioAction;
+        protected AudioAction chasingAudioAction;
         [SerializeField]
-        private AudioAction lungeAudioAction;
+        protected AudioAction lungeAudioAction;
         [SerializeField]
-        private AudioListAction footstepsAudioListAction;
+        protected AudioListAction footstepsAudioListAction;
+        [Space(10)]
+
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction spawnDustMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction spawnDustParticleAction;
+        [SerializeField]
+        protected MaterialAction runDustMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction runDustParticleAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public MaterialAction TopTeethMaterialAction => topTeethMaterialAction;
+        public MaterialAction BottomTeethMaterialAction => bottomTeethMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction TopTeethMeshAction => topTeethMeshAction;
+        public StaticMeshAction BottomTeethMeshAction => bottomTeethMeshAction;
+        public AudioAction ScreamAudioAction => screamAudioAction;
+        public AudioAction KillPlayerAudioAction => killPlayerAudioAction;
+        public AudioAction BreathingAudioAction => breathingAudioAction;
+        public AudioAction StunAudioAction => stunAudioAction;
+        public AudioAction GrowlAudioAction => growlAudioAction;
+        public AudioAction ChasingAudioAction => chasingAudioAction;
+        public AudioAction LungeAudioAction => lungeAudioAction;
+        public AudioListAction FootstepsAudioListAction => footstepsAudioListAction;
+        public MaterialAction SpawnDustMaterialAction => spawnDustMaterialAction;
+        public ParticleSystemAction SpawnDustParticleAction => spawnDustParticleAction;
+        public MaterialAction RunDustMaterialAction => runDustMaterialAction;
+        public ParticleSystemAction RunDustParticleAction => runDustParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.EYELESS_DOG_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new EyelessDogSkinner
-            (
-                attachments,
-                bodyMeshAction,
-                topTeethMeshAction,
-                bottomTeethMeshAction,
-                bodyMaterialAction,
-                topTeethMaterialAction,
-                bottomTeethMaterialAction,
-                screamAudioAction,
-                killPlayerAudioAction,
-                breathingAudioAction,
-                stunAudioAction,
-                growlAudioAction,
-                chasingAudioAction,
-                lungeAudioAction,
-                footstepsAudioListAction
-            );
+            return new EyelessDogSkinner(this);
         }
     }
 }

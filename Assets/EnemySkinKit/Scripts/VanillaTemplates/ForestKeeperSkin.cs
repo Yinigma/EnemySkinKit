@@ -9,55 +9,81 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction stunAudioAction;
+        protected AudioAction stunAudioAction;
         [SerializeField]
-        private AudioAction roarAudioAction;
+        protected AudioAction roarAudioAction;
         [SerializeField]
-        private AudioAction eatPlayerAudioAction;
+        protected AudioAction eatPlayerAudioAction;
         [SerializeField]
-        private AudioAction fallAudioAction;
+        protected AudioAction fallAudioAction;
         [SerializeField]
-        private AudioAction deathCryAudioAction;
+        protected AudioAction deathCryAudioAction;
         [SerializeField]
-        private AudioListAction stompAudioListAction;
+        protected AudioListAction stompAudioListAction;
         [SerializeField]
-        private AudioListAction rumbleAudioListAction;
+        protected AudioListAction rumbleAudioListAction;
         [SerializeField]
-        private AudioAction burnAudioAction;
+        protected AudioAction burnAudioAction;
+        [Space(10)]
+
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction bloodMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction bloodParticleAction;
+        [SerializeField]
+        protected MaterialAction smokeMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction smokeParticleAction;
+        [SerializeField]
+        protected MaterialAction fireMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction fireParticleAction;
+        [SerializeField]
+        protected MaterialAction flashMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction flashParticleAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public AudioAction StunAudioAction => stunAudioAction;
+        public AudioAction RoarAudioAction => roarAudioAction;
+        public AudioAction EatPlayerAudioAction => eatPlayerAudioAction;
+        public AudioAction FallAudioAction => fallAudioAction;
+        public AudioAction DeathCryAudioAction => deathCryAudioAction;
+        public AudioListAction StompAudioListAction => stompAudioListAction;
+        public AudioListAction RumbleAudioListAction => rumbleAudioListAction;
+        public AudioAction BurnAudioAction => burnAudioAction;
+        public MaterialAction BloodMaterialAction => bloodMaterialAction;
+        public ParticleSystemAction BloodParticleAction => bloodParticleAction;
+        public MaterialAction SmokeMaterialAction => smokeMaterialAction;
+        public ParticleSystemAction SmokeParticleAction => smokeParticleAction;
+        public MaterialAction FireMaterialAction => fireMaterialAction;
+        public ParticleSystemAction FireParticleAction => fireParticleAction;
+        public MaterialAction FlashMaterialAction => flashMaterialAction;
+        public ParticleSystemAction FlashParticleAction => flashParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.FOREST_KEEPER_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new ForestKeeperSkinner
-            (
-                attachments, 
-                bodyMaterialAction, 
-                bodyMeshAction,
-                stunAudioAction,
-                roarAudioAction,
-                eatPlayerAudioAction,
-                fallAudioAction,
-                deathCryAudioAction,
-                stompAudioListAction,
-                rumbleAudioListAction,
-                burnAudioAction
-            );
+            return new ForestKeeperSkinner(this);
         }
     }
 

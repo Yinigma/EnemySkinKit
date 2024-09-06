@@ -2,6 +2,7 @@ using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
@@ -11,74 +12,39 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string MESH_PATH = "FlowermanModel/LOD1";
         protected const string LEFT_EYE_PATH = "FlowermanModel/AnimContainer/metarig/Torso1/Torso2/Torso3/Neck1/Neck2/Head1/LeftEye";
         protected const string RIGHT_EYE_PATH = "FlowermanModel/AnimContainer/metarig/Torso1/Torso2/Torso3/Neck1/Neck2/Head1/RightEye";
+        protected const string POOF_PARTICLE_PATH = "FlowermanModel/AnimContainer/PoofParticle";
         protected const string ANCHOR_PATH = "FlowermanModel/AnimContainer";
-        protected Material vanillaBodyMaterial;
-        protected Material vanillaLeafMaterial;
-        protected Material vanillaRightEyeMaterial;
-        protected Material vanillaLeftEyeMaterial;
+        protected VanillaMaterial vanillaBodyMaterial;
+        protected VanillaMaterial vanillaLeafMaterial;
+        protected VanillaMaterial vanillaRightEyeMaterial;
+        protected VanillaMaterial vanillaLeftEyeMaterial;
+        protected ParticleSystem vanillaPoofParticle;
 
         protected Mesh vanillaRightEyeMesh;
         protected Mesh vanillaLeftEyeMesh;
 
         protected AudioClip vanillaAngerSound;
         protected AudioClip vanillaKillSound;
+        protected VanillaMaterial vanillaPoofParticleMaterial;
         protected AudioClip vanillaFoundSound;
         protected AudioClip[] vanillaLeafRustleSounds;
         protected List<GameObject> activeAttachments;
+        protected GameObject skinnedMeshReplacement;
 
-        protected MaterialAction LeafMaterialAction { get; }
-        protected MaterialAction BodyMaterialAction { get; }
-        protected MaterialAction LeftEyeMaterialAction { get; }
-        protected MaterialAction RightEyeMaterialAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected StaticMeshAction LeftEyeMeshAction { get; }
-        protected StaticMeshAction RightEyeMeshAction { get; }
-        protected AudioAction AngerAudioAction { get; }
-        protected AudioAction SnapNeckAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-        protected AudioAction FoundAudioAction { get; }
-        protected AudioAction HitBodyAudioAction { get; }
-        protected AudioAction StunAudioAction { get; }
-        protected AudioListAction LeafRustleAudioListAction { get; }
-
-        protected bool VoiceSilenced => StunAudioAction.actionType != AudioActionType.RETAIN;
-        protected bool EffectsSilenced => HitBodyAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool VoiceSilenced => SkinData.StunAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
 
         protected AudioSource modCreatureEffects;
         protected AudioSource modCreatureVoice;
 
+        protected BrackenSkin SkinData { get; }
+
         public BrackenSkinner
         (
-            ArmatureAttachment[] attachments,
-            MaterialAction leafMaterialAction,
-            MaterialAction bodyMaterialAction,
-            MaterialAction leftEyeMaterialAction,
-            MaterialAction rightEyeMaterialAction,
-            SkinnedMeshAction bodyMeshAction,
-            StaticMeshAction leftEyeMeshAction,
-            StaticMeshAction rightEyeMeshAction,
-            AudioAction angerAudioAction,
-            AudioAction snapNeckAudioAction,
-            AudioAction foundAudioAction,
-            AudioAction hitBodyAudioAction,
-            AudioAction stunAudioAction,
-            AudioListAction leafRustleAudioListAction
+            BrackenSkin skinData
         )
         {
-            LeafMaterialAction = leafMaterialAction;
-            BodyMaterialAction = bodyMaterialAction;
-            LeftEyeMaterialAction = leftEyeMaterialAction;
-            RightEyeMaterialAction = rightEyeMaterialAction;
-            BodyMeshAction = bodyMeshAction;
-            LeftEyeMeshAction = leftEyeMeshAction;
-            RightEyeMeshAction = rightEyeMeshAction;
-            AngerAudioAction = angerAudioAction;
-            SnapNeckAudioAction = snapNeckAudioAction;
-            Attachments = attachments;
-            FoundAudioAction = foundAudioAction;
-            HitBodyAudioAction = hitBodyAudioAction;
-            StunAudioAction = stunAudioAction;
-            LeafRustleAudioListAction = leafRustleAudioListAction;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
@@ -99,20 +65,24 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     audioAnimEvents.audioToPlay = modCreatureEffects;
                 }
             }
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() );
-            vanillaLeafMaterial = LeafMaterialAction.Apply(enemy.transform.Find(MESH_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(MESH_PATH)?.gameObject.GetComponent<Renderer>(), 1);
-            vanillaLeftEyeMaterial = LeftEyeMaterialAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaRightEyeMaterial = RightEyeMaterialAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMeshAction.Apply(new SkinnedMeshRenderer[] { enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, enemy.transform.Find(ANCHOR_PATH));
-            vanillaLeftEyeMesh = LeftEyeMeshAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaRightEyeMesh = RightEyeMeshAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaAngerSound = AngerAudioAction.ApplyToSource(bracken.creatureAngerVoice);
-            vanillaKillSound = SnapNeckAudioAction.Apply(ref bracken.crackNeckSFX);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() );
+            vanillaLeafMaterial = SkinData.LeafMaterialAction.Apply(enemy.transform.Find(MESH_PATH)?.gameObject.GetComponent<Renderer>(), 1);
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(MESH_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaLeftEyeMaterial = SkinData.LeftEyeMaterialAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaRightEyeMaterial = SkinData.RightEyeMaterialAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply(new SkinnedMeshRenderer[] { enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, enemy.transform.Find(ANCHOR_PATH));
+            vanillaLeftEyeMesh = SkinData.LeftEyeMeshAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaRightEyeMesh = SkinData.RightEyeMeshAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaAngerSound = SkinData.AngerAudioAction.ApplyToSource(bracken.creatureAngerVoice);
+            vanillaKillSound = SkinData.NeckSnapAudioAction.Apply(ref bracken.crackNeckSFX);
+
+            vanillaPoofParticleMaterial = SkinData.DeathSporeMaterialAction.Apply(audioAnimEvents.particle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaPoofParticle = SkinData.DeathSporeParticleAction.ApplyRef(ref audioAnimEvents.particle);
+            //vanillaPoofParticle = DeathSporeAction.Apply(ref );
             if (audioAnimEvents != null)
             {
-                vanillaFoundSound = FoundAudioAction.Apply(ref audioAnimEvents.audioClip);
-                vanillaLeafRustleSounds = LeafRustleAudioListAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaFoundSound = SkinData.FoundAudioAction.Apply(ref audioAnimEvents.audioClip);
+                vanillaLeafRustleSounds = SkinData.LeafRustleAudioListAction.Apply(ref audioAnimEvents.randomClips);
             }
             EnemySkinRegistry.RegisterEnemyEventHandler(bracken, this);
         }
@@ -137,19 +107,23 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 }
             }
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            LeafMaterialAction.Remove(enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaLeafMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<Renderer>(), 1, vanillaBodyMaterial);
-            LeftEyeMaterialAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaLeftEyeMaterial);
-            RightEyeMaterialAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaRightEyeMaterial);
-            BodyMeshAction.Remove(new SkinnedMeshRenderer[] { enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, enemy.transform.Find(ANCHOR_PATH));
-            LeftEyeMeshAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaLeftEyeMesh);
-            RightEyeMeshAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaRightEyeMesh);
-            AngerAudioAction.RemoveFromSource(bracken.creatureAngerVoice, vanillaAngerSound);
-            SnapNeckAudioAction.Remove(ref bracken.crackNeckSFX, vanillaKillSound);
-            if(audioAnimEvents != null)
+            SkinData.LeafMaterialAction.Remove(enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaLeafMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<Renderer>(), 1, vanillaBodyMaterial);
+            SkinData.LeftEyeMaterialAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaLeftEyeMaterial);
+            SkinData.RightEyeMaterialAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaRightEyeMaterial);
+            SkinData.BodyMeshAction.Remove(new SkinnedMeshRenderer[] { enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, skinnedMeshReplacement);
+            SkinData.LeftEyeMeshAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaLeftEyeMesh);
+            SkinData.RightEyeMeshAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaRightEyeMesh);
+            SkinData.AngerAudioAction.RemoveFromSource(bracken.creatureAngerVoice, vanillaAngerSound);
+            SkinData.NeckSnapAudioAction.Remove(ref bracken.crackNeckSFX, vanillaKillSound);
+
+            SkinData.DeathSporeParticleAction.RemoveRef(ref audioAnimEvents.particle, vanillaPoofParticle);
+            SkinData.DeathSporeMaterialAction.Remove(audioAnimEvents.particle.GetComponent<ParticleSystemRenderer>(), 0, vanillaPoofParticleMaterial);
+
+            if (audioAnimEvents != null)
             {
-                FoundAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaFoundSound);
-                LeafRustleAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaLeafRustleSounds);
+                SkinData.FoundAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaFoundSound);
+                SkinData.LeafRustleAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaLeafRustleSounds);
             }
         }
 
@@ -157,7 +131,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
+                modCreatureVoice.PlayOneShot(SkinData.StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
             }
         }
 
@@ -165,8 +139,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (EffectsSilenced && playSoundEffect)
             {
-                modCreatureEffects.PlayOneShot(HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
             }
         }
 

@@ -9,67 +9,66 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [SerializeField]
-        private MaterialAction leftWingMaterialAction;
+        protected MaterialAction leftWingMaterialAction;
         [SerializeField]
-        private MaterialAction rightWingMaterialAction;
+        protected MaterialAction rightWingMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [SerializeField]
-        private StaticMeshAction leftWingMeshAction;
+        protected StaticMeshAction leftWingMeshAction;
         [SerializeField]
-        private StaticMeshAction rightWingMeshAction;
+        protected StaticMeshAction rightWingMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioListAction chitterAudioListAction;
+        protected AudioListAction chitterAudioListAction;
         [SerializeField]
-        private AudioListAction angryChirpsAudioListAction;
+        protected AudioListAction angryChirpsAudioListAction;
         [SerializeField]
-        private AudioAction beginAttackAudioAction;
+        protected AudioAction beginAttackAudioAction;
         [SerializeField]
-        private AudioAction flyAudioAction;
+        protected AudioAction flyAudioAction;
         [SerializeField]
-        private AudioAction hitPlayerAudioAction;
+        protected AudioAction hitPlayerAudioAction;
         [SerializeField]
-        private AudioAction stunAudioAction;
+        protected AudioAction stunAudioAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioListAction footstepsAudioListAction;
+        protected AudioListAction footstepsAudioListAction;
         [Space(10)]
 
-        [Header("Audio Attachments")]
+        [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public MaterialAction LeftWingMaterialAction => leftWingMaterialAction;
+        public MaterialAction RightWingMaterialAction => rightWingMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction LeftWingMeshAction => leftWingMeshAction;
+        public StaticMeshAction RightWingMeshAction => rightWingMeshAction;
+        public AudioListAction ChitterAudioListAction => chitterAudioListAction;
+        public AudioListAction AngryChirpsAudioListAction => angryChirpsAudioListAction;
+        public AudioAction BeginAttackAudioAction => beginAttackAudioAction;
+        public AudioAction FlyAudioAction => flyAudioAction;
+        public AudioAction HitPlayerAudioAction => hitPlayerAudioAction;
+        public AudioAction StunAudioAction => stunAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioListAction FootstepsAudioListAction => footstepsAudioListAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.HOARDER_BUG_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new HoarderBugSkinner
-            (
-                attachments,
-                bodyMaterialAction,
-                leftWingMaterialAction,
-                rightWingMaterialAction,
-                bodyMeshAction,
-                leftWingMeshAction,
-                rightWingMeshAction,
-                chitterAudioListAction,
-                angryChirpsAudioListAction,
-                beginAttackAudioAction,
-                flyAudioAction,
-                hitPlayerAudioAction,
-                stunAudioAction,
-                hitBodyAudioAction,
-                footstepsAudioListAction
-            );
+            return new HoarderBugSkinner(this);
         }
     }
 }

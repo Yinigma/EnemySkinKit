@@ -223,14 +223,8 @@ namespace AntlerShed.EnemySkinKit
             //Check if this is the correct assembly
             if(assemblyPath.EndsWith($"{sanitizedAssemblyName}.dll"))
             {
-                foreach (string path in Directory.EnumerateFiles(stagingPath, "*.meta", SearchOption.AllDirectories))
-                {
-                    File.Delete(path);
-                }
-                File.Delete(sourceCodeFilePath);
-                //File.Delete($"{sourceCodeFilePath}.meta");
-                File.Delete(assemblyFilePath);
-                //File.Delete($"{assemblyFilePath}.meta");
+                AssetDatabase.DeleteAsset(sourceCodeFilePath);
+                AssetDatabase.DeleteAsset(assemblyFilePath);
                 
                 //create mod folder
                 File.Copy(assemblyPath, Path.Combine(pluginPath, Path.GetFileName(assemblyPath)));
@@ -243,7 +237,7 @@ namespace AntlerShed.EnemySkinKit
 
                 //Zip up mod folder
                 ZipFile.CreateFromDirectory(stagingPath, zipPath);
-                Directory.Delete(stagingPath, true);
+                AssetDatabase.DeleteAsset(stagingPath);
                 
             }
 
@@ -295,7 +289,9 @@ namespace AntlerShed.EnemySkinKit
 
         private string createTemplateSkinEntrySource(BaseSkin skin, DefaultSkinConfigurationView? defaultConfig)
         {
-            return $"EnemySkinRegistry.RegisterSkin(bundle.LoadAsset<{skin.GetType().Name}>(\"{AssetDatabase.GetAssetPath(skin)}\"){(!defaultConfig.HasValue ? "" : $", {createDefaultSkinConfigSource(defaultConfig.Value)}")});";
+            
+            return $"EnemySkinRegistry.RegisterSkin(bundle.LoadAsset<{skin.GetType().Name}>(\"{AssetDatabase.GetAssetPath(skin)}\"){(!defaultConfig.HasValue ? "" : $", {createDefaultSkinConfigSource(defaultConfig.Value)}")});" + ( skin is BaseNestSkin ? "\n" +
+                $"EnemySkinRegistry.RegisterNestSkin(bundle.LoadAsset<{skin.GetType().Name}>(\"{AssetDatabase.GetAssetPath(skin)}\"));" : "");
         }
 
         private string createSkinModSource(string modGUID, string modName, string bundleName, uint major, uint minor, uint patch, string pluginClassName, string namespaceText, BaseSkin[] skins, DefaultSkinConfigurationView[] configs)
@@ -311,8 +307,7 @@ namespace AntlerShed.EnemySkinKit
                 $"namespace {namespaceText}\n" +
                 "{\n" +
                 $"\t[BepInPlugin(\"{modGUID}\", \"{modName}\", \"{major}.{minor}.{patch}\")]\n" +
-                $"\t[BepInDependency(\"{EnemySkinKit.modGUID}\")]\n" +
-                $"\t[BepInDependency(\"{EnemySkinRegistry.modGUID}\")]\n" +
+                $"\t[BepInDependency(\"AntlerShed.LethalCompany.EnemySkinKit\")]\n" +
                 $"\tpublic class {pluginClassName} : BaseUnityPlugin\n" +
                 "\t{\n" +
                 $"\t\tpublic const string modGUID = \"{modGUID}\";\n" +
@@ -365,7 +360,7 @@ namespace AntlerShed.EnemySkinKit
                 $"\t\"version_number\": \"{major}.{minor}.{patch}\",\n" +
                 "\t\"website_url\": \"\",\n" +
                 $"\t\"description\": \"{description}\",\n" +
-                "\t\"dependencies\": [\"AntlerShed-EnemySkinKit-1.0.0\"]\n" +
+                "\t\"dependencies\": [\"AntlerShed-EnemySkinKit-1.2.3\"]\n" +
                 "}";
         }
 

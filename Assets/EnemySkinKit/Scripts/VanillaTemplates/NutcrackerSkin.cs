@@ -9,64 +9,78 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction torsoTurnAudioAction;
+        protected AudioAction torsoTurnAudioAction;
         [SerializeField]
-        private AudioListAction torsoFinishTurningAudioListAction;
+        protected AudioListAction torsoFinishTurningAudioListAction;
         [SerializeField]
-        private AudioAction aimAudioAction;
+        protected AudioAction aimAudioAction;
         [SerializeField]
-        private AudioAction kickAudioAction;
+        protected AudioAction kickAudioAction;
         [SerializeField]
-        private AudioAction hitEyeAudioAction;
+        protected AudioAction hitEyeAudioAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioAction headPopUpAudioAction;
+        protected AudioAction headPopUpAudioAction;
         [SerializeField]
-        private AudioAction reloadAudioAction;
+        protected AudioAction reloadAudioAction;
         [SerializeField]
-        private AudioAction angryDrumsAudioAction;
+        protected AudioAction angryDrumsAudioAction;
         [SerializeField]
-        private AudioListAction footstepsAudioListAction;
+        protected AudioListAction footstepsAudioListAction;
         [SerializeField]
-        private AudioListAction jointSqueaksAudioListAction;
+        protected AudioListAction jointSqueaksAudioListAction;
+        [Space(10)]
+
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction bloodSpurtMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction bloodSpurtParticleAction;
+        [SerializeField]
+        protected MaterialAction bloodFountainMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction bloodFountainParticleAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public AudioAction TorsoTurnAudioAction => torsoTurnAudioAction;
+        public AudioListAction TorsoFinishTurningAudioListAction => torsoFinishTurningAudioListAction;
+        public AudioAction AimAudioAction => aimAudioAction;
+        public AudioAction KickAudioAction => kickAudioAction;
+        public AudioAction HitEyeAudioAction => hitEyeAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioAction HeadPopUpAudioAction => headPopUpAudioAction;
+        public AudioAction ReloadAudioAction => reloadAudioAction;
+        public AudioAction AngryDrumsAudioAction => angryDrumsAudioAction;
+        public AudioListAction FootstepsAudioListAction => footstepsAudioListAction;
+        public AudioListAction JointSqueaksAudioListAction => jointSqueaksAudioListAction;
+        public MaterialAction BloodSpurtMaterialAction => bloodSpurtMaterialAction;
+        public ParticleSystemAction BloodSpurtParticleAction => bloodSpurtParticleAction;
+        public MaterialAction BloodFountainMaterialAction => bloodFountainMaterialAction;
+        public ParticleSystemAction BloodFountainParticleAction => bloodFountainParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.NUTCRACKER_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new NutcrackerSkinner
-            (
-                attachments, 
-                bodyMaterialAction, 
-                bodyMeshAction, 
-                torsoTurnAudioAction,
-                torsoFinishTurningAudioListAction,
-                aimAudioAction, 
-                kickAudioAction,
-                headPopUpAudioAction,
-                hitBodyAudioAction,
-                hitEyeAudioAction,
-                reloadAudioAction,
-                angryDrumsAudioAction,
-                jointSqueaksAudioListAction,
-                footstepsAudioListAction
-            );
+            return new NutcrackerSkinner( this );
         }
     }
 }

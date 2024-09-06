@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 4030922518
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 98a7feb9fb012645011fb8877a953796
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6161b950876c3618ec69d9121e26581b
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 98a7feb9fb012645011fb8877a953796
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -1790050701, guid: 0392ffa6353ffc1214a0df459d9bb3da, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.AudioAction
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.AudioListAction
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.MaterialAction
+- AssemblyName: EnemySkinKit
+  ClassName: AntlerShed.EnemySkinKit.SkinAction.SkinnedMeshAction
+Assets:
+- Assets/TestSkin/Nutcracker/Checker Cracker.asset
+Dependencies: []

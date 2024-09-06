@@ -9,90 +9,89 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     {
         [Header("Materials")]
         [SerializeField]
-        private MaterialAction skullMaterialAction;
+        protected MaterialAction skullMaterialAction;
         [SerializeField]
-        private MaterialAction jawMaterialAction;
+        protected MaterialAction jawMaterialAction;
         [SerializeField]
-        private MaterialAction lidMaterialAction;
+        protected MaterialAction lidMaterialAction;
         [SerializeField]
-        private MaterialAction crankMaterialAction;
+        protected MaterialAction crankMaterialAction;
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
 
         [SerializeField]
-        private StaticMeshAction skullLOD0Action;
+        protected StaticMeshAction skullLOD0Action;
         [SerializeField]
-        private StaticMeshAction skullLOD1Action;
+        protected StaticMeshAction skullLOD1Action;
         [SerializeField]
-        private StaticMeshAction skullLOD2Action;
+        protected StaticMeshAction skullLOD2Action;
 
         [SerializeField]
-        private StaticMeshAction jawLOD0Action;
+        protected StaticMeshAction jawLOD0Action;
         [SerializeField]
-        private StaticMeshAction jawLOD1Action;
+        protected StaticMeshAction jawLOD1Action;
         [SerializeField]
-        private StaticMeshAction lidMeshAction;
+        protected StaticMeshAction lidMeshAction;
         [SerializeField]
-        private StaticMeshAction crankMeshAction;
+        protected StaticMeshAction crankMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction popGoesTheWeaselMusicAudioAction;
+        protected AudioAction popGoesTheWeaselMusicAudioAction;
         [SerializeField]
-        private AudioAction popUpAudioAction;
+        protected AudioAction popUpAudioAction;
         [SerializeField]
-        private AudioAction screamingAudioAction;
+        protected AudioAction screamingAudioAction;
         [SerializeField]
-        private AudioAction killPlayerAudioAction;
+        protected AudioAction killPlayerAudioAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioAction footstepAudioAction;
+        protected AudioAction footstepAudioAction;
         [SerializeField]
-        private AudioListAction crankAudioListAction;
+        protected AudioListAction crankAudioListAction;
         [SerializeField]
-        private AudioListAction stompAudioListAction;
+        protected AudioListAction stompAudioListAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction SkullMaterialAction => skullMaterialAction;
+        public MaterialAction JawMaterialAction => jawMaterialAction;
+        public MaterialAction LidMaterialAction => lidMaterialAction;
+        public MaterialAction CrankMaterialAction => crankMaterialAction;
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction SkullLOD0Action => skullLOD0Action;
+        public StaticMeshAction SkullLOD1Action => skullLOD1Action;
+        public StaticMeshAction SkullLOD2Action => skullLOD2Action;
+        public StaticMeshAction JawLOD0Action => jawLOD0Action;
+        public StaticMeshAction JawLOD1Action => jawLOD1Action;
+        public StaticMeshAction LidMeshAction => lidMeshAction;
+        public StaticMeshAction CrankMeshAction => crankMeshAction;
+        public AudioAction PopGoesTheWeaselMusicAudioAction => popGoesTheWeaselMusicAudioAction;
+        public AudioAction PopUpAudioAction => popUpAudioAction;
+        public AudioAction ScreamingAudioAction => screamingAudioAction;
+        public AudioAction KillPlayerAudioAction => killPlayerAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioAction FootstepAudioAction => footstepAudioAction;
+        public AudioListAction CrankAudioListAction => crankAudioListAction;
+        public AudioListAction StompAudioListAction => stompAudioListAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.JESTER_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new JesterSkinner
-            (
-                attachments,
-                skullMaterialAction,
-                jawMaterialAction,
-                lidMaterialAction,
-                crankMaterialAction,
-                bodyMaterialAction,
-                skullLOD0Action,
-                skullLOD1Action,
-                skullLOD2Action,
-                jawLOD0Action,
-                jawLOD1Action,
-                lidMeshAction,
-                crankMeshAction,
-                bodyMeshAction,
-                popGoesTheWeaselMusicAudioAction,
-                popUpAudioAction,
-                screamingAudioAction,
-                killPlayerAudioAction,
-                hitBodyAudioAction,
-                footstepAudioAction,
-                crankAudioListAction,
-                stompAudioListAction
-            );
+            return new JesterSkinner(this);
         }
     }
 }

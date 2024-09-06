@@ -10,66 +10,74 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         [Header("Materials")]
         //Materials
         [SerializeField]
-        private MaterialAction bodyMaterialAction;
+        protected MaterialAction bodyMaterialAction;
         [SerializeField]
-        private MaterialAction leafMaterialAction;
+        protected MaterialAction leafMaterialAction;
         [SerializeField]
-        private MaterialAction leftEyeMaterialAction;
+        protected MaterialAction leftEyeMaterialAction;
         [SerializeField]
-        private MaterialAction rightEyeMaterialAction;
+        protected MaterialAction rightEyeMaterialAction;
         [Space(10)]
 
         [Header("Meshes")]
         //Skinned Meshes
         [SerializeField]
-        private SkinnedMeshAction bodyMeshAction;
+        protected SkinnedMeshAction bodyMeshAction;
         //Static Meshes
         [SerializeField]
-        private StaticMeshAction leftEyeMeshAction;
+        protected StaticMeshAction leftEyeMeshAction;
         [SerializeField]
-        private StaticMeshAction rightEyeMeshAction;
+        protected StaticMeshAction rightEyeMeshAction;
         [Space(10)]
 
         [Header("Audio")]
         [SerializeField]
-        private AudioAction angerAudioAction;
+        protected AudioAction angerAudioAction;
         [SerializeField]
-        private AudioAction neckSnapAudioAction;
+        protected AudioAction neckSnapAudioAction;
         [SerializeField]
-        private AudioAction foundAudioAction;
+        protected AudioAction foundAudioAction;
         [SerializeField]
-        private AudioAction hitBodyAudioAction;
+        protected AudioAction hitBodyAudioAction;
         [SerializeField]
-        private AudioAction stunAudioAction;
+        protected AudioAction stunAudioAction;
         [SerializeField]
-        private AudioListAction leafRustleAudioListAction;
+        protected AudioListAction leafRustleAudioListAction;
+        [Space(10)]
+
+        [Header("Particles")]
+        [SerializeField]
+        protected MaterialAction deathSporeMaterialAction;
+        [SerializeField]
+        protected ParticleSystemAction deathSporeParticleAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
         [SerializeField]
-        private ArmatureAttachment[] attachments;
+        protected ArmatureAttachment[] attachments;
+
+        public MaterialAction BodyMaterialAction => bodyMaterialAction;
+        public MaterialAction LeafMaterialAction => leafMaterialAction;
+        public MaterialAction LeftEyeMaterialAction => leftEyeMaterialAction;
+        public MaterialAction RightEyeMaterialAction => rightEyeMaterialAction;
+        public SkinnedMeshAction BodyMeshAction => bodyMeshAction;
+        public StaticMeshAction LeftEyeMeshAction => leftEyeMeshAction;
+        public StaticMeshAction RightEyeMeshAction => rightEyeMeshAction;
+        public AudioAction AngerAudioAction => angerAudioAction;
+        public AudioAction NeckSnapAudioAction => neckSnapAudioAction;
+        public AudioAction FoundAudioAction => foundAudioAction;
+        public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioAction StunAudioAction => stunAudioAction;
+        public AudioListAction LeafRustleAudioListAction => leafRustleAudioListAction;
+        public MaterialAction DeathSporeMaterialAction => deathSporeMaterialAction;
+        public ParticleSystemAction DeathSporeParticleAction => deathSporeParticleAction;
+        public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.BRACKEN_ID;
 
         public override Skinner CreateSkinner()
         {
-            return new BrackenSkinner
-            (
-                attachments,
-                leafMaterialAction,
-                bodyMaterialAction,
-                leftEyeMaterialAction,
-                rightEyeMaterialAction,
-                bodyMeshAction,
-                leftEyeMeshAction,
-                rightEyeMeshAction,
-                angerAudioAction,
-                neckSnapAudioAction,
-                foundAudioAction,
-                hitBodyAudioAction,
-                stunAudioAction,
-                leafRustleAudioListAction
-            );
+            return new BrackenSkinner(this);
         }
     }
 }

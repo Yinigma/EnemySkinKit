@@ -26,12 +26,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         protected const string ANIM_EVENT_PATH = "MeshContainer/AnimContainer";
 
-        protected Material vanillaBodyMaterial;
-        protected Material vanillaSkullMaterial;
-        protected Material vanillaJawMaterial;
-        protected Material vanillaLidMaterial;
+        protected VanillaMaterial vanillaBodyMaterial;
+        protected VanillaMaterial vanillaSkullMaterial;
+        protected VanillaMaterial vanillaJawMaterial;
+        protected VanillaMaterial vanillaLidMaterial;
 
-        protected Material vanillaCrankMaterial; //c'mon, dawg
+        protected VanillaMaterial vanillaCrankMaterial; //c'mon, dawg
 
         protected Mesh vanillaSkullLOD0Mesh;
         protected Mesh vanillaSkullLOD1Mesh;
@@ -51,83 +51,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip[] vanillaStompAudio;
         protected AudioClip[] vanillaCrankAudio;
         protected List<GameObject> activeAttachments;
-
-        protected MaterialAction SkullMaterialAction { get; }
-        protected MaterialAction JawMaterialAction { get; }
-        protected MaterialAction LidMaterialAction { get; }
-        protected MaterialAction CrankMaterialAction { get; }
-        protected MaterialAction BodyMaterialAction { get; }
-        protected StaticMeshAction SkullLOD0Action { get; }
-        protected StaticMeshAction SkullLOD1Action { get; }
-        protected StaticMeshAction SkullLOD2Action { get; }
-        protected StaticMeshAction JawLOD0Action { get; }
-        protected StaticMeshAction JawLOD1Action { get; }
-        protected StaticMeshAction LidMeshAction { get; }
-        protected StaticMeshAction CrankMeshAction { get; }
-        protected SkinnedMeshAction BodyMeshAction { get; }
-
-        protected AudioAction MusicAudioAction { get; }
-        protected AudioAction PopUpAudioAction { get; }
-        protected AudioAction ScreamingAudioAction { get; }
-        protected AudioAction KillPlayerAudioAction { get; }
-        protected AudioAction HitBodyAudioAction { get; }
-        protected AudioAction FootstepAudioAction { get; }
-        protected AudioListAction ChaseStompAudioListAction { get; }
-        protected AudioListAction CrankAudioListAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-
-        protected bool EffectsSilenced => HitBodyAudioAction.actionType != AudioActionType.RETAIN;
+        protected GameObject skinnedMeshReplacement;
+        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
 
         protected AudioSource modCreatureEffects;
 
-        public JesterSkinner
-        (
-            ArmatureAttachment[] attachments,
-            MaterialAction skullMaterialAction, 
-            MaterialAction jawMaterialAction, 
-            MaterialAction lidMaterialAction, 
-            MaterialAction crankMaterialAction, 
-            MaterialAction bodyMaterialAction, 
-            StaticMeshAction skullLOD0Action, 
-            StaticMeshAction skullLOD1Action, 
-            StaticMeshAction skullLOD2Action, 
-            StaticMeshAction jawLOD0Action, 
-            StaticMeshAction jawLOD1Action, 
-            StaticMeshAction lidMeshAction, 
-            StaticMeshAction crankMeshAction, 
-            SkinnedMeshAction bodyMeshAction,
-            AudioAction musicAudioAction,
-            AudioAction popUpAudioAction,
-            AudioAction screamingAudioAction,
-            AudioAction killPlayerAudioAction,
-            AudioAction hitBodyAudioAction,
-            AudioAction footstepAudioAction,
-            AudioListAction crankAudioListAction,
-            AudioListAction stompAudioListAction
-        )
+        protected JesterSkin SkinData { get; }
+
+        public JesterSkinner(JesterSkin skinData)
         {
-            SkullMaterialAction = skullMaterialAction;
-            JawMaterialAction = jawMaterialAction;
-            LidMaterialAction = lidMaterialAction;
-            CrankMaterialAction = crankMaterialAction;
-            BodyMaterialAction = bodyMaterialAction;
-            SkullLOD0Action = skullLOD0Action;
-            SkullLOD1Action = skullLOD1Action;
-            SkullLOD2Action = skullLOD2Action;
-            JawLOD0Action = jawLOD0Action;
-            JawLOD1Action = jawLOD1Action;
-            LidMeshAction = lidMeshAction;
-            CrankMeshAction = crankMeshAction;
-            BodyMeshAction = bodyMeshAction;
-            MusicAudioAction = musicAudioAction;
-            PopUpAudioAction = popUpAudioAction;
-            ScreamingAudioAction = screamingAudioAction;
-            KillPlayerAudioAction = killPlayerAudioAction;
-            HitBodyAudioAction = hitBodyAudioAction;
-            FootstepAudioAction = footstepAudioAction;
-            CrankAudioListAction = crankAudioListAction;
-            ChaseStompAudioListAction = stompAudioListAction;
-            Attachments = attachments;
+            SkinData = skinData;
         }
 
         //This enemy has so many goddamn parts
@@ -144,44 +77,44 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     audioAnimEvents.audioToPlay = modCreatureEffects;
                 }
             }
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(BODY_LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
 
-            vanillaSkullMaterial = SkullMaterialAction.Apply(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            SkullMaterialAction.Apply(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            SkullMaterialAction.Apply(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaSkullMaterial = SkinData.SkullMaterialAction.Apply(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.SkullMaterialAction.Apply(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.SkullMaterialAction.Apply(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0);
 
-            vanillaJawMaterial = JawMaterialAction.Apply(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            JawMaterialAction.Apply(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaJawMaterial = SkinData.JawMaterialAction.Apply(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.JawMaterialAction.Apply(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
 
-            vanillaCrankMaterial = CrankMaterialAction.Apply(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaLidMaterial = LidMaterialAction.Apply(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaCrankMaterial = SkinData.CrankMaterialAction.Apply(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaLidMaterial = SkinData.LidMaterialAction.Apply(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<Renderer>(), 0);
 
-            vanillaSkullLOD0Mesh = SkullLOD0Action.Apply(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaSkullLOD1Mesh = SkullLOD1Action.Apply(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaSkullLOD2Mesh = SkullLOD2Action.Apply(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaSkullLOD0Mesh = SkinData.SkullLOD0Action.Apply(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaSkullLOD1Mesh = SkinData.SkullLOD1Action.Apply(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaSkullLOD2Mesh = SkinData.SkullLOD2Action.Apply(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            vanillaJawLOD0Mesh = JawLOD0Action.Apply(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaJawLOD1Mesh = JawLOD1Action.Apply(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaJawLOD0Mesh = SkinData.JawLOD0Action.Apply(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaJawLOD1Mesh = SkinData.JawLOD1Action.Apply(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            vanillaCrankMesh = CrankMeshAction.Apply(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaLidMesh = LidMeshAction.Apply(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaCrankMesh = SkinData.CrankMeshAction.Apply(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaLidMesh = SkinData.LidMeshAction.Apply(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            vanillaScreamAudio = ScreamingAudioAction.Apply(ref jester.screamingSFX);
-            vanillaPopUpAudio = PopUpAudioAction.Apply(ref jester.popUpSFX);
-            vanillaKillPlayerAudio = KillPlayerAudioAction.Apply(ref jester.killPlayerSFX);
-            vanillaMusic = MusicAudioAction.Apply(ref jester.popGoesTheWeaselTheme);
+            vanillaScreamAudio = SkinData.ScreamingAudioAction.Apply(ref jester.screamingSFX);
+            vanillaPopUpAudio = SkinData.PopUpAudioAction.Apply(ref jester.popUpSFX);
+            vanillaKillPlayerAudio = SkinData.KillPlayerAudioAction.Apply(ref jester.killPlayerSFX);
+            vanillaMusic = SkinData.PopGoesTheWeaselMusicAudioAction.Apply(ref jester.popGoesTheWeaselTheme);
 
             if(audioAnimEvents != null)
             {
-                vanillaCrankAudio = CrankAudioListAction.Apply(ref audioAnimEvents.randomClips);
-                vanillaStompAudio = ChaseStompAudioListAction.Apply(ref audioAnimEvents.randomClips2);
-                vanillaFootstepAudio = FootstepAudioAction.Apply(ref audioAnimEvents.audioClip);
+                vanillaCrankAudio = SkinData.CrankAudioListAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaStompAudio = SkinData.StompAudioListAction.Apply(ref audioAnimEvents.randomClips2);
+                vanillaFootstepAudio = SkinData.FootstepAudioAction.Apply(ref audioAnimEvents.audioClip);
             }
 
-            BodyMeshAction.Apply
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -210,43 +143,43 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             }
 
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
 
-            SkullMaterialAction.Remove(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSkullMaterial);
-            SkullMaterialAction.Remove(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSkullMaterial);
-            SkullMaterialAction.Remove(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSkullMaterial);
+            SkinData.SkullMaterialAction.Remove(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSkullMaterial);
+            SkinData.SkullMaterialAction.Remove(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSkullMaterial);
+            SkinData.SkullMaterialAction.Remove(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaSkullMaterial);
 
-            JawMaterialAction.Remove(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaJawMaterial);
-            JawMaterialAction.Remove(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaJawMaterial);
+            SkinData.JawMaterialAction.Remove(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaJawMaterial);
+            SkinData.JawMaterialAction.Remove(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaJawMaterial);
 
-            CrankMaterialAction.Remove(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaCrankMaterial);
-            LidMaterialAction.Remove(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaLidMaterial);
+            SkinData.CrankMaterialAction.Remove(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaCrankMaterial);
+            SkinData.LidMaterialAction.Remove(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaLidMaterial);
 
-            SkullLOD0Action.Remove(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaSkullLOD0Mesh);
-            SkullLOD1Action.Remove(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaSkullLOD1Mesh);
-            SkullLOD2Action.Remove(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaSkullLOD2Mesh);
+            SkinData.SkullLOD0Action.Remove(enemy.transform.Find(SKULL_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaSkullLOD0Mesh);
+            SkinData.SkullLOD1Action.Remove(enemy.transform.Find(SKULL_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaSkullLOD1Mesh);
+            SkinData.SkullLOD2Action.Remove(enemy.transform.Find(SKULL_LOD2_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaSkullLOD2Mesh);
 
-            JawLOD0Action.Remove(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaJawLOD0Mesh);
-            JawLOD1Action.Remove(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaJawLOD1Mesh);
+            SkinData.JawLOD0Action.Remove(enemy.transform.Find(JAW_LOD0_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaJawLOD0Mesh);
+            SkinData.JawLOD1Action.Remove(enemy.transform.Find(JAW_LOD1_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaJawLOD1Mesh);
 
-            CrankMeshAction.Remove(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaCrankMesh);
-            LidMeshAction.Remove(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLidMesh);
+            SkinData.CrankMeshAction.Remove(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaCrankMesh);
+            SkinData.LidMeshAction.Remove(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLidMesh);
 
-            ScreamingAudioAction.Remove(ref jester.screamingSFX, vanillaScreamAudio);
-            PopUpAudioAction.Remove(ref jester.popUpSFX, vanillaPopUpAudio);
-            KillPlayerAudioAction.Remove(ref jester.killPlayerSFX, vanillaKillPlayerAudio);
-            MusicAudioAction.Remove(ref jester.popGoesTheWeaselTheme, vanillaMusic);
+            SkinData.ScreamingAudioAction.Remove(ref jester.screamingSFX, vanillaScreamAudio);
+            SkinData.PopUpAudioAction.Remove(ref jester.popUpSFX, vanillaPopUpAudio);
+            SkinData.KillPlayerAudioAction.Remove(ref jester.killPlayerSFX, vanillaKillPlayerAudio);
+            SkinData.PopGoesTheWeaselMusicAudioAction.Remove(ref jester.popGoesTheWeaselTheme, vanillaMusic);
 
             if (audioAnimEvents != null)
             {
-                CrankAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaCrankAudio);
-                FootstepAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaFootstepAudio);
-                ChaseStompAudioListAction.Remove(ref audioAnimEvents.randomClips2, vanillaStompAudio);
+                SkinData.CrankAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaCrankAudio);
+                SkinData.FootstepAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaFootstepAudio);
+                SkinData.StompAudioListAction.Remove(ref audioAnimEvents.randomClips2, vanillaStompAudio);
             }
 
-            BodyMeshAction.Remove
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -254,7 +187,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                     enemy.transform.Find(BODY_LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(BODY_LOD2_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -262,7 +195,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
+                modCreatureEffects.PlayOneShot(SkinData.KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
             }
         }
 
@@ -270,8 +203,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced)
             {
-                modCreatureEffects.PlayOneShot(PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
+                modCreatureEffects.PlayOneShot(SkinData.PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
             }
         }
 
@@ -279,8 +212,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(EffectsSilenced && playSoundEffect)
             {
-                modCreatureEffects.PlayOneShot(HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
             }
         }
     }

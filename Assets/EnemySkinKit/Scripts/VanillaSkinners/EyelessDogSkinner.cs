@@ -13,9 +13,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string LOD0_PATH = "MouthDogModel/ToothDogBody";
         protected const string LOD1_PATH = "MouthDogModel/ToothDogBodyLOD1";
         protected const string ANCHOR_PATH = "MouthDogModel/AnimContainer";
-        protected Material vanillaBodyMaterial;
-        protected Material vanillaTopTeethMaterial;
-        protected Material vanillaBottomTeethMaterial;
+        protected const string SPAWN_PARTICLE_PATH = "MouthDogModel/AnimContainer/ParticleEffects/AppearFromGround";
+        protected const string RUN_PARTICLE_PATH = "MouthDogModel/AnimContainer/ParticleEffects/RunDust";
+        protected VanillaMaterial vanillaBodyMaterial;
+        protected VanillaMaterial vanillaTopTeethMaterial;
+        protected VanillaMaterial vanillaBottomTeethMaterial;
 
         protected Mesh vanillaTeethTopMesh;
         protected Mesh vanillaTeethBottomMesh;
@@ -29,61 +31,24 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioClip[] vanillaFootstepsAudio;
 
         protected List<GameObject> activeAttachments;
+        protected GameObject skinnedMeshReplacement;
 
-        protected SkinnedMeshAction BodyMeshAction { get; }
-        protected StaticMeshAction TopTeethMeshAction { get; }
-        protected StaticMeshAction BottomTeethMeshAction { get; }
-        protected MaterialAction BodyMaterialAction { get; }
-        protected MaterialAction TopTeethMaterialAction { get; }
-        protected MaterialAction BottomTeethMaterialAction { get; }
-        protected AudioAction ScreamAudioAction { get; }
-        protected AudioAction KillPlayerAudioAction { get; }
-        protected AudioAction BreathingAudioAction { get; }
-        protected ArmatureAttachment[] Attachments { get; }
-        protected AudioAction StunAudioAction { get; }
-        protected AudioAction GrowlAudioAction { get; }
-        protected AudioAction ChasingAudioAction { get; }
-        protected AudioAction LungeAudioAction { get; }
-        protected AudioListAction FootstepsAudioListAction { get; }
+        protected ParticleSystem vanillaSpawnParticle;
+        protected VanillaMaterial vanillaRunDustMaterial;
+        protected VanillaMaterial vanillaSpawnMaterial;
+        protected ParticleSystem vanillaRunDustParticle;
 
-        protected bool VoiceSilenced => StunAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool VoiceSilenced => SkinData.StunAudioAction.actionType != AudioActionType.RETAIN;
 
         protected AudioSource modCreatureVoice;
+        protected ParticleSystem replacementRunDustParticle;
+        protected ParticleSystem replacementSpawnParticle;
 
-        public EyelessDogSkinner
-        (
-            ArmatureAttachment[] attachments,
-            SkinnedMeshAction bodyMeshAction, 
-            StaticMeshAction topTeethMeshAction, 
-            StaticMeshAction bottomTeethMeshAction, 
-            MaterialAction bodyMaterialAction, 
-            MaterialAction topTeethMaterialAction, 
-            MaterialAction bottomTeethMaterialAction,
-            AudioAction screamAudioAction,
-            AudioAction killPlayerAudioAction,
-            AudioAction breathingAudioAction,
-            AudioAction stunAudioAction,
-            AudioAction growlAudioAction,
-            AudioAction chasingAudioAction,
-            AudioAction lungeAudioAction,
-            AudioListAction footstepsAudioListAction
-        )
+        protected EyelessDogSkin SkinData { get; }
+
+        public EyelessDogSkinner( EyelessDogSkin skinData)
         {
-            BodyMeshAction = bodyMeshAction;
-            TopTeethMeshAction = topTeethMeshAction;
-            BottomTeethMeshAction = bottomTeethMeshAction;
-            BodyMaterialAction = bodyMaterialAction;
-            TopTeethMaterialAction = topTeethMaterialAction;
-            BottomTeethMaterialAction = bottomTeethMaterialAction;
-            ScreamAudioAction = screamAudioAction;
-            KillPlayerAudioAction = killPlayerAudioAction;
-            BreathingAudioAction = breathingAudioAction;
-            Attachments = attachments;
-            StunAudioAction = stunAudioAction;
-            GrowlAudioAction = growlAudioAction;
-            ChasingAudioAction = chasingAudioAction;
-            LungeAudioAction = lungeAudioAction;
-            FootstepsAudioListAction = footstepsAudioListAction;
+            SkinData = skinData;
         }
 
         public override void Apply(GameObject enemy)
@@ -91,29 +56,39 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             MouthDogAI dog = enemy.GetComponent<MouthDogAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             
-            activeAttachments = ArmatureAttachment.ApplyAttachments(Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
-            vanillaTopTeethMaterial = TopTeethMaterialAction.Apply(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaBottomTeethMaterial = BottomTeethMaterialAction.Apply(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaBodyMaterial = BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
-            vanillaTeethTopMesh = TopTeethMeshAction.Apply(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaTeethBottomMesh = BottomTeethMeshAction.Apply(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaScreamAudio = ScreamAudioAction.Apply(ref dog.screamSFX);
-            vanillaKillPlayerAudio = KillPlayerAudioAction.Apply(ref dog.killPlayerSFX);
-            vanillaBreathingAudio = BreathingAudioAction.Apply(ref dog.breathingSFX);
-            vanillaGrowlAudio = GrowlAudioAction.Apply(ref dog.enemyBehaviourStates[1].VoiceClip);
-            vanillaChaseAudio = ChasingAudioAction.Apply(ref dog.enemyBehaviourStates[2].VoiceClip);
-            vanillaLungeAudio = LungeAudioAction.Apply(ref dog.enemyBehaviourStates[3].SFXClip);
+            activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            vanillaTopTeethMaterial = SkinData.TopTeethMaterialAction.Apply(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaBottomTeethMaterial = SkinData.BottomTeethMaterialAction.Apply(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            SkinData.BodyMaterialAction.Apply(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
+            vanillaTeethTopMesh = SkinData.TopTeethMeshAction.Apply(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaTeethBottomMesh = SkinData.BottomTeethMeshAction.Apply(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<MeshFilter>());
+            vanillaScreamAudio = SkinData.ScreamAudioAction.Apply(ref dog.screamSFX);
+            vanillaKillPlayerAudio = SkinData.KillPlayerAudioAction.Apply(ref dog.killPlayerSFX);
+            vanillaBreathingAudio = SkinData.BreathingAudioAction.Apply(ref dog.breathingSFX);
+            vanillaGrowlAudio = SkinData.GrowlAudioAction.Apply(ref dog.enemyBehaviourStates[1].VoiceClip);
+            vanillaChaseAudio = SkinData.ChasingAudioAction.Apply(ref dog.enemyBehaviourStates[2].VoiceClip);
+            vanillaLungeAudio = SkinData.LungeAudioAction.Apply(ref dog.enemyBehaviourStates[3].SFXClip);
             if (audioAnimEvents != null)
             {
-                vanillaFootstepsAudio = FootstepsAudioListAction.Apply(ref audioAnimEvents.randomClips);
+                vanillaFootstepsAudio = SkinData.FootstepsAudioListAction.Apply(ref audioAnimEvents.randomClips);
             }
             if (VoiceSilenced)
             {
                 modCreatureVoice = CreateModdedAudioSource(dog.creatureVoice, "modVoice");
                 dog.creatureVoice.mute = true;
             }
-            BodyMeshAction.Apply
+
+            vanillaRunDustParticle = dog.transform.Find(RUN_PARTICLE_PATH)?.GetComponent<ParticleSystem>();
+            vanillaSpawnParticle = dog.transform.Find(SPAWN_PARTICLE_PATH)?.GetComponent<ParticleSystem>();
+
+            vanillaRunDustMaterial = SkinData.RunDustMaterialAction.Apply(vanillaRunDustParticle.GetComponent<ParticleSystemRenderer>(), 0);
+            vanillaSpawnMaterial = SkinData.SpawnDustMaterialAction.Apply(vanillaSpawnParticle.GetComponent<ParticleSystemRenderer>(), 0);
+
+            replacementRunDustParticle = SkinData.RunDustParticleAction.Apply(vanillaRunDustParticle);
+            replacementSpawnParticle = SkinData.SpawnDustParticleAction.Apply(vanillaSpawnParticle);
+
+            skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
                 {
@@ -142,30 +117,43 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 dog.creatureVoice.mute = false;
             }
             ArmatureAttachment.RemoveAttachments(activeAttachments);
-            TopTeethMaterialAction.Remove(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaTopTeethMaterial);
-            BottomTeethMaterialAction.Remove(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBottomTeethMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
-            TopTeethMeshAction.Remove(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaTeethTopMesh);
-            BottomTeethMeshAction.Remove(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaTeethBottomMesh);
-            ScreamAudioAction.Remove(ref enemy.GetComponent<MouthDogAI>().screamSFX, vanillaScreamAudio);
-            KillPlayerAudioAction.Remove(ref enemy.GetComponent<MouthDogAI>().killPlayerSFX, vanillaKillPlayerAudio);
-            BreathingAudioAction.Remove(ref enemy.GetComponent<MouthDogAI>().breathingSFX, vanillaBreathingAudio);
-            GrowlAudioAction.Remove(ref dog.enemyBehaviourStates[1].VoiceClip, vanillaGrowlAudio);
-            ChasingAudioAction.Remove(ref dog.enemyBehaviourStates[2].VoiceClip, vanillaChaseAudio);
-            LungeAudioAction.Remove(ref dog.enemyBehaviourStates[3].VoiceClip, vanillaLungeAudio);
+            SkinData.TopTeethMaterialAction.Remove(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaTopTeethMaterial);
+            SkinData.BottomTeethMaterialAction.Remove(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBottomTeethMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.BodyMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
+            SkinData.TopTeethMeshAction.Remove(enemy.transform.Find(TEETH_TOP_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaTeethTopMesh);
+            SkinData.BottomTeethMeshAction.Remove(enemy.transform.Find(TEETH_BOTTOM_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaTeethBottomMesh);
+            SkinData.ScreamAudioAction.Remove(ref enemy.GetComponent<MouthDogAI>().screamSFX, vanillaScreamAudio);
+            SkinData.KillPlayerAudioAction.Remove(ref enemy.GetComponent<MouthDogAI>().killPlayerSFX, vanillaKillPlayerAudio);
+            SkinData.BreathingAudioAction.Remove(ref enemy.GetComponent<MouthDogAI>().breathingSFX, vanillaBreathingAudio);
+            SkinData.GrowlAudioAction.Remove(ref dog.enemyBehaviourStates[1].VoiceClip, vanillaGrowlAudio);
+            SkinData.ChasingAudioAction.Remove(ref dog.enemyBehaviourStates[2].VoiceClip, vanillaChaseAudio);
+            SkinData.LungeAudioAction.Remove(ref dog.enemyBehaviourStates[3].VoiceClip, vanillaLungeAudio);
             if (audioAnimEvents != null)
             {
-                FootstepsAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudio);
+                SkinData.FootstepsAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudio);
             }
-            BodyMeshAction.Remove
+
+            if(vanillaRunDustParticle != null)
+            {
+                SkinData.RunDustParticleAction.Remove(vanillaRunDustParticle, replacementRunDustParticle);
+                SkinData.RunDustMaterialAction.Remove(vanillaRunDustParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaRunDustMaterial);
+            }
+            
+            if(vanillaSpawnParticle != null)
+            {
+                SkinData.SpawnDustParticleAction.Remove(vanillaSpawnParticle, replacementSpawnParticle);
+                SkinData.SpawnDustMaterialAction.Remove(vanillaSpawnParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaSpawnMaterial);
+            }
+
+            SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
                 {
                     enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>(),
                     enemy.transform.Find(LOD1_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>()
                 },
-                enemy.transform.Find(ANCHOR_PATH)
+                skinnedMeshReplacement
             );
         }
 
@@ -173,7 +161,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(BreathingAudioAction.WorkingClip(vanillaBreathingAudio));
+                modCreatureVoice.PlayOneShot(SkinData.BreathingAudioAction.WorkingClip(vanillaBreathingAudio));
                 //WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, ChasingAudioAction.WorkingClip(dog.enemyBehaviourStates[2].VoiceClip), modCreatureVoice.volume);
             }
         }
@@ -182,8 +170,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if(VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(GrowlAudioAction.WorkingClip(vanillaGrowlAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, GrowlAudioAction.WorkingClip(vanillaGrowlAudio), modCreatureVoice.volume);
+                modCreatureVoice.PlayOneShot(SkinData.GrowlAudioAction.WorkingClip(vanillaGrowlAudio));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, SkinData.GrowlAudioAction.WorkingClip(vanillaGrowlAudio), modCreatureVoice.volume);
             }
         }
 
@@ -191,7 +179,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(ScreamAudioAction.WorkingClip(vanillaScreamAudio));
+                modCreatureVoice.PlayOneShot(SkinData.ScreamAudioAction.WorkingClip(vanillaScreamAudio));
             }
         }
         
@@ -201,7 +189,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             {
                 modCreatureVoice.pitch = Random.Range(0.96f, 1.04f);
                 
-                modCreatureVoice.PlayOneShot(KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio), 1f);
+                modCreatureVoice.PlayOneShot(SkinData.KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio), 1f);
             }
         }
 
@@ -209,7 +197,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             if (VoiceSilenced)
             {
-                modCreatureVoice.PlayOneShot(StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
+                modCreatureVoice.PlayOneShot(SkinData.StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
             }
         }
     }
