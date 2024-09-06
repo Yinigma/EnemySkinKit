@@ -360,7 +360,7 @@ namespace AntlerShed.EnemySkinKit
                 $"\t\"version_number\": \"{major}.{minor}.{patch}\",\n" +
                 "\t\"website_url\": \"\",\n" +
                 $"\t\"description\": \"{description}\",\n" +
-                "\t\"dependencies\": [\"AntlerShed-EnemySkinKit-1.2.3\"]\n" +
+                "\t\"dependencies\": [\"AntlerShed-EnemySkinKit-1.2.4\"]\n" +
                 "}";
         }
 

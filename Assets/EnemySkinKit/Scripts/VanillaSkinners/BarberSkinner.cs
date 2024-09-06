@@ -23,7 +23,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected Material[] replacementMaterials;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
-        protected bool DoFade { get; }
 
         protected BarberSkin SkinData { get; }
 
@@ -113,7 +112,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         public void OnEnemyUpdate(EnemyAI enemy)
         {
-            if(DoFade)
+            if(SkinData.DoFade)
             {
                 float num = Vector3.Distance(StartOfRound.Instance.audioListener.transform.position, enemy.transform.position + Vector3.up * 0.7f);
                 ClaySurgeonAI klayman = enemy as ClaySurgeonAI;

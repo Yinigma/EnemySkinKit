@@ -56,6 +56,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public AudioAction DrumRoll => drumRoll;
         public AudioListAction MoveAudioListAction => moveAudioListAction;
         public ArmatureAttachment[] Attachments => attachments;
+        public bool DoFade => doFade;
 
         public override string EnemyId => EnemySkinRegistry.BARBER_ID;
 
