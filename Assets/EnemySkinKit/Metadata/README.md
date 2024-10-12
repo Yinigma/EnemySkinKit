@@ -305,17 +305,9 @@ Finally, when you get ready to export your model, you'll probably want to copy m
 
 ## Note on Sound Replacement
 
-Because this mod seeks to apply skins on a per-instance basis, I normally opt to swap out references to sounds when the enemy spawns (I recommend doing the same if you intend to extend a base skin). That runs into an issue with certain sounds that are stored in Lethal Company per enemy TYPE (in a Scriptable Object) and not per enemy INSTANCE (in a MonoBehaviour). My solution for these cases is to silence the vanilla AudioSource, add a modded one, then play the sound through that at the correct time. This unfortunately bleeds over to any other sound effects that use these sources, and the events that play these sounds are time-consuming for me to test. So if you're running into trouble with certain sounds not playing and the enemy you're skinning has a "stun" sound or a "hit body" sound attached to it, consider setting that to "retain" if it's not important that either of those sounds are changed from vanilla.
+As of 1.3.0 Sounds are less stupid.
 
-Additionally, these clips will also cause the replacement of Audio sources that other clips play out of:
-
-- Baboon Hawk: intimidate, intimidateVoice, death, killPlayer, enterFight
-- Nutcracker: hitEye, hitBody, reload, headPopUp
-- Old Bird: Brainwashing clips, stomp clips
-- Butler: stab, coat rustle, inflate, pop
-- Tulip Snake: all sounds (why)
-
-The sound replacement is designed to work despite this, I'm just letting you know in case this more brittle method fails. And if something isn't working how you expect, please report an issue on github or send me a message through the Lethal Company modding discord.
+All original audio sources are muted and forward the sound they want to play to a modded audio source. If the modded source has a modded sound that corresponds to that clip, then the modded audio source will play the modded sound instead. If no modded clip is present the modded source plays the vanilla clip.
 
 ## Note on Material Replacement and Post Processing
 

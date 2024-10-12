@@ -1,3 +1,4 @@
+using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -12,21 +13,22 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected const string HEAD_PATH = "SpringManModel/Head";
         protected const string ANCHOR_PATH = "SpringManModel/AnimContainer/metarig";
         protected const string ANIM_EVENT_PATH = "SpringManModel/AnimContainer";
+        protected const string FOOTSTEP_AUDIO_PATH = "SpringManModel/FootstepSFX";
 
         protected VanillaMaterial vanillaBodyMaterial;
         protected VanillaMaterial vanillaRustMaterial;
         protected VanillaMaterial vanillaHeadMaterial;
         protected Mesh vanillaHeadMesh;
-        protected AudioClip[] vanillaSpringAudio;
-        protected AudioClip[] vanillaFootstepsAudio;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
 
-        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
+        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
 
-        protected AudioSource modCreatureEffects;
+        protected AudioReflector modCreatureEffects;
+        protected AudioReflector modFootsteps;
+        protected AudioReflector modCreatureVoice;
 
-        protected CoilheadSkin SkinData {get;}
+        protected CoilheadSkin SkinData { get; }
 
         public CoilHeadSkinner(CoilheadSkin skinData)
         {
@@ -37,21 +39,33 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             SpringManAI coilhead = enemy.GetComponent<SpringManAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            if (EffectsSilenced)
-            {
-                modCreatureEffects = CreateModdedAudioSource(coilhead.creatureSFX, "modEffects");
-                coilhead.creatureSFX.mute = true;
-            }
             activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 1);
             vanillaRustMaterial = SkinData.RustMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             vanillaHeadMaterial = SkinData.HeadMaterialAction.Apply(enemy.transform.Find(HEAD_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             skinnedMeshReplacement = SkinData.BodyMeshAction.Apply(new SkinnedMeshRenderer[] { enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, enemy.transform.Find(ANCHOR_PATH));
-            vanillaSpringAudio = SkinData.SpringNoisesAudioListAction.Apply(ref coilhead.springNoises);
-            if(audioAnimEvents!=null)
+            AudioSource footStepsAudio = coilhead.transform.Find(FOOTSTEP_AUDIO_PATH)?.gameObject.GetComponent<AudioSource>();
+
+            SkinData.SpringNoisesAudioListAction.ApplyToMap(coilhead.springNoises, clipMap);
+            SkinData.CooldownAudioAction.ApplyToMap(coilhead.enterCooldownSFX, clipMap);
+            SkinData.HitBodyAudioAction.ApplyToMap(coilhead.enemyType.hitBodySFX, clipMap);
+            if (audioAnimEvents != null)
             {
-                vanillaFootstepsAudio = SkinData.FootstepsAudioListAction.Apply(ref audioAnimEvents.randomClips);
+                SkinData.FootstepsAudioListAction.ApplyToMap(audioAnimEvents.randomClips, clipMap);
             }
+
+            if (footStepsAudio != null)
+            {
+                modFootsteps = CreateAudioReflector(footStepsAudio, clipMap, coilhead.NetworkObjectId);
+                footStepsAudio.mute = true;
+            }
+            modCreatureEffects = CreateAudioReflector(coilhead.creatureSFX, clipMap, coilhead.NetworkObjectId);
+            coilhead.creatureSFX.mute = true;
+            modCreatureVoice = CreateAudioReflector(coilhead.creatureVoice, clipMap, coilhead.NetworkObjectId);
+            coilhead.creatureVoice.mute = true;
+            
+            
+
             vanillaHeadMesh = SkinData.HeadMeshAction.Apply(enemy.transform.Find(HEAD_PATH)?.gameObject.GetComponent<MeshFilter>());
             EnemySkinRegistry.RegisterEnemyEventHandler(coilhead, this);
         }
@@ -60,32 +74,25 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             SpringManAI coilhead = enemy.GetComponent<SpringManAI>();
             EnemySkinRegistry.RemoveEnemyEventHandler(coilhead, this);
-            PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            if (EffectsSilenced)
+            AudioSource footStepsAudio = coilhead.transform.Find(FOOTSTEP_AUDIO_PATH)?.gameObject.GetComponent<AudioSource>();
+
+            DestroyAudioReflector(modFootsteps);
+            if (footStepsAudio != null)
             {
-                DestroyModdedAudioSource(modCreatureEffects);
-                coilhead.creatureSFX.mute = false;
+                footStepsAudio.mute = false;
             }
+            DestroyAudioReflector(modCreatureEffects);
+            coilhead.creatureSFX.mute = false;
+            DestroyAudioReflector(modCreatureVoice);
+            coilhead.creatureVoice.mute = false;
+
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 1, vanillaBodyMaterial);
             SkinData.RustMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaRustMaterial);
             SkinData.HeadMaterialAction.Remove(enemy.transform.Find(HEAD_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaHeadMaterial);
-            SkinData.SpringNoisesAudioListAction.Remove(ref coilhead.springNoises, vanillaSpringAudio);
-            if (audioAnimEvents != null)
-            {
-                SkinData.FootstepsAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudio);
-            }
+
             SkinData.BodyMeshAction.Remove(new SkinnedMeshRenderer[] { enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, skinnedMeshReplacement);
             SkinData.HeadMeshAction.Remove(enemy.transform.Find(HEAD_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaHeadMesh);
-        }
-
-        public void OnHit(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer, bool playSoundEffect)
-        {
-            if (EffectsSilenced && playSoundEffect)
-            {
-                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -43,18 +44,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected Mesh vanillaCrankMesh;
         protected Mesh vanillaLidMesh;
 
-        protected AudioClip vanillaMusic;
-        protected AudioClip vanillaPopUpAudio;
-        protected AudioClip vanillaScreamAudio;
-        protected AudioClip vanillaKillPlayerAudio;
-        protected AudioClip vanillaFootstepAudio;
-        protected AudioClip[] vanillaStompAudio;
-        protected AudioClip[] vanillaCrankAudio;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
         protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
 
-        protected AudioSource modCreatureEffects;
+        protected AudioReflector modCreatureEffects;
+        protected AudioReflector modCreatureVoice;
+        protected AudioReflector modFar;
+
+        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
 
         protected JesterSkin SkinData { get; }
 
@@ -68,15 +66,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             JesterAI jester = enemy.GetComponent<JesterAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            if (EffectsSilenced)
-            {
-                modCreatureEffects = CreateModdedAudioSource(jester.creatureSFX, "modEffects");
-                jester.creatureSFX.mute = true;
-                if (audioAnimEvents != null)
-                {
-                    audioAnimEvents.audioToPlay = modCreatureEffects;
-                }
-            }
             activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0);
@@ -102,17 +91,24 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaCrankMesh = SkinData.CrankMeshAction.Apply(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>());
             vanillaLidMesh = SkinData.LidMeshAction.Apply(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            vanillaScreamAudio = SkinData.ScreamingAudioAction.Apply(ref jester.screamingSFX);
-            vanillaPopUpAudio = SkinData.PopUpAudioAction.Apply(ref jester.popUpSFX);
-            vanillaKillPlayerAudio = SkinData.KillPlayerAudioAction.Apply(ref jester.killPlayerSFX);
-            vanillaMusic = SkinData.PopGoesTheWeaselMusicAudioAction.Apply(ref jester.popGoesTheWeaselTheme);
-
+            SkinData.ScreamingAudioAction.ApplyToMap(jester.screamingSFX, clipMap);
+            SkinData.PopUpAudioAction.ApplyToMap(jester.popUpSFX, clipMap);
+            SkinData.KillPlayerAudioAction.ApplyToMap(jester.killPlayerSFX, clipMap);
+            SkinData.PopGoesTheWeaselMusicAudioAction.ApplyToMap(jester.popGoesTheWeaselTheme, clipMap);
+            SkinData.HitBodyAudioAction.ApplyToMap(jester.enemyType.hitBodySFX, clipMap);
             if(audioAnimEvents != null)
             {
-                vanillaCrankAudio = SkinData.CrankAudioListAction.Apply(ref audioAnimEvents.randomClips);
-                vanillaStompAudio = SkinData.StompAudioListAction.Apply(ref audioAnimEvents.randomClips2);
-                vanillaFootstepAudio = SkinData.FootstepAudioAction.Apply(ref audioAnimEvents.audioClip);
+                SkinData.CrankAudioListAction.ApplyToMap(audioAnimEvents.randomClips, clipMap);
+                SkinData.StompAudioListAction.ApplyToMap(audioAnimEvents.randomClips2, clipMap);
+                SkinData.FootstepAudioAction.ApplyToMap(audioAnimEvents.audioClip, clipMap);
             }
+
+            modFar = CreateAudioReflector(jester.farAudio, clipMap, jester.NetworkObjectId); 
+            jester.farAudio.mute = true;
+            modCreatureEffects = CreateAudioReflector(jester.creatureSFX, clipMap, jester.NetworkObjectId); 
+            jester.creatureSFX.mute = true;
+            modCreatureVoice = CreateAudioReflector(jester.creatureVoice, clipMap, jester.NetworkObjectId); 
+            jester.creatureVoice.mute = true;
 
             skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
@@ -132,15 +128,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             JesterAI jester = enemy.GetComponent<JesterAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANIM_EVENT_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             EnemySkinRegistry.RemoveEnemyEventHandler(jester, this);
-            if (EffectsSilenced)
-            {
-                DestroyModdedAudioSource(modCreatureEffects);
-                jester.creatureSFX.mute = false;
-                if (audioAnimEvents != null)
-                {
-                    audioAnimEvents.audioToPlay = jester.creatureSFX;
-                }
-            }
 
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
@@ -167,17 +154,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             SkinData.CrankMeshAction.Remove(enemy.transform.Find(CRANK_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaCrankMesh);
             SkinData.LidMeshAction.Remove(enemy.transform.Find(LID_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLidMesh);
 
-            SkinData.ScreamingAudioAction.Remove(ref jester.screamingSFX, vanillaScreamAudio);
-            SkinData.PopUpAudioAction.Remove(ref jester.popUpSFX, vanillaPopUpAudio);
-            SkinData.KillPlayerAudioAction.Remove(ref jester.killPlayerSFX, vanillaKillPlayerAudio);
-            SkinData.PopGoesTheWeaselMusicAudioAction.Remove(ref jester.popGoesTheWeaselTheme, vanillaMusic);
-
-            if (audioAnimEvents != null)
-            {
-                SkinData.CrankAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaCrankAudio);
-                SkinData.FootstepAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaFootstepAudio);
-                SkinData.StompAudioListAction.Remove(ref audioAnimEvents.randomClips2, vanillaStompAudio);
-            }
+            DestroyAudioReflector(modFar);
+            jester.farAudio.mute = false;
+            DestroyAudioReflector(modCreatureEffects);
+            jester.creatureSFX.mute = false;
+            DestroyAudioReflector(modCreatureVoice);
+            jester.creatureVoice.mute = false;
 
             SkinData.BodyMeshAction.Remove
             (
@@ -189,32 +171,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 },
                 skinnedMeshReplacement
             );
-        }
-
-        public void OnKillPlayer(JesterAI instance, GameNetcodeStuff.PlayerControllerB playerControllerB)
-        {
-            if(EffectsSilenced)
-            {
-                modCreatureEffects.PlayOneShot(SkinData.KillPlayerAudioAction.WorkingClip(vanillaKillPlayerAudio));
-            }
-        }
-
-        public void OnEnterPoppedState(JesterAI instance)
-        {
-            if(EffectsSilenced)
-            {
-                modCreatureEffects.PlayOneShot(SkinData.PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.PopUpAudioAction.WorkingClip(vanillaPopUpAudio));
-            }
-        }
-
-        public void OnHit(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer, bool playSoundEffect)
-        {
-            if(EffectsSilenced && playSoundEffect)
-            {
-                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-            }
         }
     }
 }

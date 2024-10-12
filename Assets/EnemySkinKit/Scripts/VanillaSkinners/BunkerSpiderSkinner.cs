@@ -1,3 +1,4 @@
+using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -21,18 +22,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected Mesh vanillaRightFangMesh;
         protected Mesh vanillaLeftFangMesh;
         protected Mesh vanillaSafetyTextMesh;
-        protected AudioClip[] vanillaFootstepSounds;
-        protected AudioClip vanillaAttackSound;
-        protected AudioClip vanillaSpoolSound;
-        protected AudioClip vanillaHangSound;
-        protected AudioClip vanillaHitHissSound;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
 
-        protected bool isVoiceSilenced => SkinData.StunAudioAction.actionType != AudioActionType.RETAIN;
-        protected bool isEffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
-        protected AudioSource modCreatureEffects;
-        protected AudioSource modCreatureVoice;
+        protected AudioReflector modCreatureEffects;
+        protected AudioReflector modCreatureVoice;
+        protected AudioReflector modFootsteps;
+
+        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
 
         protected BunkerSpiderSkin SkinData { get; }
 
@@ -47,16 +44,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public override void Apply(GameObject enemy)
         {
             SandSpiderAI spider = enemy.GetComponent<SandSpiderAI>();
-            if (isVoiceSilenced)
-            {
-                modCreatureVoice = CreateModdedAudioSource(spider.creatureVoice, "modVoice");
-                spider.creatureVoice.mute = true;
-            }
-            if (isEffectsSilenced)
-            {
-                modCreatureEffects = CreateModdedAudioSource(spider.creatureSFX, "modEffects");
-                spider.creatureSFX.mute = true;
-            }
             activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             vanillaLeftFangMaterial = SkinData.LeftFangMaterialAction.Apply(enemy.transform.Find(LEFT_FANG_PATH)?.gameObject.GetComponent<Renderer>(), 0);
@@ -65,11 +52,23 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaLeftFangMesh = SkinData.LeftFangMeshAction.Apply(enemy.transform.Find(LEFT_FANG_PATH)?.gameObject.GetComponent<MeshFilter>());
             vanillaRightFangMesh = SkinData.RightFangMeshAction.Apply(enemy.transform.Find(RIGHT_FANG_PATH)?.gameObject.GetComponent<MeshFilter>());
             vanillaSafetyTextMesh = SkinData.SafetyTextMeshAction.Apply(enemy.transform.Find(TEXT_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaAttackSound = SkinData.AttackAudioAction.Apply(ref spider.attackSFX);
-            vanillaSpoolSound = SkinData.SpoolPlayerAudioAction.Apply(ref spider.spoolPlayerSFX);
-            vanillaHangSound = SkinData.HangPlayerAudioAction.Apply(ref spider.hangPlayerSFX);
-            vanillaHitHissSound = SkinData.HitHissAudioAction.Apply(ref spider.hitSpiderSFX);
-            vanillaFootstepSounds = SkinData.FootstepsAction.Apply(ref spider.footstepSFX);
+
+
+            SkinData.AttackAudioAction.ApplyToMap(spider.attackSFX, clipMap);
+            SkinData.SpoolPlayerAudioAction.ApplyToMap(spider.spoolPlayerSFX, clipMap);
+            SkinData.HangPlayerAudioAction.ApplyToMap(spider.hangPlayerSFX, clipMap);
+            SkinData.HitHissAudioAction.ApplyToMap(spider.hitSpiderSFX, clipMap);
+            SkinData.FootstepsAction.ApplyToMap(spider.footstepSFX, clipMap);
+            SkinData.StunAudioAction.ApplyToMap(spider.enemyType.stunSFX, clipMap);
+            SkinData.HitBodyAudioAction.ApplyToMap(spider.enemyType.hitBodySFX, clipMap);
+
+            modCreatureVoice = CreateAudioReflector(spider.creatureVoice, clipMap, spider.NetworkObjectId);
+            spider.creatureVoice.mute = true;
+            modFootsteps = CreateAudioReflector(spider.footstepAudio, clipMap, spider.NetworkObjectId);
+            spider.footstepAudio.mute = true;
+            modCreatureEffects = CreateAudioReflector(spider.creatureSFX, clipMap, spider.NetworkObjectId);
+            spider.creatureSFX.mute = true;
+
             skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
@@ -86,16 +85,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             SandSpiderAI spider = enemy.GetComponent<SandSpiderAI>();
             EnemySkinRegistry.RemoveEnemyEventHandler(spider, this);
-            if (isVoiceSilenced)
-            {
-                DestroyModdedAudioSource(modCreatureVoice);
-                spider.creatureVoice.mute = false;
-            }
-            if (isEffectsSilenced)
-            {
-                DestroyModdedAudioSource(modCreatureEffects);
-                spider.creatureSFX.mute = false;
-            }
+
+            DestroyAudioReflector(modCreatureVoice);
+            spider.creatureVoice.mute = false;
+            DestroyAudioReflector(modFootsteps);
+            spider.footstepAudio.mute = false;
+            DestroyAudioReflector(modCreatureEffects);
+            spider.creatureSFX.mute = false;
+
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
             SkinData.LeftFangMaterialAction.Remove(enemy.transform.Find(LEFT_FANG_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaLeftFangMaterial);
@@ -104,11 +101,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             SkinData.LeftFangMeshAction.Remove(enemy.transform.Find(LEFT_FANG_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaLeftFangMesh);
             SkinData.RightFangMeshAction.Remove(enemy.transform.Find(RIGHT_FANG_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaRightFangMesh);
             SkinData.SafetyTextMeshAction.Remove(enemy.transform.Find(TEXT_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaSafetyTextMesh);
-            SkinData.AttackAudioAction.Remove(ref spider.attackSFX, vanillaAttackSound);
-            SkinData.SpoolPlayerAudioAction.Remove(ref spider.spoolPlayerSFX, vanillaSpoolSound);
-            SkinData.HangPlayerAudioAction.Remove(ref spider.hangPlayerSFX, vanillaHangSound);
-            SkinData.HitHissAudioAction.Remove(ref spider.hitSpiderSFX, vanillaHitHissSound);
-            SkinData.FootstepsAction.Remove(ref spider.footstepSFX, vanillaFootstepSounds);
 
             SkinData.BodyMeshAction.Remove
             (
@@ -118,60 +110,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 },
                 skinnedMeshReplacement
             );
-        }
-
-        public void OnStun(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer)
-        {
-            if (isVoiceSilenced)
-            {
-                modCreatureVoice.PlayOneShot(SkinData.StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
-            }
-        }
-
-        public void OnHit(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer, bool playSoundEffect)
-        {
-            if (isEffectsSilenced)
-            {
-                if(!enemy.isEnemyDead)
-                {
-                    modCreatureEffects.PlayOneShot(SkinData.HitHissAudioAction.WorkingClip(vanillaHitHissSound));
-                    WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitHissAudioAction.WorkingClip(vanillaHitHissSound));
-                }
-                if(playSoundEffect)
-                {
-                    modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                    WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                }
-            }
-        }
-
-        public void OnKilled(EnemyAI enemy)
-        {
-            if (isEffectsSilenced)
-            {
-                modCreatureEffects.Stop();
-            }
-            if (isVoiceSilenced)
-            {
-                modCreatureVoice.Stop();
-            }
-        }
-
-        public void OnAttackPlayer(SandSpiderAI spider, GameNetcodeStuff.PlayerControllerB player)
-        {
-            if(isEffectsSilenced)
-            {
-                modCreatureEffects.PlayOneShot(SkinData.AttackAudioAction.WorkingClip(vanillaAttackSound));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.AttackAudioAction.WorkingClip(vanillaAttackSound));
-            }
-        }
-
-        public void OnWrapBody(SandSpiderAI spider, DeadBodyInfo spooledBody)
-        {
-            if (isEffectsSilenced)
-            {
-                modCreatureEffects.PlayOneShot(SkinData.SpoolPlayerAudioAction.WorkingClip(vanillaSpoolSound));
-            }
         }
     }
 }

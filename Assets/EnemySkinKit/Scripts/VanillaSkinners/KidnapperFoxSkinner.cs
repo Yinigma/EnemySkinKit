@@ -1,3 +1,4 @@
+using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -22,27 +23,24 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected Texture vanillaFurMask;
         protected VanillaMaterial vanillaTeethMaterial;
 
-        protected AudioClip vanillaHitAudio;
-        protected AudioClip vanillaDieAudio;
-        protected AudioClip vanillaSnarlAudio;
-        protected AudioClip[] vanillaGrowlAudioList;
-        protected AudioClip vanillaShootTongueAudio;
-        protected AudioClip vanillaTongueShootingAudio;
-        protected AudioClip vanillaKillAudio;
-        protected AudioClip[] vanillaNearCallAudioList;
-        protected AudioClip[] vanillaFarCallAudioList;
-        protected AudioClip[] vanillaFootstepsAudioList;
         protected GameObject skinnedMeshReplacement;
 
         protected List<GameObject> activeAttachments;
         private VanillaMaterial vanillaBloodMaterial;
         private VanillaMaterial vanillaDroolMaterial;
 
-        protected bool VoiceSilenced => SkinData.StunAudioAction.actionType != AudioActionType.RETAIN;
+        protected AudioReflector modCreatureVoice;
 
-        protected AudioSource modCreatureVoice;
+
+        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
+
         private ParticleSystem vanillaBloodParticle;
         private ParticleSystem vanillaDroolParticle;
+        private AudioReflector modCreatureEffects;
+        private AudioReflector modGrowlAudio;
+        private AudioReflector modCallClose;
+        private AudioReflector modCallFar;
+        private AudioReflector modTongueAudio;
 
         protected KidnapperFoxSkin SkinData { get; }
 
@@ -57,23 +55,31 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(AUDIO_ANIM_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             if(audioAnimEvents!=null)
             {
-                vanillaFootstepsAudioList = SkinData.FootstepsAudioListAction.Apply(ref audioAnimEvents.randomClips);
-            }
-            if (VoiceSilenced)
-            {
-                modCreatureVoice = CreateModdedAudioSource(fox.creatureVoice, "modVoice");
-                fox.creatureVoice.mute = true;
+                SkinData.FootstepsAudioListAction.ApplyToMap(audioAnimEvents.randomClips, clipMap);
             }
 
-            vanillaHitAudio = SkinData.HitAudioAction.Apply(ref fox.hitBushWolfSFX);
-            vanillaDieAudio = SkinData.DieAudioAction.Apply(ref fox.dieSFX);
-            vanillaSnarlAudio = SkinData.DragSnarlAudioAction.Apply(ref fox.snarlSFX);
-            vanillaGrowlAudioList = SkinData.GrowlAudioListAction.Apply(ref fox.growlSFX);
-            vanillaShootTongueAudio = SkinData.ShootTongueAudioAction.Apply(ref fox.shootTongueSFX);
-            vanillaTongueShootingAudio = SkinData.TongueShootingAudioAction.Apply(ref fox.tongueShootSFX);
-            vanillaKillAudio = SkinData.KillPlayerAudioAction.Apply(ref fox.killSFX);
-            vanillaNearCallAudioList = SkinData.NearCallAudioListAction.Apply(ref fox.callsClose);
-            vanillaFarCallAudioList = SkinData.FarCallAudioListAction.Apply(ref fox.callsFar);
+            SkinData.HitAudioAction.ApplyToMap(fox.hitBushWolfSFX, clipMap);
+            SkinData.DieAudioAction.ApplyToMap(fox.dieSFX, clipMap);
+            SkinData.DragSnarlAudioAction.ApplyToMap(fox.snarlSFX, clipMap);
+            SkinData.GrowlAudioListAction.ApplyToMap(fox.growlSFX, clipMap);
+            SkinData.ShootTongueAudioAction.ApplyToMap(fox.shootTongueSFX, clipMap);
+            SkinData.TongueShootingAudioAction.ApplyToMap(fox.tongueShootSFX, clipMap);
+            SkinData.KillPlayerAudioAction.ApplyToMap(fox.killSFX, clipMap);
+            SkinData.NearCallAudioListAction.ApplyToMap(fox.callsClose, clipMap);
+            SkinData.FarCallAudioListAction.ApplyToMap(fox.callsFar, clipMap);
+
+            modCreatureEffects = CreateAudioReflector(fox.creatureSFX, clipMap, fox.NetworkObjectId); 
+            fox.creatureSFX.mute = true;
+            modCreatureVoice = CreateAudioReflector(fox.creatureVoice, clipMap, fox.NetworkObjectId); 
+            fox.creatureVoice.mute = true;
+            modGrowlAudio = CreateAudioReflector(fox.growlAudio, clipMap, fox.NetworkObjectId); 
+            fox.growlAudio.mute = true;
+            modCallClose = CreateAudioReflector(fox.callClose, clipMap, fox.NetworkObjectId); 
+            fox.callClose.mute = true;
+            modCallFar = CreateAudioReflector(fox.callFar, clipMap, fox.NetworkObjectId); 
+            fox.callFar.mute = true;
+            modTongueAudio = CreateAudioReflector(fox.tongueAudio, clipMap, fox.NetworkObjectId); 
+            fox.tongueAudio.mute = true;
 
             //important this step goes before material action application
             vanillaDiffuseTexture = SkinData.DiffuseTextureAction.Apply(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>().material, DIFFUSE_ID);
@@ -130,26 +136,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             BushWolfEnemy fox = enemy.GetComponent<BushWolfEnemy>();
 
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(AUDIO_ANIM_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            if (audioAnimEvents != null)
-            {
-                SkinData.FootstepsAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaFootstepsAudioList);
-            }
-
-            if (VoiceSilenced)
-            {
-                DestroyModdedAudioSource(modCreatureVoice);
-                fox.creatureVoice.mute = false;
-            }
-
-            SkinData.HitAudioAction.Remove(ref fox.hitBushWolfSFX, vanillaHitAudio);
-            SkinData.DieAudioAction.Remove(ref fox.dieSFX, vanillaDieAudio);
-            SkinData.DragSnarlAudioAction.Remove(ref fox.snarlSFX, vanillaSnarlAudio);
-            SkinData.GrowlAudioListAction.Remove(ref fox.growlSFX, vanillaGrowlAudioList);
-            SkinData.ShootTongueAudioAction.Remove(ref fox.shootTongueSFX, vanillaShootTongueAudio);
-            SkinData.TongueShootingAudioAction.Remove(ref fox.tongueShootSFX, vanillaTongueShootingAudio);
-            SkinData.KillPlayerAudioAction.Remove(ref fox.killSFX, vanillaKillAudio);
-            SkinData.NearCallAudioListAction.Remove(ref fox.callsClose, vanillaNearCallAudioList);
-            SkinData.FarCallAudioListAction.Remove(ref fox.callsFar, vanillaFarCallAudioList);
 
             SkinData.FurMaterialAction.Remove(enemy.transform.Find(LOD0_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaFurMaterial);
             SkinData.FurMaterialAction.Remove(enemy.transform.Find(LOD1_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaFurMaterial);
@@ -191,6 +177,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             }
 
             ArmatureAttachment.RemoveAttachments(activeAttachments);
+
+            DestroyAudioReflector(modCreatureEffects);
+            fox.creatureSFX.mute = false;
+            DestroyAudioReflector(modCreatureVoice);
+            fox.creatureVoice.mute = false;
+            DestroyAudioReflector(modGrowlAudio);
+            fox.growlAudio.mute = false;
+            DestroyAudioReflector(modCallClose);
+            fox.callClose.mute = false;
+            DestroyAudioReflector(modCallFar);
+            fox.callFar.mute = false;
+            DestroyAudioReflector(modTongueAudio);
+            fox.tongueAudio.mute = false;
+
             SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
@@ -202,65 +202,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 skinnedMeshReplacement
             );
             EnemySkinRegistry.RemoveEnemyEventHandler(fox, this);
-        }
-
-        public void OnCancelReelingPlayer(BushWolfEnemy fox, bool wasDragging)
-        {
-            if(VoiceSilenced)
-            {
-                if (wasDragging) 
-                { 
-                    modCreatureVoice?.Stop(); 
-                }
-            }
-        }
-
-        public void OnLandedTongueShot(BushWolfEnemy fox, PlayerControllerB draggingPlayer)
-        {
-            if(VoiceSilenced)
-            {
-                modCreatureVoice?.PlayOneShot(SkinData.DragSnarlAudioAction.WorkingClip(vanillaSnarlAudio));
-            }
-        }
-
-        public void OnTongueHit(BushWolfEnemy fox)
-        {
-            if (VoiceSilenced)
-            {
-                modCreatureVoice?.PlayOneShot(SkinData.HitAudioAction.WorkingClip(vanillaHitAudio));
-            }
-        }
-
-        public void OnTongueShot(BushWolfEnemy fox)
-        {
-            if (VoiceSilenced)
-            {
-                modCreatureVoice?.PlayOneShot(SkinData.ShootTongueAudioAction.WorkingClip(vanillaShootTongueAudio));
-            }
-        }
-
-        public void OnHit(EnemyAI enemy, PlayerControllerB attackingPlayer, bool playHitSoundEffect)
-        {
-            if(VoiceSilenced)
-            {
-                modCreatureVoice?.PlayOneShot(SkinData.HitAudioAction.WorkingClip(vanillaHitAudio));
-            }
-        }
-
-        public void OnKilled(EnemyAI enemy)
-        {
-            if (VoiceSilenced && modCreatureVoice != null)
-            {
-                WalkieTalkie.TransmitOneShotAudio(modCreatureVoice, SkinData.DieAudioAction.WorkingClip(vanillaDieAudio));
-            }
-        }
-
-        public void OnStun(EnemyAI enemy, PlayerControllerB attackingPlayer)
-        {
-            if (VoiceSilenced)
-            {
-                modCreatureVoice.PlayOneShot(SkinData.StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
-            }
         }
 
     }

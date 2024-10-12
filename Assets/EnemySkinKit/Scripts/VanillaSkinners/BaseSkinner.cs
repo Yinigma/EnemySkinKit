@@ -1,36 +1,16 @@
+using AntlerShed.EnemySkinKit.AudioReflection;
+using AntlerShed.EnemySkinKit.Patches;
 using AntlerShed.SkinRegistry;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
 {
     public abstract class BaseSkinner : Skinner
     {
-        /*protected bool origEffectsMute;
-        protected bool origVoiceMute;
-        protected bool MuteEffects { get; }
-        protected bool MuteVoice { get; }
-
-        public BaseSkinner()
-        {
-            MuteEffects = muteSoundEffects;
-            MuteVoice = muteVoice;
-        }*/
-
         public abstract void Apply(GameObject enemy);
-        // {
-        /*EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
-        origVoiceMute = enemyAI.creatureVoice.mute;
-        origEffectsMute = enemyAI.creatureSFX.mute;
-        enemyAI.creatureSFX.mute = MuteEffects;
-        enemyAI.creatureVoice.mute = MuteVoice;*/
-        //}
 
         public abstract void Remove(GameObject enemy);
-        //{
-            /*EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
-            enemyAI.creatureSFX.mute = origEffectsMute;
-            enemyAI.creatureVoice.mute = origVoiceMute;*/
-        //}
 
         private static void CopyAudioSource(AudioSource source, AudioSource destination)
         {
@@ -89,6 +69,33 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             destination.useReverb = source.useReverb;
             destination.overridingLowPass = source.overridingLowPass;
             destination.lowPassOverride = source.lowPassOverride;
+        }
+
+        protected static AudioReflector CreateAudioReflector(AudioSource vanilla, Dictionary<string, AudioReplacement> audioMap, ulong seed)
+        {
+            if(vanilla == null)
+            {
+                return null;
+            }
+            GameObject voiceGO = new GameObject("mod" + vanilla.gameObject.name);
+            voiceGO.transform.parent = vanilla.gameObject.transform;
+            voiceGO.transform.localPosition = Vector3.zero;
+            voiceGO.transform.localScale = Vector3.one;
+            voiceGO.transform.localRotation = Quaternion.identity;
+            AudioReflector reflector = voiceGO.AddComponent<AudioReflector>();
+            reflector.Init(audioMap, seed);
+            AudioSourcePatch.AddReflector(vanilla, reflector);
+            return reflector;
+        }
+
+        protected static void DestroyAudioReflector(AudioReflector reflector)
+        {
+            if(reflector==null)
+            {
+                return;
+            }
+            AudioSourcePatch.RemoveReflector(reflector);
+            GameObject.Destroy(reflector.gameObject);
         }
 
         protected static AudioSource CreateModdedAudioSource

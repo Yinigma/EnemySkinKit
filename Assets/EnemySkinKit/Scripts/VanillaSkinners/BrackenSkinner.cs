@@ -1,3 +1,4 @@
+using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -31,13 +32,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
 
-        protected bool VoiceSilenced => SkinData.StunAudioAction.actionType != AudioActionType.RETAIN;
-        protected bool EffectsSilenced => SkinData.HitBodyAudioAction.actionType != AudioActionType.RETAIN;
-
-        protected AudioSource modCreatureEffects;
-        protected AudioSource modCreatureVoice;
+        protected AudioReflector modCreatureEffects;
+        protected AudioReflector modCreatureVoice;
+        protected AudioReflector modAngerVoice;
+        protected AudioReflector modNeckSnap;
 
         protected BrackenSkin SkinData { get; }
+
+        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
 
         public BrackenSkinner
         (
@@ -51,39 +53,47 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             FlowermanAI bracken = enemy.GetComponent<FlowermanAI>();
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            if(VoiceSilenced)
+
+            //Audio - populate map
+            SkinData.AngerAudioAction.ApplyToMap(bracken.creatureAngerVoice.clip, clipMap);
+            SkinData.NeckSnapAudioAction.ApplyToMap(bracken.crackNeckSFX, clipMap);
+            SkinData.HitBodyAudioAction.ApplyToMap(bracken.enemyType.hitBodySFX, clipMap);
+            SkinData.StunAudioAction.ApplyToMap(bracken.enemyType.stunSFX, clipMap);
+            if (audioAnimEvents != null)
             {
-                modCreatureVoice = CreateModdedAudioSource(bracken.creatureVoice, "modVoice");
-                bracken.creatureVoice.mute = true;
+                SkinData.FoundAudioAction.ApplyToMap(audioAnimEvents.audioClip, clipMap);
+                SkinData.LeafRustleAudioListAction.ApplyToMap(audioAnimEvents.randomClips, clipMap);
             }
-            if (EffectsSilenced)
-            {
-                modCreatureEffects = CreateModdedAudioSource(bracken.creatureSFX, "modEffects");
-                bracken.creatureSFX.mute = true;
-                if (audioAnimEvents != null)
-                {
-                    audioAnimEvents.audioToPlay = modCreatureEffects;
-                }
-            }
+
+            //THEN spin up the audio sources
+            modCreatureVoice = CreateAudioReflector(bracken.creatureVoice, clipMap, bracken.NetworkObjectId);
+            bracken.creatureVoice.mute = true;
+            modAngerVoice = CreateAudioReflector(bracken.creatureAngerVoice, clipMap, bracken.NetworkObjectId);
+            bracken.creatureAngerVoice.mute = true;
+            modCreatureEffects = CreateAudioReflector(bracken.creatureSFX, clipMap, bracken.NetworkObjectId);
+            bracken.creatureSFX.mute = true;
+            modNeckSnap = CreateAudioReflector(bracken.crackNeckAudio, clipMap, bracken.NetworkObjectId);
+            bracken.crackNeckAudio.mute = true;
+
+            //Attachments
             activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() );
+
+            //Materials
             vanillaLeafMaterial = SkinData.LeafMaterialAction.Apply(enemy.transform.Find(MESH_PATH)?.gameObject.GetComponent<Renderer>(), 1);
             vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(MESH_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             vanillaLeftEyeMaterial = SkinData.LeftEyeMaterialAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             vanillaRightEyeMaterial = SkinData.RightEyeMaterialAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0);
             skinnedMeshReplacement = SkinData.BodyMeshAction.Apply(new SkinnedMeshRenderer[] { enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>() }, enemy.transform.Find(ANCHOR_PATH));
+
+            //Meshes
             vanillaLeftEyeMesh = SkinData.LeftEyeMeshAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
             vanillaRightEyeMesh = SkinData.RightEyeMeshAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
-            vanillaAngerSound = SkinData.AngerAudioAction.ApplyToSource(bracken.creatureAngerVoice);
-            vanillaKillSound = SkinData.NeckSnapAudioAction.Apply(ref bracken.crackNeckSFX);
 
+            //Particles
             vanillaPoofParticleMaterial = SkinData.DeathSporeMaterialAction.Apply(audioAnimEvents.particle.GetComponent<ParticleSystemRenderer>(), 0);
             vanillaPoofParticle = SkinData.DeathSporeParticleAction.ApplyRef(ref audioAnimEvents.particle);
             //vanillaPoofParticle = DeathSporeAction.Apply(ref );
-            if (audioAnimEvents != null)
-            {
-                vanillaFoundSound = SkinData.FoundAudioAction.Apply(ref audioAnimEvents.audioClip);
-                vanillaLeafRustleSounds = SkinData.LeafRustleAudioListAction.Apply(ref audioAnimEvents.randomClips);
-            }
+            
             EnemySkinRegistry.RegisterEnemyEventHandler(bracken, this);
         }
 
@@ -92,20 +102,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             FlowermanAI bracken = enemy.GetComponent<FlowermanAI>();
             EnemySkinRegistry.RemoveEnemyEventHandler(bracken, this);
             PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
-            if (VoiceSilenced)
-            {
-                DestroyModdedAudioSource(modCreatureVoice);
-                bracken.creatureVoice.mute = false;
-            }
-            if (EffectsSilenced)
-            {
-                DestroyModdedAudioSource(modCreatureEffects);
-                bracken.creatureSFX.mute = false;
-                if (audioAnimEvents != null)
-                {
-                    audioAnimEvents.audioToPlay = bracken.creatureSFX;
-                }
-            }
+
+            DestroyAudioReflector(modCreatureEffects);
+            DestroyAudioReflector(modCreatureVoice);
+            DestroyAudioReflector(modNeckSnap);
+            DestroyAudioReflector(modAngerVoice);
+            bracken.creatureVoice.mute = false;
+            bracken.creatureSFX.mute = false;
+            bracken.creatureAngerVoice.mute = false;
+            bracken.crackNeckAudio.mute = false;
+
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SkinData.LeafMaterialAction.Remove(enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaLeafMaterial);
             SkinData.BodyMaterialAction.Remove(enemy.transform.Find(MESH_PATH)?.gameObject?.GetComponent<Renderer>(), 1, vanillaBodyMaterial);
@@ -124,35 +130,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             {
                 SkinData.FoundAudioAction.Remove(ref audioAnimEvents.audioClip, vanillaFoundSound);
                 SkinData.LeafRustleAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaLeafRustleSounds);
-            }
-        }
-
-        public void OnStun(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer)
-        {
-            if(VoiceSilenced)
-            {
-                modCreatureVoice.PlayOneShot(SkinData.StunAudioAction.WorkingClip(enemy.enemyType.stunSFX));
-            }
-        }
-
-        public void OnHit(EnemyAI enemy, GameNetcodeStuff.PlayerControllerB attackingPlayer, bool playSoundEffect)
-        {
-            if (EffectsSilenced && playSoundEffect)
-            {
-                modCreatureEffects.PlayOneShot(SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.HitBodyAudioAction.WorkingClip(enemy.enemyType.hitBodySFX));
-            }
-        }
-
-        public void OnKilled(EnemyAI enemy)
-        {
-            if (EffectsSilenced)
-            {
-                modCreatureEffects.Stop();
-            }
-            if (VoiceSilenced)
-            {
-                modCreatureVoice.Stop();
             }
         }
     }

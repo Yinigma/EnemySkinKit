@@ -1,7 +1,9 @@
+using AntlerShed.EnemySkinKit.Patches;
 using AntlerShed.SkinRegistry;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+using HarmonyLib;
 
 namespace AntlerShed.EnemySkinKit
 {
@@ -11,7 +13,9 @@ namespace AntlerShed.EnemySkinKit
     {
         public const string modGUID = "AntlerShed.LethalCompany.EnemySkinKit";
         public const string modName = "Vanilla Enemy Skin Kit";
-        public const string modVersion = "1.2.4";
+        public const string modVersion = "1.3.1";
+
+        private readonly Harmony harmony = new Harmony(modGUID);
 
         internal static ManualLogSource SkinKitLogger { get; private set; } = BepInEx.Logging.Logger.CreateLogSource(modGUID);
         private static ConfigEntry<LogLevel> logLevel;
@@ -19,6 +23,7 @@ namespace AntlerShed.EnemySkinKit
 
         private void Awake()
         {
+            harmony.PatchAll(typeof(AudioSourcePatch));
             logLevel = Config.Bind("LogLevel", "Logging", LogLevel.ERROR, "Verbosity setting of the logger.");
         }
     }
