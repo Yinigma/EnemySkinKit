@@ -19,6 +19,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected Mesh vanillaHeadMesh;
         protected AudioClip[] vanillaSpringAudio;
         protected AudioClip[] vanillaFootstepsAudio;
+        protected AudioClip vanillaCooldown;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
 
@@ -42,6 +43,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 modCreatureEffects = CreateModdedAudioSource(coilhead.creatureSFX, "modEffects");
                 coilhead.creatureSFX.mute = true;
             }
+            vanillaCooldown = SkinData.CooldownAudioAction.Apply(ref coilhead.enterCooldownSFX);
             activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(BODY_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
             vanillaBodyMaterial = SkinData.BodyMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 1);
             vanillaRustMaterial = SkinData.RustMaterialAction.Apply(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0);
@@ -66,6 +68,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 DestroyModdedAudioSource(modCreatureEffects);
                 coilhead.creatureSFX.mute = false;
             }
+            SkinData.CooldownAudioAction.Remove(ref coilhead.enterCooldownSFX, vanillaCooldown);
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 1, vanillaBodyMaterial);
             SkinData.RustMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaRustMaterial);

@@ -33,6 +33,8 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected AudioListAction footstepsAudioListAction;
         [SerializeField]
         protected AudioAction hitBodyAudioAction;
+        [SerializeField]
+        protected AudioAction cooldownAudioAction;
         [Space(10)]
 
         [Header("Armature Attachments")]
@@ -47,6 +49,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public AudioListAction SpringNoisesAudioListAction => springNoisesAudioListAction;
         public AudioListAction FootstepsAudioListAction => footstepsAudioListAction;
         public AudioAction HitBodyAudioAction => hitBodyAudioAction;
+        public AudioAction CooldownAudioAction => cooldownAudioAction;
         public ArmatureAttachment[] Attachments => attachments;
 
         public override string EnemyId => EnemySkinRegistry.COILHEAD_ID;

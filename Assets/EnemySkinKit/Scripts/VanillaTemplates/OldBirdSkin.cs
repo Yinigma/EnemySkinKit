@@ -173,7 +173,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public MaterialAction MuzzleFlashMaterialAction => muzzleFlashMaterialAction;
         public ArmatureAttachment[] Attachments => attachments;
         public SkinnedMeshAction NestBodyMeshAction => useCustomNestActions ? nestBodyMeshAction : bodyMeshAction;
-        public MaterialAction NestBodyMaterialAction => useCustomNestActions ? nestBodyMaterialAction : nestBodyMaterialAction;
+        public MaterialAction NestBodyMaterialAction => useCustomNestActions ? nestBodyMaterialAction : defaultMaterialAction;
         public ArmatureAttachment[] NestAttachments => useCustomNestActions ? nestAttachments : attachments;
 
         public override string EnemyId => EnemySkinRegistry.OLD_BIRD_ID;

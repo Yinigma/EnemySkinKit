@@ -1,6 +1,20 @@
 # Changelog
 
-### 1.3.2
+### 1.3.4
+- Fate refused to change
+- Rolled back to 1.2.5. Gonna try and play nice with soundAPI next time.
+
+### 1.3.1
+- Changed the version proper
+
+### 1.3.0
+- Refactored audio to avoid use of events
+
+### 1.2.5
+- Fixed Old Bird nest skin material always being applied
+- Added sound replacer for coilhead's cooldown sound
+
+### 1.2.4
 - Added Maneater skinner
 - Bonemapper now is best effort rather than strict. Armatures don't have to perfectly match now, it's just that anything that isn't perfectly matched isn't getting animated.
 
