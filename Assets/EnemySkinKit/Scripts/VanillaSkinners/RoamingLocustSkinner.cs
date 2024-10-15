@@ -1,8 +1,6 @@
-using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
@@ -14,12 +12,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         private Texture vanillaLocustTexture = null;
         private Mesh vanillaLocustMesh;
+        private AudioClip vanillaChirpAudio;
+
+        protected bool EffectsSilenced => SkinData.DisperseAudioAction.actionType != AudioActionType.RETAIN;
+        protected AudioSource modCreatureEffects;
 
         protected RoamingLocustSkin SkinData { get; }
-
-        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
-        private AudioReflector modConstant;
-        private AudioReflector modSwarmLeave;
 
         public RoamingLocustSkinner(RoamingLocustSkin skinData)
         {
@@ -29,27 +27,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public override void Apply(GameObject enemy)
         {
             DocileLocustBeesAI locusts = enemy.GetComponent<DocileLocustBeesAI>();
-
             vanillaLocustTexture = SkinData.LocustTextureAction.ApplyToVisualEffect(locusts.bugsEffect, TEXTURE_PROPERTY);
             vanillaLocustMesh = SkinData.LocustMeshAction.ApplyToVisualEffect(locusts.bugsEffect, MESH_PROPERTY);
+            vanillaChirpAudio = SkinData.ChirpAudioAction.ApplyToSource(enemy.transform.Find("ConstantSFX")?.gameObject.GetComponent<AudioSource>());
 
-            SkinData.DisperseAudioAction.ApplyToMap(locusts.enemyType.audioClips[0], clipMap);
-
-            AudioSource constant = enemy.transform.Find("ConstantSFX")?.gameObject.GetComponent<AudioSource>();
-            if(constant != null)
+            if (EffectsSilenced)
             {
-                SkinData.ChirpAudioAction.ApplyToMap(constant.clip, clipMap);
-                modConstant = CreateAudioReflector(constant, clipMap, locusts.NetworkObjectId); 
-                constant.mute = true;
+                modCreatureEffects = CreateModdedAudioSource(locusts.creatureSFX, "modEffects");
+                locusts.creatureSFX.mute = true;
             }
-            AudioSource swarmLeave = enemy.transform.Find("SwarmLeaveSFX")?.gameObject.GetComponent<AudioSource>();
-            if (swarmLeave != null)
-            {
-                modSwarmLeave = CreateAudioReflector(swarmLeave, clipMap, locusts.NetworkObjectId);
-                swarmLeave.mute = true;
-            }
-
-
             EnemySkinRegistry.RegisterEnemyEventHandler(locusts, this);
         }
 
@@ -57,23 +43,23 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             DocileLocustBeesAI locusts = enemy.GetComponent<DocileLocustBeesAI>();
             EnemySkinRegistry.RegisterEnemyEventHandler(locusts, this);
+            if (EffectsSilenced)
+            {
+                DestroyModdedAudioSource(modCreatureEffects);
+                locusts.creatureSFX.mute = false;
+            }
             SkinData.LocustTextureAction.RemoveFromVisualEffect(locusts.bugsEffect, TEXTURE_PROPERTY, vanillaLocustTexture);
             SkinData.LocustMeshAction.RemoveFromVisualEffect(locusts.bugsEffect, vanillaLocustMesh, MESH_PROPERTY);
+            SkinData.ChirpAudioAction.RemoveFromSource(enemy.transform.Find("ConstantSFX")?.gameObject.GetComponent<AudioSource>(), vanillaChirpAudio);
+        }
 
-            AudioSource constant = enemy.transform.Find("ConstantSFX")?.gameObject.GetComponent<AudioSource>();
-            if (constant != null)
+        public void OnDisperse(DocileLocustBeesAI locusts)
+        {
+            if(EffectsSilenced)
             {
-                DestroyAudioReflector(modConstant);
-                constant.mute = false;
+                modCreatureEffects.PlayOneShot(SkinData.DisperseAudioAction.WorkingClip(locusts.enemyType.audioClips[0]));
+                WalkieTalkie.TransmitOneShotAudio(modCreatureEffects, SkinData.DisperseAudioAction.WorkingClip(locusts.enemyType.audioClips[0]), 0.8f);
             }
-            AudioSource swarmLeave = enemy.transform.Find("SwarmLeaveSFX")?.gameObject.GetComponent<AudioSource>();
-            if (swarmLeave != null)
-            {
-                DestroyAudioReflector(modSwarmLeave);
-                swarmLeave.mute = false;
-            }
-
-
         }
     }
 }

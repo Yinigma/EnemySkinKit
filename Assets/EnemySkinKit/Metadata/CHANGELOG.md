@@ -1,22 +1,8 @@
 # Changelog
 
-
-### 1.3.1
-- Changed the version proper
-
-### 1.3.0
-- Refactored audio to avoid use of events
-
-### 1.2.5
-- Fixed Old Bird nest skin material always being applied
-- Added sound replacer for coilhead's cooldown sound
-
-### 1.2.4
+### 1.3.2
 - Added Maneater skinner
 - Bonemapper now is best effort rather than strict. Armatures don't have to perfectly match now, it's just that anything that isn't perfectly matched isn't getting animated.
-
-### 1.2.3
-- Made some interesting versioning choices apparently.
 
 ### 1.2.2
 - Fixed bug with last update where NREs would get thrown if the ghost girl's main mesh wasn't replaced

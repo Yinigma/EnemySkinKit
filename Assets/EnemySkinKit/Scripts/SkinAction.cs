@@ -1,7 +1,8 @@
 using AntlerShed.EnemySkinKit.ArmatureReflection;
-using AntlerShed.EnemySkinKit.AudioReflection;
+using AntlerShed.SkinRegistry;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -889,30 +890,6 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaClip;
         }
 
-        public void ApplyToMap(AudioClip vanillaClip, Dictionary<string, AudioReplacement> clips)
-        {
-            if (vanillaClip != null)
-            {
-                switch (actionType)
-                {
-                    case AudioActionType.MUTE:
-                        if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN && clips.ContainsKey(vanillaClip.name)) { EnemySkinKit.SkinKitLogger.LogWarning($"Audio Clip \"{vanillaClip.name}\" is already present in the modded audio map."); }
-                        clips[vanillaClip.name] = new AudioReplacement(Silence);
-                        break;
-                    case AudioActionType.REPLACE:
-                        if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN && clips.ContainsKey(vanillaClip.name)) { EnemySkinKit.SkinKitLogger.LogWarning($"Audio Clip \"{vanillaClip.name}\" is already present in the modded audio map."); }
-                        clips[vanillaClip.name] = new AudioReplacement(replacementClip);
-                        break;
-                    case AudioActionType.RETAIN:
-                        break;
-                }
-            }
-            else
-            {
-                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip was null for Audio Action. Skipping Apply."); }
-            }
-        }
-
         public AudioClip WorkingClip(AudioClip vanillaClip)
         {
             switch (actionType)
@@ -1067,33 +1044,6 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                 if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip Array was null for Audio List Action. Skipping Apply."); }
             }
             return vanillaClips;
-        }
-
-        public void ApplyToMap(AudioClip[] vanillaClips, Dictionary<string, AudioReplacement> clips)
-        {
-            if (vanillaClips != null)
-            {
-                foreach (AudioClip vanillaClip in vanillaClips)
-                {
-                    switch (actionType)
-                    {
-                        case AudioListActionType.MUTE:
-                            if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN && clips.ContainsKey(vanillaClip.name)) { EnemySkinKit.SkinKitLogger.LogWarning($"Audio Clip \"{vanillaClip.name}\" is already present in the modded audio map."); }
-                            clips[vanillaClip.name] = new AudioReplacement(Silence);
-                            break;
-                        case AudioListActionType.REPLACE:
-                            if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN && clips.ContainsKey(vanillaClip.name)) { EnemySkinKit.SkinKitLogger.LogWarning($"Audio Clip \"{vanillaClip.name}\" is already present in the modded audio map."); }
-                            clips[vanillaClip.name] = new AudioReplacement(replacementClips);
-                            break;
-                        case AudioListActionType.RETAIN:
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Vanilla Audio Clip Array was null for Audio List Action. Skipping Apply."); }
-            }
         }
 
         public AudioClip[] WorkingClips(AudioClip[] vanillaClips)

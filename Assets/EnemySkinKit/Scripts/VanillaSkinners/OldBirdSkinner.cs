@@ -1,4 +1,3 @@
-using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -30,19 +29,27 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected VanillaMaterial vanillaDefaultMaterial;
         protected VanillaMaterial vanillaBotSpotlightMaterial;
         protected List<GameObject> activeAttachments;
+        protected AudioClip[] vanillaShootGunAudio;
+        protected AudioClip[] vanillaExplosionAudio;
+        protected AudioClip vanillaBlowtorchAudio;
+        protected AudioClip vanillaAlarmAudio;
         //source
-        //protected AudioClip vanillaThrustFarAudio;
+        protected AudioClip vanillaThrustFarAudio;
         //source
-        //protected AudioClip vanillaThrustCloseAudio;
+        protected AudioClip vanillaThrustCloseAudio;
         //source
-        //protected AudioClip vanillaThrustStartAudio;
+        protected AudioClip vanillaThrustStartAudio;
         //source
-        //protected AudioClip vanillaActivateSpotlightAudio;
+        protected AudioClip vanillaActivateSpotlightAudio;
+        protected AudioClip vanillaDeactivateSpotlightAudio;
+        protected AudioClip vanillaSpotlightFlickerAudio;
+        protected AudioClip vanillaWakeAudio;
         //source
-        //protected AudioClip vanillaEngineAudio;
+        protected AudioClip vanillaEngineAudio;
         //source
-        //protected AudioClip vanillaChargeAudio;
-
+        protected AudioClip vanillaChargeAudio;
+        protected AudioClip[] vanillaStompAudio;
+        protected AudioClip[] vanillaBrainwashAudio;
         protected GameObject skinnedMeshReplacement;
 
         private VanillaMaterial vanillaSpotlightMaterial;
@@ -78,21 +85,10 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         private ParticleSystem vanillaLandShockwaveParticle;
         private ParticleSystem vanillaMuzzleParticle;
 
-        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
+        protected bool EffectsSilenced => SkinData.BrainwashingAudioListAction.actionType != AudioListActionType.RETAIN || SkinData.StompAudioListAction.actionType != AudioListActionType.RETAIN;
 
-        protected AudioReflector modLRAD2;
-        protected AudioReflector modEffects;
-        protected AudioReflector modCreatureVoice;
-        protected AudioReflector modFlyingDistant;
-        protected AudioReflector modSpotlightOn;
-        protected AudioReflector modExplosion;
-        protected AudioReflector modEngineEffects;
-        protected AudioReflector modCreatureEffects;
-        protected AudioReflector modChargeForward;
-        protected AudioReflector modBlowtorch;
-        protected AudioReflector modLRAD;
-        protected AudioReflector modThrusterClose;
-        protected AudioReflector modThrusterStart;
+        protected AudioSource modLRAD2;
+        protected AudioSource modEffects;
 
         protected OldBirdSkin SkinData { get; }
         
@@ -105,6 +101,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             RadMechAI mech = enemy.GetComponent<RadMechAI>();
             activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(MECH_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
+            AudioSource thrusterStartSource = enemy.transform.Find(THRUSTER_BLAST_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
+            if (thrusterStartSource != null)
+            {
+                vanillaThrustStartAudio = SkinData.ThrusterStartAudioAction.ApplyToSource(thrusterStartSource);
+            }
+            AudioSource thrusterCloseSource = enemy.transform.Find(THRUSTER_CLOSE_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
+            if (thrusterCloseSource != null)
+            {
+                vanillaThrustCloseAudio = SkinData.ThrusterCloseAudioAction.ApplyToSource(thrusterCloseSource);
+            }
 
             vanillaSpotlightMaterial = SkinData.LightMaterialAction.Apply(mech.transform.Find(SEARCH_LIGHT_MESH_PATH)?.GetComponent<MeshRenderer>(), 0);
             vanillaSearchlightMesh = SkinData.SearchLightMeshAction.Apply(mech.transform.Find(SEARCH_LIGHT_MESH_PATH)?.GetComponent<MeshFilter>());
@@ -118,64 +124,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaBotSpotlightMaterial = SkinData.SpotlightActiveMaterialAction.ApplyRef(ref mech.spotlightMat);
             vanillaDefaultMaterial = SkinData.DefaultMaterialAction.ApplyRef(ref mech.defaultMat);
 
-            SkinData.ShootGunAudioListAction.ApplyToMap(mech.shootGunSFX, clipMap);
-            SkinData.ExplosionAudioListAction.ApplyToMap(mech.largeExplosionSFX, clipMap);
+            vanillaShootGunAudio = SkinData.ShootGunAudioListAction.Apply(ref mech.shootGunSFX);
+            vanillaExplosionAudio = SkinData.ExplosionAudioListAction.Apply(ref mech.largeExplosionSFX);
 
-            SkinData.AlarmAudioAction.ApplyToMap(mech.LocalLRADAudio.clip, clipMap);
-            SkinData.SpotlightActivateAudioAction.ApplyToMap(mech.spotlightOnAudio.clip, clipMap);
+            vanillaAlarmAudio = SkinData.AlarmAudioAction.ApplyToSource(mech.LocalLRADAudio);
+            vanillaActivateSpotlightAudio = SkinData.SpotlightActivateAudioAction.ApplyToSource(mech.spotlightOnAudio);
 
-            SkinData.ThrusterFarAudioAction.ApplyToMap(mech.flyingDistantAudio.clip, clipMap);
-            SkinData.BlowtorchAudioAction.ApplyToMap(mech.blowtorchAudio.clip, clipMap);
-            SkinData.ChargeAudioAction.ApplyToMap(mech.chargeForwardAudio.clip, clipMap);
-            SkinData.EngineHumAudioAction.ApplyToMap(mech.engineSFX.clip, clipMap);
-            SkinData.WakeAudioAction.ApplyToMap(mech.creatureSFX.clip, clipMap);
+            vanillaThrustFarAudio = SkinData.ThrusterFarAudioAction.ApplyToSource(mech.flyingDistantAudio);
+            vanillaBlowtorchAudio = SkinData.BlowtorchAudioAction.ApplyToSource(mech.blowtorchAudio);
+            vanillaChargeAudio = SkinData.ChargeAudioAction.ApplyToSource(mech.chargeForwardAudio);
+            vanillaEngineAudio = SkinData.EngineHumAudioAction.ApplyToSource(mech.engineSFX);
+            vanillaWakeAudio = SkinData.WakeAudioAction.ApplyToSource(mech.creatureSFX);
 
-            AudioClip[] vanillaBrainwashAudio = new AudioClip[mech.enemyType.audioClips.Length - 4];
-            Array.Copy(mech.enemyType.audioClips, 4, vanillaBrainwashAudio, 0, mech.enemyType.audioClips.Length - 4);
-            AudioClip[] vanillaStompAudio = new AudioClip[4];
-            Array.Copy(mech.enemyType.audioClips, 0, vanillaStompAudio, 0, 4);
-
-            SkinData.BrainwashingAudioListAction.ApplyToMap(vanillaBrainwashAudio, clipMap);
-            SkinData.StompAudioListAction.ApplyToMap(vanillaStompAudio, clipMap);
-
-            SkinData.SpotlightDectivateAudioAction.ApplyToMap(mech.spotlightOff, clipMap);
-            SkinData.SpotlightFlickerAudioAction.ApplyToMap(mech.spotlightFlicker, clipMap);
-
-            modLRAD = CreateAudioReflector(mech.LocalLRADAudio, clipMap, mech.NetworkObjectId);
-            mech.LocalLRADAudio.mute = true;
-            modLRAD2 = CreateAudioReflector(mech.LocalLRADAudio2, clipMap, mech.NetworkObjectId); 
-            mech.LocalLRADAudio2.mute = true;
-            modBlowtorch = CreateAudioReflector(mech.blowtorchAudio, clipMap, mech.NetworkObjectId); 
-            mech.blowtorchAudio.mute = true;
-            modChargeForward = CreateAudioReflector(mech.chargeForwardAudio, clipMap, mech.NetworkObjectId); 
-            mech.chargeForwardAudio.mute = true;
-            modCreatureEffects = CreateAudioReflector(mech.creatureSFX, clipMap, mech.NetworkObjectId); 
-            mech.creatureSFX.mute = true;
-            modEngineEffects = CreateAudioReflector(mech.engineSFX, clipMap, mech.NetworkObjectId); 
-            mech.engineSFX.mute = true;
-            modExplosion = CreateAudioReflector(mech.explosionAudio, clipMap, mech.NetworkObjectId); 
-            mech.explosionAudio.mute = true;
-            modSpotlightOn = CreateAudioReflector(mech.spotlightOnAudio, clipMap, mech.NetworkObjectId); 
-            mech.spotlightOnAudio.mute = true;
-            modFlyingDistant = CreateAudioReflector(mech.flyingDistantAudio, clipMap, mech.NetworkObjectId); 
-            mech.flyingDistantAudio.mute = true;
-            modCreatureVoice = CreateAudioReflector(mech.creatureVoice, clipMap, mech.NetworkObjectId); 
-            mech.creatureVoice.mute = true;
-
-            AudioSource thrusterStartSource = enemy.transform.Find(THRUSTER_BLAST_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
-            if (thrusterStartSource != null)
-            {
-                SkinData.ThrusterStartAudioAction.ApplyToMap(thrusterStartSource.clip, clipMap);
-                modThrusterStart = CreateAudioReflector(thrusterStartSource, clipMap, mech.NetworkObjectId);
-                thrusterStartSource.mute = true;
-            }
-            AudioSource thrusterCloseSource = enemy.transform.Find(THRUSTER_CLOSE_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
-            if (thrusterCloseSource != null)
-            {
-                SkinData.ThrusterCloseAudioAction.ApplyToMap(thrusterCloseSource.clip, clipMap);
-                modThrusterClose = CreateAudioReflector(thrusterCloseSource, clipMap, mech.NetworkObjectId);
-                thrusterCloseSource.mute = true;
-            }
+            vanillaDeactivateSpotlightAudio = SkinData.SpotlightDectivateAudioAction.Apply(ref mech.spotlightOff);
+            vanillaSpotlightFlickerAudio = SkinData.SpotlightFlickerAudioAction.Apply(ref mech.spotlightFlicker);
 
             ParticleSystem vanillaChargeFlash = mech.transform.Find(CHARGE_FLASH_PATH)?.GetComponent<ParticleSystem>();
             ParticleSystem vanillaChargeBlast = mech.transform.Find(CHARGE_BLAST_PATH)?.GetComponent<ParticleSystem>();
@@ -211,6 +173,19 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaLandShockwaveParticle = SkinData.LandShockwaveParticleAction.ApplyRef(ref mech.bothFeetParticle);
             vanillaMuzzleParticle = SkinData.MuzzleFlashParticleAction.ApplyRef(ref mech.gunArmParticle);
 
+            vanillaBrainwashAudio = new AudioClip[mech.enemyType.audioClips.Length-4];
+            Array.Copy(mech.enemyType.audioClips, 4, vanillaBrainwashAudio, 0, mech.enemyType.audioClips.Length - 4);
+            vanillaStompAudio = new AudioClip[4];
+            Array.Copy(mech.enemyType.audioClips, 0, vanillaStompAudio, 0, 4);
+
+            if (EffectsSilenced)
+            {
+                modLRAD2 = CreateModdedAudioSource(mech.LocalLRADAudio2, "moddedLRAD");
+                mech.LocalLRADAudio2.mute = true;
+                modEffects = CreateModdedAudioSource(mech.creatureSFX, "moddedEffects");
+                mech.creatureSFX.mute = true;
+            }
+
             skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[]
@@ -233,38 +208,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             RadMechAI mech = enemy.GetComponent<RadMechAI>();
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             EnemySkinRegistry.RemoveEnemyEventHandler(mech, this);
-            DestroyAudioReflector(modLRAD);
-            mech.LocalLRADAudio.mute = false;
-            DestroyAudioReflector(modLRAD2);
-            mech.LocalLRADAudio2.mute = false;
-            DestroyAudioReflector(modBlowtorch);
-            mech.blowtorchAudio.mute = false;
-            DestroyAudioReflector(modChargeForward);
-            mech.chargeForwardAudio.mute = false;
-            DestroyAudioReflector(modCreatureEffects);
-            mech.creatureSFX.mute = false;
-            DestroyAudioReflector(modEngineEffects);
-            mech.engineSFX.mute = false;
-            DestroyAudioReflector(modExplosion);
-            mech.explosionAudio.mute = false;
-            DestroyAudioReflector(modSpotlightOn);
-            mech.spotlightOnAudio.mute = false;
-            DestroyAudioReflector(modFlyingDistant);
-            mech.flyingDistantAudio.mute = false;
-            DestroyAudioReflector(modCreatureVoice);
-            mech.creatureVoice.mute = false;
-
             AudioSource thrusterStartSource = enemy.transform.Find(THRUSTER_BLAST_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
             if (thrusterStartSource != null)
             {
-                DestroyAudioReflector(modThrusterStart);
-                thrusterStartSource.mute = false;
+                SkinData.ThrusterStartAudioAction.RemoveFromSource(thrusterStartSource, vanillaThrustStartAudio);
             }
             AudioSource thrusterCloseSource = enemy.transform.Find(THRUSTER_CLOSE_AUDIO_PATH)?.gameObject?.GetComponent<AudioSource>();
             if (thrusterCloseSource != null)
             {
-                DestroyAudioReflector(modThrusterClose);
-                thrusterCloseSource.mute = false;
+                SkinData.ThrusterCloseAudioAction.RemoveFromSource(thrusterCloseSource, vanillaThrustCloseAudio);
             }
 
             SkinData.LightMaterialAction.Remove(mech.transform.Find(SEARCH_LIGHT_MESH_PATH)?.GetComponent<MeshRenderer>(), 0, vanillaSpotlightMaterial);
@@ -278,6 +230,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
             SkinData.SpotlightActiveMaterialAction.RemoveRef(ref mech.spotlightMat, vanillaBotSpotlightMaterial);
             SkinData.DefaultMaterialAction.RemoveRef(ref mech.defaultMat, vanillaDefaultMaterial);
+
+            SkinData.ShootGunAudioListAction.Remove(ref mech.shootGunSFX, vanillaShootGunAudio);
+            SkinData.ExplosionAudioListAction.Remove(ref mech.largeExplosionSFX, vanillaExplosionAudio);
+
+            SkinData.AlarmAudioAction.RemoveFromSource(mech.LocalLRADAudio, vanillaAlarmAudio);
+            SkinData.SpotlightActivateAudioAction.RemoveFromSource(mech.spotlightOnAudio, vanillaActivateSpotlightAudio);
+            SkinData.ThrusterFarAudioAction.RemoveFromSource(mech.flyingDistantAudio, vanillaThrustFarAudio);
+            SkinData.BlowtorchAudioAction.RemoveFromSource(mech.blowtorchAudio, vanillaBlowtorchAudio);
+            SkinData.ChargeAudioAction.RemoveFromSource(mech.chargeForwardAudio, vanillaChargeAudio);
+            SkinData.EngineHumAudioAction.RemoveFromSource(mech.engineSFX, vanillaEngineAudio);
+            SkinData.WakeAudioAction.RemoveFromSource(mech.creatureSFX, vanillaWakeAudio);
+
+            SkinData.SpotlightDectivateAudioAction.Remove(ref mech.spotlightOff, vanillaDeactivateSpotlightAudio);
+            SkinData.SpotlightFlickerAudioAction.Remove(ref mech.spotlightFlicker, vanillaSpotlightFlickerAudio);
 
             ParticleSystem vanillaChargeFlash = mech.transform.Find(CHARGE_FLASH_PATH)?.GetComponent<ParticleSystem>();
             ParticleSystem vanillaChargeBlast = mech.transform.Find(CHARGE_BLAST_PATH)?.GetComponent<ParticleSystem>();
@@ -313,6 +279,14 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             SkinData.LandShockwaveMaterialAction.Remove(mech.bothFeetParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaLandShockwaveMaterial);
             SkinData.MuzzleFlashMaterialAction.Remove(mech.gunArmParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaMuzzleMaterial);
 
+            if (EffectsSilenced)
+            {
+                DestroyModdedAudioSource(modLRAD2);
+                DestroyModdedAudioSource(modEffects);
+                mech.creatureSFX.mute = false;
+                mech.LocalLRADAudio2.mute = false;
+            }
+
             SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]
@@ -321,6 +295,46 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 },
                 skinnedMeshReplacement
             );
+        }
+
+        public void OnStomp(RadMechAI instance)
+        {
+            if (EffectsSilenced)
+            {
+                AudioClip[] stompClips = SkinData.StompAudioListAction.WorkingClips(vanillaStompAudio);
+                AudioClip stompClip = stompClips[UnityEngine.Random.Range(0, stompClips.Length)];
+                modEffects.PlayOneShot(stompClip, UnityEngine.Random.Range(0.82f, 1f));
+                WalkieTalkie.TransmitOneShotAudio(modEffects, stompClip, 0.85f);
+            }
+        }
+
+        public void OnBlastBrainwashing(RadMechAI oldBird, int clipIndex)
+        {
+            if(EffectsSilenced)
+            {
+                if (SkinData.BrainwashingAudioListAction.actionType == AudioListActionType.RETAIN)
+                {
+                    modLRAD2.clip = oldBird.enemyType.audioClips[clipIndex + 4];
+                    modLRAD2.Play();
+                }
+                else if (SkinData.BrainwashingAudioListAction.actionType == AudioListActionType.REPLACE)
+                {
+                    AudioClip[] clips = SkinData.BrainwashingAudioListAction.WorkingClips(vanillaBrainwashAudio);
+                    modLRAD2.clip = clips[UnityEngine.Random.Range(0, clips.Length)];
+                    modLRAD2.Play();
+                }
+            }
+        }
+
+        public void OnShootGun(RadMechAI instance)
+        {
+            if (EffectsSilenced)
+            {
+                AudioClip[] shootClips = SkinData.ShootGunAudioListAction.WorkingClips(vanillaShootGunAudio);
+                AudioClip shootClip = shootClips[UnityEngine.Random.Range(0, shootClips.Length)];
+                modEffects.PlayOneShot(shootClip, UnityEngine.Random.Range(0.82f, 1f));
+                WalkieTalkie.TransmitOneShotAudio(modEffects, shootClip, 0.85f);
+            }
         }
     }
 }

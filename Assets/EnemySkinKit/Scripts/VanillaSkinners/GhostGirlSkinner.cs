@@ -1,4 +1,3 @@
-using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -19,17 +18,17 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected VanillaMaterial vanillaRightEyeMaterial;
         protected Mesh vanillaLeftEyeMesh;
         protected Mesh vanillaRightEyeMesh;
-        protected AudioReflector modHeartbeats;
-        protected AudioReflector modCreatureEffects;
-        protected AudioReflector modCreatureVoice;
+
+        protected AudioClip[] vanillaSkipWalkSounds;
+        protected AudioClip vanillaBreatheSound;
+        protected AudioClip vanillaHeartbeatSound;
+        protected AudioClip[] vanillaHauntingSounds;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
 
         private GhostGirlDisappearEventHandler eventHandler;
 
         protected GhostGirlSkin SkinData { get; }
-
-        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
 
         public GhostGirlSkinner(GhostGirlSkin skinData)
         {
@@ -48,20 +47,13 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             vanillaLeftEyeMesh = SkinData.LeftEyeMeshAction.Apply(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
             vanillaRightEyeMesh = SkinData.RightEyeMeshAction.Apply(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>());
 
-            modHeartbeats = CreateAudioReflector(girl.heartbeatMusic, clipMap, girl.NetworkObjectId);
-            girl.heartbeatMusic.mute = true;
-            modCreatureEffects = CreateAudioReflector(girl.creatureSFX, clipMap, girl.NetworkObjectId);
-            girl.creatureSFX.mute = true;
-            modCreatureVoice = CreateAudioReflector(girl.creatureVoice, clipMap, girl.NetworkObjectId);
-            girl.creatureVoice.mute = true;
-
-            SkinData.HauntingCuesAudioListAction.ApplyToMap(girl.appearStaringSFX, clipMap);
+            vanillaHauntingSounds = SkinData.HauntingCuesAudioListAction.Apply(ref girl.appearStaringSFX);
             if(audioAnimEvents!=null)
             {
-                SkinData.SkipAndWalkAudioListAction.ApplyToMap(audioAnimEvents.randomClips, clipMap);
+                vanillaSkipWalkSounds = SkinData.SkipAndWalkAudioListAction.Apply(ref audioAnimEvents.randomClips);
             }
-            SkinData.BreatheAudioAction.ApplyToMap(girl.breathingSFX, clipMap);
-            SkinData.HeartBeatAudioAction.ApplyToMap(girl.heartbeatMusic.clip, clipMap);
+            vanillaBreatheSound = SkinData.BreatheAudioAction.Apply(ref girl.breathingSFX);
+            vanillaHeartbeatSound = SkinData.HeartBeatAudioAction.ApplyToSource(girl.heartbeatMusic);
 
             skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
@@ -88,6 +80,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public override void Remove(GameObject enemy)
         {
             DressGirlAI girl = enemy.GetComponent<DressGirlAI>();
+            PlayAudioAnimationEvent audioAnimEvents = enemy.transform.Find(ANCHOR_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             EnemySkinRegistry.RemoveEnemyEventHandler(girl, eventHandler);
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SkinData.BodyMaterialAction.Remove(enemy.transform.Find(BODY_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaBodyMaterial);
@@ -95,13 +88,13 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             SkinData.RightEyeMaterialAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<Renderer>(), 0, vanillaRightEyeMaterial);
             SkinData.LeftEyeMeshAction.Remove(enemy.transform.Find(LEFT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaLeftEyeMesh);
             SkinData.RightEyeMeshAction.Remove(enemy.transform.Find(RIGHT_EYE_PATH)?.gameObject.GetComponent<MeshFilter>(), vanillaRightEyeMesh);
-
-            DestroyAudioReflector(modHeartbeats);
-            girl.heartbeatMusic.mute = false;
-            DestroyAudioReflector(modCreatureEffects);
-            girl.creatureSFX.mute = false;
-            DestroyAudioReflector(modCreatureVoice);
-            girl.creatureVoice.mute = false;
+            SkinData.HauntingCuesAudioListAction.Remove(ref girl.appearStaringSFX, vanillaHauntingSounds);
+            if(audioAnimEvents!=null)
+            {
+                SkinData.SkipAndWalkAudioListAction.Remove(ref audioAnimEvents.randomClips, vanillaSkipWalkSounds);
+            }
+            SkinData.BreatheAudioAction.Remove(ref girl.breathingSFX, vanillaBreatheSound);
+            SkinData.HeartBeatAudioAction.RemoveFromSource(girl.heartbeatMusic, vanillaHeartbeatSound);
 
             SkinData.BodyMeshAction.Remove
             (

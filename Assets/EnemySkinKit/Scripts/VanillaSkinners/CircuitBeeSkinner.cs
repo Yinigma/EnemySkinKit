@@ -1,8 +1,6 @@
-using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AntlerShed.EnemySkinKit.Vanilla
@@ -14,14 +12,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         private Texture vanillaBeeTexture = null;
         private Mesh vanillaBeeMesh;
+        private AudioClip vanillaIdleAudio;
+        private AudioClip vanillaDefensiveAudio;
+        private AudioClip vanillaAngryAudio;
+        private AudioClip vanillaZapConstantAudio;
 
-        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
+        protected bool EffectsSilenced => SkinData.LeaveAudioAction.actionType != AudioActionType.RETAIN;
+        protected bool ZapSilenced => SkinData.ZapAudioListAction.actionType != AudioListActionType.RETAIN;
 
-        protected AudioReflector modAngry;
-        protected AudioReflector modCreatureEffects;
-        protected AudioReflector modDefensive;
-        protected AudioReflector modIdle;
-        protected AudioReflector modZap;
+        protected AudioSource modCreatureEffects;
+        protected AudioSource modZapAudio;
 
         protected CircuitBeesSkin SkinData {get;}
 
@@ -35,24 +35,21 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             RedLocustBees bees = enemy.GetComponent<RedLocustBees>();
             vanillaBeeTexture = SkinData.BeeTextureAction.ApplyToVisualEffect(bees.beeParticles, TEXTURE_PROPERTY);
             vanillaBeeMesh = SkinData.BeeMeshAction.ApplyToVisualEffect(bees.beeParticles, MESH_PROPERTY);
-
-            SkinData.IdleAudioAction.ApplyToMap(bees.beesIdle.clip, clipMap);
-            SkinData.AngryAudioAction.ApplyToMap(bees.beesAngry.clip, clipMap);
-            SkinData.DefensiveAudioAction.ApplyToMap(bees.beesDefensive.clip, clipMap);
-            SkinData.ZapConstantAudioAction.ApplyToMap(bees.beeZapAudio.clip, clipMap);
-            SkinData.LeaveAudioAction.ApplyToMap(bees.enemyType.audioClips[0], clipMap);
-
-            modCreatureEffects = CreateAudioReflector(bees.creatureSFX, clipMap, bees.NetworkObjectId);
-            bees.creatureSFX.mute = true;
-            modZap = CreateAudioReflector(bees.beeZapAudio, clipMap, bees.NetworkObjectId);
-            bees.beeZapAudio.mute = true;
-            modAngry = CreateAudioReflector(bees.beesAngry, clipMap, bees.NetworkObjectId);
-            bees.beesAngry.mute = true;
-            modDefensive = CreateAudioReflector(bees.beesDefensive, clipMap, bees.NetworkObjectId);
-            bees.beesDefensive.mute = true;
-            modIdle = CreateAudioReflector(bees.beesIdle, clipMap, bees.NetworkObjectId);
-            bees.beesIdle.mute = true;
-
+            vanillaIdleAudio = SkinData.IdleAudioAction.ApplyToSource(bees.beesIdle);
+            vanillaAngryAudio = SkinData.AngryAudioAction.ApplyToSource(bees.beesAngry);
+            vanillaDefensiveAudio = SkinData.DefensiveAudioAction.ApplyToSource(bees.beesDefensive);
+            vanillaZapConstantAudio = SkinData.ZapConstantAudioAction.ApplyToSource(bees.beeZapAudio);
+            if(EffectsSilenced)
+            {
+                modCreatureEffects = CreateModdedAudioSource(bees.creatureSFX, "modEffects");
+                bees.creatureSFX.mute = true;
+            }
+            if (ZapSilenced)
+            {
+                modZapAudio = CreateModdedAudioSource(bees.beeZapAudio, "modZapAudio");
+                modZapAudio.clip = SkinData.ZapConstantAudioAction.WorkingClip(vanillaZapConstantAudio);
+                bees.beeZapAudio.mute = true;
+            }
             EnemySkinRegistry.RegisterEnemyEventHandler(bees, this);
         }
 
@@ -60,20 +57,58 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             RedLocustBees bees = enemy.GetComponent<RedLocustBees>();
             EnemySkinRegistry.RegisterEnemyEventHandler(bees, this);
-
-            DestroyAudioReflector(modCreatureEffects);
-            bees.creatureSFX.mute = false;
-            DestroyAudioReflector(modZap);
-            bees.beeZapAudio.mute = false;
-            DestroyAudioReflector(modAngry);
-            bees.beesAngry.mute = false;
-            DestroyAudioReflector(modDefensive);
-            bees.beesDefensive.mute = false;
-            DestroyAudioReflector(modIdle);
-            bees.beesIdle.mute = false;
-
+            if (EffectsSilenced)
+            {
+                DestroyModdedAudioSource(modCreatureEffects);
+                bees.creatureSFX.mute = false;
+            }
+            if (ZapSilenced)
+            {
+                DestroyModdedAudioSource(modZapAudio);
+                bees.beeZapAudio.mute = false;
+            }
             SkinData.BeeTextureAction.RemoveFromVisualEffect(bees.beeParticles, TEXTURE_PROPERTY, vanillaBeeTexture);
             SkinData.BeeMeshAction.RemoveFromVisualEffect(bees.beeParticles, vanillaBeeMesh, MESH_PROPERTY);
+            SkinData.IdleAudioAction.RemoveFromSource(bees.beesIdle, vanillaIdleAudio);
+            SkinData.AngryAudioAction.RemoveFromSource(bees.beesAngry, vanillaAngryAudio);
+            SkinData.DefensiveAudioAction.RemoveFromSource(bees.beesDefensive, vanillaDefensiveAudio);
+            SkinData.ZapConstantAudioAction.RemoveFromSource(bees.beeZapAudio, vanillaZapConstantAudio);
+        }
+
+        public void OnZapAudioCue(RedLocustBees bees)
+        {
+            if (ZapSilenced)
+            {
+                modZapAudio.pitch = UnityEngine.Random.Range(0.8f, 1.1f);
+                AudioClip[] zapClips = SkinData.ZapAudioListAction.WorkingClips(bees.enemyType.audioClips);
+                AudioClip zapClip = zapClips[UnityEngine.Random.Range(0, zapClips.Length)];
+                modZapAudio.PlayOneShot(zapClip, UnityEngine.Random.Range(0.6f, 1f));
+            }
+        }
+
+        public void OnZapAudioStart(RedLocustBees bees)
+        {
+            if (ZapSilenced)
+            {
+                if (!modZapAudio.isPlaying)
+                {
+                    modZapAudio.Play();
+                    modZapAudio.pitch = 1f;
+                }
+            }
+        }
+
+        public void OnZapAudioStop(RedLocustBees bees)
+        {
+            if (ZapSilenced)
+            {
+                modZapAudio.Stop();
+            }
+        }
+
+        public void OnLeaveLevel(RedLocustBees bees)
+        {
+            modZapAudio.PlayOneShot(SkinData.LeaveAudioAction.WorkingClip(bees.enemyType.audioClips[0]), 0.5f);
         }
     }
 }

@@ -1,4 +1,3 @@
-using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -18,17 +17,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected Mesh vanillaUpperBladeMesh;
         protected Mesh vanillaLowerBladeMesh;
         protected VanillaMaterial vanillaBarberMaterial;
-
+        protected AudioClip vanillaSnipClip;
+        protected AudioClip vanillaDrumrollClip;
+        protected AudioClip[] vanillaParadeClips;
         protected Material[] replacementMaterials;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
-
-        protected AudioReflector modCreatureVoice;
-        protected AudioReflector modCreatureEffects;
-        protected AudioReflector modMusicClose;
-        protected AudioReflector modMusicFar;
-
-        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
 
         protected BarberSkin SkinData { get; }
 
@@ -45,21 +39,9 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             SkinData.LowerScissorsMaterialAction.Apply(enemy.transform.Find(LOWER_BLADE_PATH)?.gameObject?.GetComponent<Renderer>(), 0);
             vanillaUpperBladeMesh = SkinData.UpperScissorsMeshAction.Apply(enemy.transform.Find(UPPER_BLADE_PATH)?.gameObject?.GetComponent<MeshFilter>());
             vanillaLowerBladeMesh = SkinData.LowerScissorsMeshAction.Apply(enemy.transform.Find(LOWER_BLADE_PATH)?.gameObject?.GetComponent<MeshFilter>());
-
-            SkinData.DrumRoll.ApplyToMap(klayman.snareDrum, clipMap);
-            SkinData.MoveAudioListAction.ApplyToMap(klayman.paradeClips, clipMap);
-            SkinData.SnipAudioAction.ApplyToMap(klayman.snipScissors, clipMap);
-
-            //THEN spin up the audio sources
-            modCreatureVoice = CreateAudioReflector(klayman.creatureVoice, clipMap, klayman.NetworkObjectId);
-            klayman.creatureVoice.mute = true;
-            modMusicClose = CreateAudioReflector(klayman.musicAudio, clipMap, klayman.NetworkObjectId);
-            klayman.musicAudio.mute = true;
-            modCreatureEffects = CreateAudioReflector(klayman.creatureSFX, clipMap, klayman.NetworkObjectId);
-            klayman.creatureSFX.mute = true;
-            modMusicFar = CreateAudioReflector(klayman.musicAudio2, clipMap, klayman.NetworkObjectId);
-            klayman.musicAudio2.mute = true;
-
+            vanillaDrumrollClip = SkinData.DrumRoll.Apply(ref klayman.snareDrum);
+            vanillaParadeClips = SkinData.MoveAudioListAction.Apply(ref klayman.paradeClips);
+            vanillaSnipClip = SkinData.SnipAudioAction.Apply(ref klayman.snipScissors);
             skinnedMeshReplacement = SkinData.BodyMeshAction.Apply
             (
                 new SkinnedMeshRenderer[] 
@@ -112,18 +94,12 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             SkinData.UpperScissorsMaterialAction.Remove(enemy.transform.Find(UPPER_BLADE_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBarberMaterial);
             SkinData.LowerScissorsMaterialAction.Remove(enemy.transform.Find(LOWER_BLADE_PATH)?.gameObject?.GetComponent<Renderer>(), 0, vanillaBarberMaterial);
 
-            DestroyAudioReflector(modCreatureVoice);
-            klayman.creatureVoice.mute = false;
-            DestroyAudioReflector(modMusicClose);
-            klayman.musicAudio.mute = false;
-            DestroyAudioReflector(modCreatureEffects);
-            klayman.creatureSFX.mute = false;
-            DestroyAudioReflector(modMusicFar);
-            klayman.musicAudio2.mute = false;
-
             ArmatureAttachment.RemoveAttachments(activeAttachments);
             SkinData.UpperScissorsMeshAction.Remove(enemy.transform.Find(UPPER_BLADE_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaUpperBladeMesh);
             SkinData.LowerScissorsMeshAction.Remove(enemy.transform.Find(LOWER_BLADE_PATH)?.gameObject?.GetComponent<MeshFilter>(), vanillaLowerBladeMesh);
+            SkinData.DrumRoll.Remove(ref klayman.snareDrum, vanillaDrumrollClip);
+            SkinData.MoveAudioListAction.Remove(ref klayman.paradeClips, vanillaParadeClips);
+            SkinData.SnipAudioAction.Remove(ref klayman.snipScissors, vanillaSnipClip);
             SkinData.BodyMeshAction.Remove
             (
                 new SkinnedMeshRenderer[]

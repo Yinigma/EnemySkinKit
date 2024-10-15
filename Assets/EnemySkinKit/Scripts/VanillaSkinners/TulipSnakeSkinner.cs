@@ -1,4 +1,3 @@
-using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -17,13 +16,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         protected VanillaMaterial[] vanillaBodyMaterial = new VanillaMaterial[3];
 
+        protected bool VoiceSilenced => SkinData.FlapAudioListAction.actionType != AudioListActionType.RETAIN ||
+            SkinData.LeapAudioListAction.actionType != AudioListActionType.RETAIN ||
+            SkinData.ChuckleAudioListAction.actionType != AudioListActionType.RETAIN;
+
+        protected bool FlapSilenced => SkinData.FlapAudioListAction.actionType != AudioListActionType.RETAIN ||
+            SkinData.ScurryAudioAction.actionType != AudioActionType.RETAIN;
+
+        protected AudioClip[] vanillaFlapClips;
+        protected AudioClip[] vanillaChuckleClips;
+        protected AudioClip[] vanillaLeapClips;
+        protected AudioSource modCreatureVoice;
+        protected AudioSource modFlapAudio;
         protected List<GameObject> activeAttachments;
         protected GameObject skinnedMeshReplacement;
-
-        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
-        protected AudioReflector modFlappingAudio;
-        protected AudioReflector modCreatureEffects;
-        protected AudioReflector modCreatureVoice;
 
         protected TulipSnakeSkin SkinData { get; }
 
@@ -35,19 +41,19 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         public override void Apply(GameObject enemy)
         {
             FlowerSnakeEnemy friend = enemy.GetComponent<FlowerSnakeEnemy>();
-            SkinData.FlapAudioListAction.ApplyToMap(new AudioClip[] { friend.enemyType.audioClips[4], friend.enemyType.audioClips[5] }, clipMap);
-            SkinData.ChuckleAudioListAction.ApplyToMap(new AudioClip[] { friend.enemyType.audioClips[0], friend.enemyType.audioClips[1], friend.enemyType.audioClips[2], friend.enemyType.audioClips[3] }, clipMap);
-            SkinData.LeapAudioListAction.ApplyToMap(new AudioClip[] { friend.enemyType.audioClips[6], friend.enemyType.audioClips[7], friend.enemyType.audioClips[10] }, clipMap);
-            SkinData.ScurryAudioAction.ApplyToMap(friend.enemyType.audioClips[9], clipMap);
-
-
-            modFlappingAudio = CreateAudioReflector(friend.flappingAudio, clipMap, friend.NetworkObjectId); 
-            friend.flappingAudio.mute = true;
-            modCreatureEffects = CreateAudioReflector(friend.creatureSFX, clipMap, friend.NetworkObjectId); 
-            friend.creatureSFX.mute = true;
-            modCreatureVoice = CreateAudioReflector(friend.creatureVoice, clipMap, friend.NetworkObjectId); 
-            friend.creatureVoice.mute = true;
-
+            vanillaFlapClips = new AudioClip[] { friend.enemyType.audioClips[4], friend.enemyType.audioClips[5] };
+            vanillaChuckleClips = new AudioClip[] { friend.enemyType.audioClips[0], friend.enemyType.audioClips[1], friend.enemyType.audioClips[2], friend.enemyType.audioClips[3] };
+            vanillaLeapClips = new AudioClip[] { friend.enemyType.audioClips[6], friend.enemyType.audioClips[7], friend.enemyType.audioClips[10] };
+            if (VoiceSilenced)
+            {
+                modCreatureVoice = CreateModdedAudioSource(friend.creatureVoice, "modVoice");
+                friend.creatureVoice.mute = true;
+            }
+            if (VoiceSilenced)
+            {
+                modFlapAudio = CreateModdedAudioSource(friend.creatureVoice, "modFlapAudio");
+                friend.flappingAudio.mute = true;
+            }
             activeAttachments = ArmatureAttachment.ApplyAttachments(SkinData.Attachments, enemy.transform.Find(LOD0_PATH)?.gameObject?.GetComponent<SkinnedMeshRenderer>());
 
             SkinData.BodyMaterialAction.ApplyRef(ref friend.randomSkinColor[0]);
@@ -80,6 +86,16 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         {
             FlowerSnakeEnemy friend = enemy.GetComponent<FlowerSnakeEnemy>();
             EnemySkinRegistry.RemoveEnemyEventHandler(friend, this);
+            if (VoiceSilenced)
+            {
+                DestroyModdedAudioSource(modCreatureVoice);
+                friend.creatureVoice.mute = false;
+            }
+            if (VoiceSilenced)
+            {
+                DestroyModdedAudioSource(modFlapAudio);
+                friend.flappingAudio.mute = false;
+            }
             ArmatureAttachment.RemoveAttachments(activeAttachments);
 
             //Thank god for deterministic RNG
@@ -115,6 +131,108 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 },
                 skinnedMeshReplacement
             );
+        }
+
+        public void OnChuckle(FlowerSnakeEnemy snake)
+        {
+            if (VoiceSilenced && modCreatureVoice != null)
+            {
+                AudioClip[] workingEffects = SkinData.FlapAudioListAction.WorkingClips(vanillaFlapClips).Concat(SkinData.ChuckleAudioListAction.WorkingClips(vanillaChuckleClips)).ToArray();
+                if(workingEffects.Length > 0)
+                {
+                    RoundManager.PlayRandomClip(modCreatureVoice, workingEffects, randomize: true, 1f, 0, workingEffects.Length);
+                }
+            }
+        }
+
+        public void OnStartLeap(FlowerSnakeEnemy snake)
+        {
+            if (FlapSilenced)
+            {
+                modFlapAudio?.Stop();
+            }
+            if (VoiceSilenced)
+            {
+                modCreatureVoice?.Stop();
+                AudioClip[] leapEffects = SkinData.LeapAudioListAction.WorkingClips(vanillaLeapClips);
+                if(leapEffects.Length > 0)
+                {
+                    modCreatureVoice?.PlayOneShot(leapEffects[UnityEngine.Random.Range(0, leapEffects.Length - 1)]);
+                }
+            }
+        }
+
+        public void OnStopLeap(FlowerSnakeEnemy snake)
+        {
+            if (FlapSilenced)
+            {
+                if (!snake.isEnemyDead)
+                {
+                    modFlapAudio?.PlayOneShot(SkinData.ScurryAudioAction.WorkingClip(snake.enemyType.audioClips[9]));
+                }
+            }
+        }
+
+        public void OnStopCling(FlowerSnakeEnemy snake)
+        {
+            if (FlapSilenced)
+            {
+                if (!snake.isEnemyDead)
+                {
+                    modFlapAudio?.PlayOneShot(SkinData.ScurryAudioAction.WorkingClip(snake.enemyType.audioClips[9]));
+                }
+            }
+        }
+
+        public void OnStartedFlapping(FlowerSnakeEnemy snake)
+        {
+            if(FlapSilenced && modFlapAudio!=null)
+            {
+                AudioClip[] flapEffects = SkinData.FlapAudioListAction.WorkingClips(vanillaFlapClips);
+                if(flapEffects.Length > 0)
+                {
+                    modFlapAudio.pitch = UnityEngine.Random.Range(0.85f, 1.1f);
+                    modFlapAudio.PlayOneShot(flapEffects[UnityEngine.Random.Range(0, flapEffects.Length-1)]);
+                }
+            }
+        }
+
+        public void OnStoppedFlapping(FlowerSnakeEnemy snake)
+        {
+            if (FlapSilenced)
+            {
+                modFlapAudio?.Stop();
+            }
+        }
+
+        public void OnSpawn(EnemyAI enemy)
+        {
+            if (FlapSilenced && modFlapAudio != null)
+            {
+                modFlapAudio.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+                modFlapAudio.PlayOneShot(SkinData.ScurryAudioAction.WorkingClip(enemy.enemyType.audioClips[9]));
+            }
+        }
+
+        public void OnKilled(EnemyAI enemy)
+        {
+            if(VoiceSilenced)
+            {
+                modCreatureVoice?.Stop();
+            }
+            if(FlapSilenced)
+            {
+                modFlapAudio?.Stop();
+            }
+        }
+
+        public void OnEnemyUpdate(EnemyAI enemy)
+        {
+            if(FlapSilenced && modFlapAudio != null)
+            {
+                FlowerSnakeEnemy friend = enemy as FlowerSnakeEnemy;
+                modFlapAudio.volume = friend.flappingAudio.volume;
+            }
         }
     }
 }

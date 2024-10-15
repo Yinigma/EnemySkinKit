@@ -9,7 +9,6 @@
     "precompiledReferences": [
         "BepInEx.dll",
         "Assembly-CSharp.dll",
-        "0Harmony.dll",
         "EnemySkinRegistry.dll",
         "Unity.Netcode.Runtime.dll"
     ],

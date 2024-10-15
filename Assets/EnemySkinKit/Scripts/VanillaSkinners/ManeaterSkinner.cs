@@ -1,4 +1,3 @@
-using AntlerShed.EnemySkinKit.AudioReflection;
 using AntlerShed.EnemySkinKit.SkinAction;
 using AntlerShed.SkinRegistry;
 using AntlerShed.SkinRegistry.Events;
@@ -10,7 +9,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
     public class ManeaterSkinner : BaseSkinner, ManeaterEventHandler
     {
         protected const string BABY_ANCHOR_PATH = "BabyMeshContainer";
-        protected const string BABY_WALK_AUDIO = "BabyWalkSFX";
         protected const string BABY_MESH_PATH = "BabyMeshContainer/BabyManeaterMesh";
         protected const string BABY_ANIM_EVENTS_PATH = "BabyMeshContainer/BabyAnimContainer";
         protected const string FLESH_PULL_PATH = "MeshContainer/AnimContainer/RagdollPoint/FleshPull (1)";
@@ -24,6 +22,10 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         protected VanillaMaterial vanillaBabyMaterial;
         protected GameObject replacementBabyBodyMesh;
+        protected AudioClip vanillaCryingAudio;
+        protected AudioClip vanillaSquirmAudio;
+        protected AudioClip[] vanillaScaredNoiseAudioList;
+        protected AudioClip[] vanillaBabyFootstepsAudioList;
         protected VanillaMaterial vanillaTearsMaterial;
         protected ParticleSystem vanillaTearsParticle;
         protected VanillaMaterial vanillaPukeMaterial;
@@ -33,6 +35,15 @@ namespace AntlerShed.EnemySkinKit.Vanilla
         protected VanillaMaterial vanillaDeadPlayerFleshMaterial;
         protected GameObject replacementAdultBodyMesh;
         protected Mesh vanillaDeadPlayerFleshMesh;
+        protected AudioClip vanillaGrowlAudio;
+        protected AudioClip vanillaCooldownAudio;
+        protected AudioClip vanillaTransformAudio;
+        protected AudioClip vanillaBiteAudio;
+        protected AudioClip vanillaAdultWalkingAudio;
+        protected AudioClip vanillaClickingMandiblesAudio;
+        protected AudioClip vanillaBuzzingAudio;
+        protected AudioClip vanillaLeapScreamAudio;
+        protected AudioClip[] vanillaFakeCryAudioList;
         protected VanillaMaterial vanillaBloodSpurtMaterial;
         protected ParticleSystem vanillaBloodSpurtParticle;
         protected VanillaMaterial vanillaBloodSpurt2Material;
@@ -45,8 +56,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         protected ManeaterSkin SkinData { get; }
 
-        protected Dictionary<string, AudioReplacement> clipMap = new Dictionary<string, AudioReplacement>();
-
         public ManeaterSkinner(ManeaterSkin skinData)
         {
             SkinData = skinData;
@@ -54,16 +63,6 @@ namespace AntlerShed.EnemySkinKit.Vanilla
 
         protected SkinnedMeshRenderer vanillaBabyMesh;
         protected SkinnedMeshRenderer vanillaAdultMesh;
-        protected AudioReflector modCreatureVoice;
-        protected AudioReflector modBabyVoice;
-        protected AudioReflector modbabyWalkAudio;
-        protected AudioReflector modCreatureEffects;
-        protected AudioReflector modClickingAudio1;
-        protected AudioReflector modClickingAudio2;
-        protected AudioReflector modWalkingAudio;
-        protected AudioReflector modBabyCryingAudio;
-        protected AudioReflector modScreamAudio;
-        protected AudioReflector modScreamAudioNonDiagetic;
 
         public override void Apply(GameObject enemy)
         {
@@ -72,7 +71,7 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             PlayAudioAnimationEvent babyAudioAnimEvents = enemy.transform.Find(BABY_ANIM_EVENTS_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             if(babyAudioAnimEvents != null)
             {
-                SkinData.BabyFootstepsAudioListAction.ApplyToMap(babyAudioAnimEvents.randomClips, clipMap);
+                vanillaBabyFootstepsAudioList = SkinData.BabyFootstepsAudioListAction.Apply(ref babyAudioAnimEvents.randomClips);
             }
             PlayAudioAnimationEvent adultAudioAnimEvents = enemy.transform.Find(ADULT_ANIM_EVENTS_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             if(adultAudioAnimEvents != null)
@@ -83,46 +82,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 vanillaTransformationGooParticle = SkinData.TransformationGooParticleAction.ApplyRef(ref adultAudioAnimEvents.particle);
             }
 
-            SkinData.ClickingMandiblesAudioAction.ApplyToMap(maneater.clickingAudio1.clip, clipMap);
-            SkinData.BuzzingAudioAction.ApplyToMap(maneater.clickingAudio2.clip, clipMap);
-            SkinData.LeapScreamAudioAction.ApplyToMap(maneater.screamAudio.clip, clipMap);
-            SkinData.LeapScreamAudioAction.ApplyToMap(maneater.screamAudioNonDiagetic.clip, clipMap);
-            SkinData.AdultWalkingAudioAction.ApplyToMap(maneater.walkingAudio.clip, clipMap);
-            SkinData.CryingAudioAction.ApplyToMap(maneater.babyCryingAudio.clip, clipMap);
+            vanillaClickingMandiblesAudio = SkinData.ClickingMandiblesAudioAction.ApplyToSource(maneater.clickingAudio1);
+            vanillaBuzzingAudio = SkinData.BuzzingAudioAction.ApplyToSource(maneater.clickingAudio2);
+            vanillaLeapScreamAudio = SkinData.LeapScreamAudioAction.ApplyToSource(maneater.screamAudio);
+            SkinData.LeapScreamAudioAction.ApplyToSource(maneater.screamAudioNonDiagetic);
+            vanillaAdultWalkingAudio = SkinData.AdultWalkingAudioAction.ApplyToSource(maneater.walkingAudio);
+            vanillaCryingAudio = SkinData.CryingAudioAction.ApplyToSource(maneater.babyCryingAudio);
 
-            SkinData.GrowlAudioAction.ApplyToMap(maneater.growlSFX, clipMap);
-            SkinData.FakeCryAudioListAction.ApplyToMap(maneater.fakeCrySFX, clipMap);
-            SkinData.CooldownAudioAction.ApplyToMap(maneater.cooldownSFX, clipMap);
-            SkinData.SquirmAudioAction.ApplyToMap(maneater.squirmingSFX, clipMap);
-            SkinData.TransformAudioAction.ApplyToMap(maneater.transformationSFX, clipMap);
-            SkinData.ScaredNoiseAudioListAction.ApplyToMap(maneater.scaredBabyVoiceSFX, clipMap);
-            SkinData.BiteAudioAction.ApplyToMap(maneater.biteSFX, clipMap);
-
-            modCreatureVoice = CreateAudioReflector(maneater.creatureVoice, clipMap, maneater.NetworkObjectId);
-            maneater.creatureVoice.mute = true;
-            modBabyVoice = CreateAudioReflector(maneater.babyVoice, clipMap, maneater.NetworkObjectId);
-            maneater.babyVoice.mute = true;
-            AudioSource babyWalkAudio = maneater.transform.Find(BABY_WALK_AUDIO).GetComponent<AudioSource>();
-            if (babyWalkAudio != null)
-            {
-                modbabyWalkAudio = CreateAudioReflector(babyWalkAudio, clipMap, maneater.NetworkObjectId);
-                babyWalkAudio.mute = true;
-            }
-            modCreatureEffects = CreateAudioReflector(maneater.creatureSFX, clipMap, maneater.NetworkObjectId); 
-            maneater.creatureSFX.mute = true;
-            modClickingAudio1 = CreateAudioReflector(maneater.clickingAudio1, clipMap, maneater.NetworkObjectId); 
-            maneater.clickingAudio1.mute = true;
-            modClickingAudio2 = CreateAudioReflector(maneater.clickingAudio2, clipMap, maneater.NetworkObjectId); 
-            maneater.clickingAudio2.mute = true;
-            modWalkingAudio = CreateAudioReflector(maneater.walkingAudio, clipMap, maneater.NetworkObjectId); 
-            maneater.walkingAudio.mute = true;
-            modBabyCryingAudio = CreateAudioReflector(maneater.babyCryingAudio, clipMap, maneater.NetworkObjectId); 
-            maneater.babyCryingAudio.mute = true;
-            modScreamAudio = CreateAudioReflector(maneater.screamAudio, clipMap, maneater.NetworkObjectId); 
-            maneater.screamAudio.mute = true;
-            modScreamAudioNonDiagetic = CreateAudioReflector(maneater.screamAudioNonDiagetic, clipMap, maneater.NetworkObjectId); 
-            maneater.screamAudioNonDiagetic.mute = true;
-            
+            vanillaGrowlAudio = SkinData.GrowlAudioAction.Apply(ref maneater.growlSFX);
+            vanillaFakeCryAudioList = SkinData.FakeCryAudioListAction.Apply(ref maneater.fakeCrySFX);
+            vanillaCooldownAudio = SkinData.CooldownAudioAction.Apply(ref maneater.cooldownSFX);
+            vanillaSquirmAudio = SkinData.SquirmAudioAction.Apply(ref maneater.squirmingSFX);
+            vanillaTransformAudio = SkinData.TransformAudioAction.Apply(ref maneater.transformationSFX);
+            vanillaScaredNoiseAudioList = SkinData.ScaredNoiseAudioListAction.Apply(ref maneater.scaredBabyVoiceSFX);
+            vanillaBiteAudio = SkinData.BiteAudioAction.Apply(ref maneater.biteSFX);
 
             vanillaTearsMaterial = SkinData.TearsMaterialAction.Apply(maneater.babyTearsParticle.GetComponent<ParticleSystemRenderer>(), 0);
             SkinData.TearsMaterialAction.Apply(maneater.babyTearsParticle.transform.Find(CRY_PARTICLE_2).GetComponent<ParticleSystemRenderer>(), 0);
@@ -180,6 +153,11 @@ namespace AntlerShed.EnemySkinKit.Vanilla
             CaveDwellerAI maneater = enemy.GetComponent<CaveDwellerAI>();
             EnemySkinRegistry.RemoveEnemyEventHandler(maneater, this);
 
+            PlayAudioAnimationEvent babyAudioAnimEvents = enemy.transform.Find(BABY_ANIM_EVENTS_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
+            if (babyAudioAnimEvents != null)
+            {
+                SkinData.BabyFootstepsAudioListAction.Remove(ref babyAudioAnimEvents.randomClips, vanillaBabyFootstepsAudioList);
+            }
             PlayAudioAnimationEvent adultAudioAnimEvents = enemy.transform.Find(ADULT_ANIM_EVENTS_PATH)?.gameObject?.GetComponent<PlayAudioAnimationEvent>();
             if (adultAudioAnimEvents != null)
             {
@@ -189,30 +167,20 @@ namespace AntlerShed.EnemySkinKit.Vanilla
                 SkinData.TransformationGooParticleAction.RemoveRef(ref adultAudioAnimEvents.particle, vanillaTransformationGooParticle);
             }
 
-            DestroyAudioReflector(modCreatureVoice);
-            maneater.creatureVoice.mute = false;
-            DestroyAudioReflector(modBabyVoice);
-            maneater.babyVoice.mute = false;
-            AudioSource babyWalkAudio = maneater.transform.Find(BABY_WALK_AUDIO)?.GetComponent<AudioSource>();
-            if (babyWalkAudio != null)
-            {
-                DestroyAudioReflector(modbabyWalkAudio);
-                babyWalkAudio.mute = false;
-            }
-            DestroyAudioReflector(modCreatureEffects);
-            maneater.creatureSFX.mute = false;
-            DestroyAudioReflector(modClickingAudio1);
-            maneater.clickingAudio1.mute = false;
-            DestroyAudioReflector(modClickingAudio2);
-            maneater.clickingAudio2.mute = false;
-            DestroyAudioReflector(modWalkingAudio);
-            maneater.walkingAudio.mute = false;
-            DestroyAudioReflector(modBabyCryingAudio);
-            maneater.babyCryingAudio.mute = false;
-            DestroyAudioReflector(modScreamAudio);
-            maneater.screamAudio.mute = false;
-            DestroyAudioReflector(modScreamAudioNonDiagetic);
-            maneater.screamAudioNonDiagetic.mute = false;
+            SkinData.ClickingMandiblesAudioAction.RemoveFromSource(maneater.clickingAudio1, vanillaClickingMandiblesAudio);
+            SkinData.BuzzingAudioAction.RemoveFromSource(maneater.clickingAudio2, vanillaBuzzingAudio);
+            SkinData.LeapScreamAudioAction.RemoveFromSource(maneater.screamAudio, vanillaLeapScreamAudio);
+            SkinData.LeapScreamAudioAction.RemoveFromSource(maneater.screamAudioNonDiagetic, vanillaLeapScreamAudio);
+            SkinData.AdultWalkingAudioAction.RemoveFromSource(maneater.walkingAudio, vanillaAdultWalkingAudio);
+            SkinData.CryingAudioAction.RemoveFromSource(maneater.babyCryingAudio, vanillaCryingAudio);
+
+            SkinData.GrowlAudioAction.Remove(ref maneater.growlSFX, vanillaGrowlAudio);
+            SkinData.FakeCryAudioListAction.Remove(ref maneater.fakeCrySFX, vanillaFakeCryAudioList);
+            SkinData.CooldownAudioAction.Remove(ref maneater.cooldownSFX, vanillaCooldownAudio);
+            SkinData.SquirmAudioAction.Remove(ref maneater.squirmingSFX, vanillaSquirmAudio);
+            SkinData.TransformAudioAction.Remove(ref maneater.transformationSFX, vanillaTransformAudio);
+            SkinData.ScaredNoiseAudioListAction.Remove(ref maneater.scaredBabyVoiceSFX, vanillaScaredNoiseAudioList);
+            SkinData.BiteAudioAction.Remove(ref maneater.biteSFX, vanillaBiteAudio);
 
             SkinData.TearsMaterialAction.Remove(maneater.babyTearsParticle.GetComponent<ParticleSystemRenderer>(), 0, vanillaTearsMaterial);
             SkinData.TearsMaterialAction.Remove(maneater.babyTearsParticle.transform.Find(CRY_PARTICLE_2).GetComponent<ParticleSystemRenderer>(), 0, vanillaTearsMaterial);
