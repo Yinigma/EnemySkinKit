@@ -1,7 +1,9 @@
 
+
 # Enemy Skin Kit
 
 This mod provides tools for creating vanilla enemy skins for lethal company from within the unity editor. Most end users will see this as a dependency for other skin mods.
+New maintainer Xu here, contact me on discord @xuxiaolan or at the EnemySkinKit/EnemySkinRegistry thread on Lethal Company Modded discord if any issues arise.
 
 ## Features
 

@@ -1,12 +1,10 @@
 using AntlerShed.EnemySkinKit.ArmatureReflection;
-using AntlerShed.SkinRegistry;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.VFX;
 
-
+#nullable enable
 namespace AntlerShed.EnemySkinKit.SkinAction
 {
     public enum SkinnedMeshActionType
@@ -35,9 +33,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         /// <param name="vanilla">the array of skinned mesh renderers to operate on. This is an array so multiple LOD meshes can be dealt with in the same way.</param>
         /// <param name="anchor">the transform that will be the parent of the replacement prefab if applicable. It's up to the author of any custom enemies to decide what is an appopriate anchor.</param>
         /// <return></return>
-        public GameObject Apply(SkinnedMeshRenderer[] vanilla, Transform anchor, Dictionary<string, Transform> additionalTransforms = null)
+        public readonly GameObject? Apply(SkinnedMeshRenderer[] vanilla, Transform anchor, Dictionary<string, Transform> additionalTransforms = null)
         {
-            GameObject moddedSkin = null;
+            GameObject? moddedSkin = null;
             if (vanilla != null)
             {
                 switch (actionType)
@@ -97,7 +95,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         /// </summary>
         /// <param name="vanilla">the array of skinned mesh renderers that a previous call to "Apply" operated on</param>
         /// <param name="anchor">the parent transform of the replacement prefab instance if applicable</param>
-        public void Remove(SkinnedMeshRenderer[] vanilla, GameObject moddedSkin)
+        public readonly void Remove(SkinnedMeshRenderer[] vanilla, GameObject? moddedSkin)
         {
             if (vanilla != null)
             {
@@ -145,9 +143,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
 
         public Mesh replacementMesh;
 
-        public Mesh Apply(MeshFilter vanilla)
+        public readonly Mesh? Apply(MeshFilter? vanilla)
         {
-            Mesh vanillaMesh = null;
+            Mesh? vanillaMesh = null;
             if (vanilla != null)
             {
                 switch (actionType)
@@ -170,9 +168,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaMesh;
         }
 
-        public Mesh ApplyToVisualEffect(VisualEffect vanillaVisualEffect, string meshId)
+        public readonly Mesh? ApplyToVisualEffect(VisualEffect? vanillaVisualEffect, string meshId)
         {
-            Mesh vanillaMesh = null;
+            Mesh? vanillaMesh = null;
             if (vanillaVisualEffect != null)
             {
                 switch (actionType)
@@ -195,7 +193,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaMesh;
         }
 
-        public void Remove(MeshFilter vanilla, Mesh vanillaMesh)
+        public readonly void Remove(MeshFilter? vanilla, Mesh vanillaMesh)
         {
             if (vanilla != null)
             {
@@ -217,7 +215,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             }
         }
 
-        public void RemoveFromVisualEffect(VisualEffect vanillaVisualEffect, Mesh vanillaMesh, string meshId)
+        public readonly void RemoveFromVisualEffect(VisualEffect? vanillaVisualEffect, Mesh vanillaMesh, string meshId)
         {
             if (vanillaVisualEffect != null)
             {
@@ -252,7 +250,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public ColorActionType actionType;
         public Color replacementColor;
         
-        public Color Apply(Material vanillaMat, string property)
+        public readonly Color Apply(Material? vanillaMat, string property)
         {
             Color vanillaColor = Color.black;
             if (vanillaMat != null)
@@ -269,7 +267,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                             break;
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     if (EnemySkinKit.LogLevelSetting >= LogLevel.ERROR) { EnemySkinKit.SkinKitLogger.LogError($"No such property \"{property}\" exists for vanilla material \"{vanillaMat.name}.\" Skipping."); }
                 }
@@ -281,7 +279,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaColor;
         }
 
-        public void Remove(Material vanillaMat, string property, Color vanillaColor)
+        public readonly void Remove(Material? vanillaMat, string property, Color vanillaColor)
         {
             if (vanillaMat != null)
             {
@@ -296,7 +294,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                             break;
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     if (EnemySkinKit.LogLevelSetting >= LogLevel.ERROR) { EnemySkinKit.SkinKitLogger.LogError($"No such property \"{property}\" exists for vanilla material \"{vanillaMat.name}.\" Skipping."); }
                 }
@@ -307,12 +305,11 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             }
         }
 
-        public Color Apply(Light vanillaLight)
+        public readonly Color Apply(Light? vanillaLight)
         {
             Color vanillaColor = Color.black;
             if (vanillaLight != null)
             {
-
                 vanillaColor = vanillaLight.color;
                 switch (actionType)
                 {
@@ -330,7 +327,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaColor;
         }
 
-        public void Remove(Light vanillaLight, Color vanillaColor)
+        public readonly void Remove(Light? vanillaLight, Color vanillaColor)
         {
             if (vanillaLight != null)
             {
@@ -362,9 +359,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public TextureActionType actionType;
         public Texture replacementTexture;
 
-        public Texture Apply(Material vanillaMat, string property)
+        public readonly Texture? Apply(Material? vanillaMat, string property)
         {
-            Texture vanillaTexture = null;
+            Texture? vanillaTexture = null;
             if (vanillaMat != null)
             {
                 try
@@ -391,7 +388,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaTexture;
         }
 
-        public void Remove(Material vanillaMat, string property, Texture vanillaTexture)
+        public readonly void Remove(Material? vanillaMat, string property, Texture vanillaTexture)
         {
             if (vanillaMat != null)
             {
@@ -417,9 +414,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             }
         }
 
-        public Texture ApplyToVisualEffect(VisualEffect vanillaVisualEffect, string property)
+        public readonly Texture? ApplyToVisualEffect(VisualEffect? vanillaVisualEffect, string property)
         {
-            Texture vanillaTexture = null;
+            Texture? vanillaTexture = null;
             if (vanillaVisualEffect != null)
             {
                 try
@@ -446,7 +443,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaTexture;
         }
 
-        public void RemoveFromVisualEffect(VisualEffect vanillaVisualEffect, string property, Texture vanillaTexture)
+        public readonly void RemoveFromVisualEffect(VisualEffect? vanillaVisualEffect, string property, Texture vanillaTexture)
         {
             if (vanillaVisualEffect != null)
             {
@@ -493,9 +490,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public Material replacementMaterial;
         public Texture2D replacementTexture;
 
-        public VanillaMaterial Apply(Renderer vanillaRenderer, int materialIndex)
+        public readonly VanillaMaterial Apply(Renderer? vanillaRenderer, int materialIndex)
         {
-            VanillaMaterial vanillaMaterial = new VanillaMaterial();
+            VanillaMaterial vanillaMaterial = new();
             if (vanillaRenderer != null)
             {
                 switch (actionType)
@@ -521,10 +518,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaMaterial;
         }
 
-        public VanillaMaterial ApplyRef(ref Material vanillaRef)
+        public readonly VanillaMaterial ApplyRef(ref Material vanillaRef)
         {
-            
-            VanillaMaterial vanillaMaterial = new VanillaMaterial();
+            VanillaMaterial vanillaMaterial = new();
             switch (actionType)
             {
                 case MaterialActionType.REPLACE:
@@ -541,7 +537,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaMaterial;
         }
 
-        public void Remove(Renderer vanillaRenderer, int materialIndex, VanillaMaterial vanillaMaterial)
+        public readonly void Remove(Renderer? vanillaRenderer, int materialIndex, VanillaMaterial vanillaMaterial)
         {
             if (vanillaRenderer != null)
             {
@@ -565,7 +561,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             }
         }
 
-        public void RemoveRef(ref Material dest, VanillaMaterial vanillaMaterial)
+        public readonly void RemoveRef(ref Material dest, VanillaMaterial vanillaMaterial)
         {
             switch (actionType)
             {
@@ -594,10 +590,10 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         public ParticleSystemActionType actionType;
         public ParticleSystem replacementParticle;
 
-        public ParticleSystem Apply(ParticleSystem vanillaParticle)
+        public readonly ParticleSystem? Apply(ParticleSystem? vanillaParticle)
         {
-            ParticleSystem retSystem = null;
-            if (vanillaParticle?.gameObject?.GetComponent<ParticleSystemRenderer>() != null)
+            ParticleSystem? retSystem = null;
+            if (vanillaParticle?.gameObject.GetComponent<ParticleSystemRenderer>() != null)
             {
                 switch (actionType)
                 {
@@ -612,9 +608,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                         instance.transform.localScale = Vector3.one;
                         instance.transform.localRotation = Quaternion.identity;
                         instance.transform.localPosition = Vector3.zero;
-                        if(vanillaParticle.isPlaying != instance.isPlaying)
+                        if (vanillaParticle.isPlaying != instance.isPlaying)
                         {
-                            if(vanillaParticle.isPlaying)
+                            if (vanillaParticle.isPlaying)
                             {
                                 instance.Play();
                             }
@@ -634,10 +630,10 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return retSystem;
         }
 
-        public ParticleSystem ApplySubEmitter(ParticleSystem vanillaParticleRef, int subEmitterIndex)
+        public readonly ParticleSystem? ApplySubEmitter(ParticleSystem vanillaParticleRef, int subEmitterIndex)
         {
-            ParticleSystem vanillaSubEmitter = vanillaParticleRef?.subEmitters.GetSubEmitterSystem(subEmitterIndex);
-            if(vanillaSubEmitter != null)
+            ParticleSystem? vanillaSubEmitter = vanillaParticleRef?.subEmitters.GetSubEmitterSystem(subEmitterIndex);
+            if (vanillaSubEmitter != null && vanillaParticleRef != null)
             {
                 switch (actionType)
                 {
@@ -677,29 +673,29 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                         }
                         break;
                 }
-                return vanillaSubEmitter;
             }
             else
             {
                 if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Could not find particle sub-emitter at index specified. Skipping."); }
-                return null;
             }
+            return vanillaSubEmitter;
         }
 
-        public ParticleSystem ApplyRef(ref ParticleSystem vanillaParticleRef)
+        public readonly ParticleSystem ApplyRef(ref ParticleSystem vanillaParticleRef)
         {
             ParticleSystem vanillaParticle = vanillaParticleRef;
-            if (vanillaParticleRef?.gameObject?.GetComponent<ParticleSystemRenderer>() != null)
+            ParticleSystemRenderer? psRenderer = vanillaParticleRef?.gameObject.GetComponent<ParticleSystemRenderer>();
+            if (psRenderer != null)
             {
                 switch (actionType)
                 {
                     case ParticleSystemActionType.RETAIN:
                         break;
                     case ParticleSystemActionType.HIDE:
-                        vanillaParticleRef.gameObject.GetComponent<ParticleSystemRenderer>().enabled = false;
+                        psRenderer.enabled = false;
                         break;
                     case ParticleSystemActionType.REPLACE:
-                        if(replacementParticle!=null)
+                        if (replacementParticle != null)
                         {
                             ParticleSystem instance = GameObject.Instantiate(replacementParticle.gameObject, vanillaParticle.transform).GetComponent<ParticleSystem>();
                             instance.transform.localPosition = Vector3.zero;
@@ -720,7 +716,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                         }
                         else
                         {
-                            vanillaParticleRef.gameObject.GetComponent<ParticleSystemRenderer>().enabled = false;
+                            psRenderer.enabled = false;
                             if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Replacement particle was null. Vanilla particle will be hidden."); }
                         }
                         break;
@@ -733,10 +729,10 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaParticle;
         }
 
-        public ParticleSystem RemoveSubEmitter(ParticleSystem vanillaParticleRef, int subEmitterIndex, ParticleSystem vanillaSubEmitter)
+        public readonly ParticleSystem? RemoveSubEmitter(ParticleSystem? vanillaParticleRef, int subEmitterIndex, ParticleSystem? vanillaSubEmitter)
         {
-            ParticleSystem replacementSubEmitter = vanillaParticleRef?.subEmitters.GetSubEmitterSystem(subEmitterIndex);
-            if (vanillaSubEmitter != null)
+            ParticleSystem? replacementSubEmitter = vanillaParticleRef?.subEmitters.GetSubEmitterSystem(subEmitterIndex);
+            if (vanillaSubEmitter != null && vanillaParticleRef != null)
             {
                 switch (actionType)
                 {
@@ -747,47 +743,45 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                         break;
                     case ParticleSystemActionType.REPLACE:
                         vanillaParticleRef.subEmitters.SetSubEmitterSystem(subEmitterIndex, vanillaSubEmitter);
-                        if (replacementSubEmitter != null)
+                        if (replacementSubEmitter == null)
+                            break;
+                        if (replacementSubEmitter.isPlaying == vanillaSubEmitter.isPlaying)
+                            break;
+                        if (replacementSubEmitter.isPlaying)
                         {
-                            if (replacementSubEmitter.isPlaying != vanillaSubEmitter.isPlaying)
-                            {
-                                if(replacementSubEmitter.isPlaying)
-                                {
-                                    vanillaSubEmitter.Play();
-                                }
-                                else
-                                {
-                                    vanillaSubEmitter.Stop();
-                                }
-                            }
-                            GameObject.Destroy(replacementSubEmitter.gameObject);
+                            vanillaSubEmitter.Play();
                         }
+                        else
+                        {
+                            vanillaSubEmitter.Stop();
+                        }
+                        GameObject.Destroy(replacementSubEmitter.gameObject);
                         break;
                 }
-                return vanillaSubEmitter;
             }
             else
             {
                 if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Could not find particle sub-emitter at index specified. Skipping."); }
-                return null;
             }
+            return vanillaSubEmitter;
         }
 
-        public void Remove(ParticleSystem vanillaParticle, ParticleSystem replacementSystem)
+        public readonly void Remove(ParticleSystem? vanillaParticle, ParticleSystem? replacementSystem)
         {
-            if (vanillaParticle?.gameObject?.GetComponent<ParticleSystemRenderer>() != null)
+            ParticleSystemRenderer? psRenderer = vanillaParticle?.gameObject.GetComponent<ParticleSystemRenderer>();
+            if (psRenderer != null && vanillaParticle != null)
             {
                 switch (actionType)
                 {
                     case ParticleSystemActionType.RETAIN:
                         break;
                     case ParticleSystemActionType.HIDE:
-                        vanillaParticle.gameObject.GetComponent<ParticleSystemRenderer>().enabled = true;
+                        psRenderer.enabled = true;
                         break;
                     case ParticleSystemActionType.REPLACE:
-                        if(replacementSystem!=null)
+                        if (replacementSystem != null)
                         {
-                            if(replacementSystem.isPlaying != vanillaParticle.isPlaying)
+                            if (replacementSystem.isPlaying != vanillaParticle.isPlaying)
                             {
                                 if (replacementSystem.isPlaying)
                                 {
@@ -800,7 +794,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                             }
                             GameObject.Destroy(replacementSystem);
                         }
-                        vanillaParticle.gameObject.GetComponent<ParticleSystemRenderer>().enabled = true;
+                        psRenderer.enabled = true;
                         break;
                 }
             }
@@ -810,14 +804,15 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             }
         }
 
-        public void RemoveRef(ref ParticleSystem vanillaParticleRef, ParticleSystem vanillaParticle)
+        public readonly void RemoveRef(ref ParticleSystem? vanillaParticleRef, ParticleSystem vanillaParticle)
         {
-            if (vanillaParticleRef?.gameObject?.GetComponent<ParticleSystemRenderer>() != null)
+            ParticleSystemRenderer? psRenderer = vanillaParticleRef?.gameObject.GetComponent<ParticleSystemRenderer>();
+            if (psRenderer != null && vanillaParticleRef != null)
             {
                 switch (actionType)
                 {
                     case ParticleSystemActionType.REPLACE:
-                        ParticleSystem replacementSystem = vanillaParticleRef;
+                        ParticleSystem? replacementSystem = vanillaParticleRef;
                         if (replacementSystem != null && replacementSystem != vanillaParticle)
                         {
                             replacementSystem.gameObject.GetComponent<ParticleSystemRenderer>().enabled = false;
@@ -831,7 +826,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                         }
                         else
                         {
-                            vanillaParticleRef.gameObject.GetComponent<ParticleSystemRenderer>().enabled = true;
+                            psRenderer.enabled = true;
                             if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) { EnemySkinKit.SkinKitLogger.LogWarning("Replacement particle was null. The only action being taken is showing the vanilla particle."); }
                         }
                         break;
@@ -863,12 +858,11 @@ namespace AntlerShed.EnemySkinKit.SkinAction
 
         public AudioClip replacementClip;
 
-        public AudioClip Silence => AudioClip.Create("empty", 1, 1, 1000, false);
+        public readonly AudioClip Silence => AudioClip.Create("empty", 1, 1, 1000, false);
 
-        public AudioClip Apply(ref AudioClip vanillaRef)
+        public readonly AudioClip? Apply(ref AudioClip? vanillaRef)
         {
-            
-            AudioClip vanillaClip = vanillaRef;
+            AudioClip? vanillaClip = vanillaRef;
             if (vanillaRef != null)
             {
                 switch (actionType)
@@ -890,7 +884,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaClip;
         }
 
-        public AudioClip WorkingClip(AudioClip vanillaClip)
+        public readonly AudioClip WorkingClip(AudioClip vanillaClip)
         {
             switch (actionType)
             {
@@ -913,12 +907,12 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         /// </summary>
         /// <param name="vanillaSource">The audio source component with an effectively-static audioClip</param>
         /// <returns>The vanilla audio clip in the case that the actionType is set to REPLACE. Null otherwise. Whatever is returned must be stored and re-used in the corresponding Remove call</returns>
-        public AudioClip ApplyToSource(AudioSource vanillaSource)
+        public readonly AudioClip? ApplyToSource(AudioSource? vanillaSource)
         {
-            AudioClip vanillaClip = null;
+            AudioClip? vanillaClip = null;
             if (vanillaSource != null)
             {
-                vanillaClip = vanillaSource?.clip;
+                vanillaClip = vanillaSource.clip;
                 switch (actionType)
                 {
                     case AudioActionType.MUTE:
@@ -944,7 +938,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaClip;
         }
 
-        public void Remove(ref AudioClip vanillaRef, AudioClip vanillaClip)
+        public readonly void Remove(ref AudioClip? vanillaRef, AudioClip vanillaClip)
         {
             if (vanillaRef != null)
             {
@@ -966,7 +960,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             }
         }
 
-        public void RemoveFromSource(AudioSource vanillaSource, AudioClip vanillaClip)
+        public readonly void RemoveFromSource(AudioSource? vanillaSource, AudioClip vanillaClip)
         {
             if (vanillaSource != null)
             {
@@ -999,7 +993,6 @@ namespace AntlerShed.EnemySkinKit.SkinAction
         RETAIN,
         MUTE,
         REPLACE,
-        
     }
 
     [Serializable]
@@ -1009,9 +1002,9 @@ namespace AntlerShed.EnemySkinKit.SkinAction
 
         public AudioClip[] replacementClips;
 
-        private AudioClip Silence => AudioClip.Create("empty", 1, 1, 1000, false);
+        private readonly AudioClip Silence => AudioClip.Create("empty", 1, 1, 1000, false);
 
-        public AudioClip[] Apply(ref AudioClip[] vanillaSource)
+        public readonly AudioClip[] Apply(ref AudioClip[] vanillaSource)
         {
             AudioClip[] vanillaClips = new AudioClip[vanillaSource.Length];
             Array.Copy(vanillaSource, vanillaClips, vanillaSource.Length);
@@ -1026,7 +1019,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
                         }
                         break;
                     case AudioListActionType.REPLACE:
-                        if(replacementClips == null)
+                        if (replacementClips == null)
                         {
                             if (EnemySkinKit.LogLevelSetting >= LogLevel.WARN) EnemySkinKit.SkinKitLogger.LogWarning("Audio list was null on a replace action. This probably means either you're running dev build or you've uninstalled fixplugintypesserialization for some reason.");
                         }
@@ -1046,7 +1039,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             return vanillaClips;
         }
 
-        public AudioClip[] WorkingClips(AudioClip[] vanillaClips)
+        public readonly AudioClip[] WorkingClips(AudioClip[] vanillaClips)
         {
             switch (actionType)
             {
@@ -1066,7 +1059,7 @@ namespace AntlerShed.EnemySkinKit.SkinAction
             }
         }
 
-        public void Remove(ref AudioClip[] vanillaSource, AudioClip[] vanillaClips)
+        public readonly void Remove(ref AudioClip[]? vanillaSource, AudioClip[] vanillaClips)
         {
             if (vanillaSource != null)
             {
